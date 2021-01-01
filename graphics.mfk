@@ -99,6 +99,7 @@ inline void sprite_tick() {
 
     update_player()
     update_fish()
+    render_commandbar()
     // update_enemies()
 }
 

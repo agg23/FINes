@@ -1,7 +1,94 @@
+import fish
+
 // const byte COMMAND_BAR_X_LOW = 0
 // const byte COMMAND_BAR_X_HIGH = $FF
 // const byte COMMAND_BAR_Y_LOW = 0
 // const byte COMMAND_BAR_Y_HIGH = $20
+
+const byte commandbar_item_count = 2
+
+// bool bar_active = true
+byte selected_command_item = 0
+byte input_timer = 0
+
+void activate_feed() {
+
+}
+
+void activate_spawn() {
+  spawn_fish()
+}
+
+const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_spawn.pointer]
+
+void commandbar_tick() {
+  read_joy1()
+
+  if (input_timer == 0) {
+    if input_dx < 0 {
+      // Left
+      if selected_command_item > 0 {
+        selected_command_item -= 1
+      }
+      input_timer = 5
+    } else if input_dx > 0 {
+      // Right
+      if selected_command_item < commandbar_item_count - 1 {
+        selected_command_item += 1
+      }
+      input_timer = 5
+    }
+
+    if input_a != 0 {
+      call(menuitem_actions[selected_command_item])
+
+      input_timer = 5
+    }
+  }
+
+  if input_timer > 0 {
+    input_timer -= 1
+  }
+}
+
+void render_commandbar() {
+  byte x_low
+  byte x_high
+  byte y_low
+  byte y_high
+  x_low = 8 - 3 + 24 * selected_command_item
+  y_low = 8 - 4
+  x_high = x_low + 8 + 6
+  y_high = 24 - 6
+
+  oam_buffer[oam_index] = y_low
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = 0
+  oam_buffer[oam_index + 3] = x_low
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = y_low
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = %01000000
+  oam_buffer[oam_index + 3] = x_high
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = y_high
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = %10000000
+  oam_buffer[oam_index + 3] = x_low
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = y_high
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = %11000000
+  oam_buffer[oam_index + 3] = x_high
+
+  oam_index += 4
+}
 
 const array(byte) commandbar_background = [0, $80, $81, 0, $82, $83, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0,

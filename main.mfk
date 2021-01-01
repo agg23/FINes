@@ -2,6 +2,7 @@ import nes_lib
 import custom_random
 import graphics
 import player
+import ui/commandbar
 import fish
 
 byte in_nmi = 0
@@ -31,7 +32,8 @@ void nmi() {
     sprite_render()
 
     set_color_effect(green)
-    player_tick()
+    // player_tick()
+    commandbar_tick()
     fish_tick()
     set_color_effect(blue)
 
