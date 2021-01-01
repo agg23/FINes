@@ -1,11 +1,20 @@
 import random
 import custom_random
+import movement_lib
+
+enum Direction {
+  up,
+  down,
+  left,
+  right
+}
 
 struct Fish {
   byte x,
   byte y,
   word velocity_x,
-  word velocity_y
+  word velocity_y,
+  Direction direction
 }
 
 Fish fish
@@ -13,8 +22,8 @@ Fish fish
 array(Fish) fish_instances [20]
 byte active_fish_count = 0
 
-const word FISH_MAX_VELOCITY_PER_TICK = $180
-const byte FISH_MAX_VELOCITY = 6
+const word FISH_MAX_VELOCITY_PER_TICK = $100
+const byte FISH_MAX_VELOCITY = 2
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
 
 void init_fish() {
@@ -41,51 +50,62 @@ void init_fish() {
 }
 
 void fish_tick() {
+  byte temp
   byte i
-  byte direction
+  byte random_direction
   byte x
   byte y
   word velocity_x
   word velocity_y
+  Direction direction
   pointer.Fish fish
 
   for i,0,until,active_fish_count {
     fish = fish_instances[i].pointer
 
-    velocity_x = fish.velocity_x
-    velocity_y = fish.velocity_y
+    x = fish->x
+    y = fish->y
+    velocity_x = fish->velocity_x
+    velocity_y = fish->velocity_y
 
-    direction = rand()
+    temp = rand()
 
-    if direction < $10 {
-      // Low chance to move vertically
-      if direction < $5 {
-        // Up
-        velocity_y -= FISH_MAX_VELOCITY_PER_TICK
+    if (temp > $E0) {
+      random_direction = rand()
+
+      if random_direction < $10 {
+        // Low chance to move vertically
+        if random_direction < $5 {
+          // Up
+          velocity_y -= FISH_MAX_VELOCITY_PER_TICK
+        } else {
+          // Down
+          velocity_y += FISH_MAX_VELOCITY_PER_TICK
+        }
       } else {
-        // Down
-        velocity_y += FISH_MAX_VELOCITY_PER_TICK
+        if random_direction < $78 {
+          // Left
+          velocity_x -= FISH_MAX_VELOCITY_PER_TICK
+        } else {
+          // Right
+          velocity_x += FISH_MAX_VELOCITY_PER_TICK
+        }
       }
-    } else {
-      if direction < $78 {
-        // Left
-        velocity_x -= FISH_MAX_VELOCITY_PER_TICK
-      } else {
-        // Right
-        velocity_x += FISH_MAX_VELOCITY_PER_TICK
-      }
+
+      cap_velocity(velocity_x.hi, velocity_x.lo, FISH_MAX_VELOCITY)
+      cap_velocity(velocity_y.hi, velocity_y.lo, FISH_MAX_VELOCITY)
     }
 
-    cap_velocity(velocity_x.hi, velocity_x.lo, FISH_MAX_VELOCITY)
-    cap_velocity(velocity_y.hi, velocity_y.lo, FISH_MAX_VELOCITY)
+    x += sbyte(velocity_x.hi)
+    y += sbyte(velocity_y.hi)
 
-    fish->x += sbyte(velocity_x.hi)
-    fish->y += sbyte(velocity_y.hi)
+    cap_fish_location_to_active_tank(x, y)
 
-    // cap_location_to_active_room(x, y)
+    fish->x = x
+    fish->y = y
 
-    decay_velocity(velocity_x.hi, velocity_x.lo, FISH_DECAY_VELOCITY_PER_TICK)
-    decay_velocity(velocity_y.hi, velocity_y.lo, FISH_DECAY_VELOCITY_PER_TICK)
+    // decay_velocity(velocity_x.hi, velocity_x.lo, FISH_DECAY_VELOCITY_PER_TICK)
+    // decay_velocity(velocity_y.hi, velocity_y.lo, FISH_DECAY_VELOCITY_PER_TICK)
 
     fish->velocity_x = velocity_x
     fish->velocity_y = velocity_y
