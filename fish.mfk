@@ -127,3 +127,25 @@ void fish_tick() {
     fish->velocity_y = velocity_y
   }
 }
+
+inline void render_fish() {
+  byte i
+  byte direction_mask
+  Fish fish
+  for i,0,until,active_fish_count {
+    fish = fish_instances[i]
+
+    if (sbyte(fish.velocity_x.hi) >= 0) {
+      direction_mask = 0
+    } else {
+      direction_mask = %01000000
+    }
+
+    oam_buffer[oam_index] = fish.y
+    oam_buffer[oam_index + 1] = $80
+    oam_buffer[oam_index + 2] = direction_mask
+    oam_buffer[oam_index + 3] = fish.x
+
+    oam_index += 4
+  }
+}

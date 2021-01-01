@@ -1,6 +1,7 @@
 import nes_graphics
 
 import ui/commandbar
+import fish
 
 import player
 import enemy
@@ -98,7 +99,7 @@ inline void sprite_tick() {
     oam_index = 0
 
     update_player()
-    update_fish()
+    render_fish()
     render_commandbar()
     // update_enemies()
 }
@@ -131,21 +132,6 @@ inline void update_player() {
 //         oam_index += 4
 //     }
 // }
-
-inline void update_fish() {
-  byte i
-  Fish fish
-  for i,0,until,active_fish_count {
-    fish = fish_instances[i]
-
-    oam_buffer[oam_index] = fish.y
-    oam_buffer[oam_index + 1] = $1
-    oam_buffer[oam_index + 2] = 0
-    oam_buffer[oam_index + 3] = fish.x
-
-    oam_index += 4
-  }
-}
 
 /**
  * Sets PPU_CTRL to the proper selected nametable
