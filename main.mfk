@@ -1,6 +1,8 @@
 import nes_lib
+import custom_random
 import graphics
 import player
+import fish
 
 byte in_nmi = 0
 
@@ -8,6 +10,8 @@ byte nmi_fail = 0
 
 void main() {
     init_graphics()
+    init_random()
+    init_fish()
 
     while(true) {}
 }
@@ -28,6 +32,7 @@ void nmi() {
 
     set_color_effect(green)
     player_tick()
+    fish_tick()
     set_color_effect(blue)
 
     set_color_effect(red_blue)
