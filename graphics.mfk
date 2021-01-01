@@ -1,5 +1,7 @@
 import nes_graphics
 
+import ui/commandbar
+
 import player
 import enemy
 
@@ -24,45 +26,56 @@ const byte vertical_ppu_ctrl = %10010100
 // enable sprites, enable background, no clipping on left side
 const byte default_mask = %00011110
 inline void init_graphics() {
-    //for now, turn off the screen and nmi
-    ppu_ctrl = 0
-    ppu_mask = 0
+  byte i
+  //for now, turn off the screen and nmi
+  ppu_ctrl = 0
+  ppu_mask = 0
 
-    init_sprites()
-    load_palletes()
+  init_sprites()
+  load_palletes()
 
-    ppu_ctrl = standard_ppu_ctrl
-    ppu_mask = default_mask
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0 + $20)
+  for i,0,until,commandbar_background.length {
+    ppu_write_data(commandbar_background[i])
+  }
+
+  read_ppu_status()
+
+  ppu_ctrl = standard_ppu_ctrl
+  ppu_mask = default_mask
+
+  ppu_set_scroll(0, 0)
 }
 
 inline void init_sprites() {
-    byte i
-    for i,0,to,255 {
-        if (i & %00000011) == 0 {
-            //each sprite takes up 4 bytes, and we want to edit
-            //the y position of each sprite (0th byte)
-            //so we use the %00000011 mask to write every 4th byte (every 0th sprite byte)
-            
-            oam_buffer[i] = $ef // move the sprite off screen
-        }
-        else {
-            oam_buffer[i] = 0
-        }
+  byte i
+  for i,0,to,255 {
+    if (i & %00000011) == 0 {
+      //each sprite takes up 4 bytes, and we want to edit
+      //the y position of each sprite (0th byte)
+      //so we use the %00000011 mask to write every 4th byte (every 0th sprite byte)
+      
+      oam_buffer[i] = $ef // move the sprite off screen
     }
+    else {
+      oam_buffer[i] = 0
+    }
+  }
 }
 
 inline void load_palletes() {
-    byte i
-    read_ppu_status() // read PPU status to reset the high/low latch
-    ppu_set_addr(ppu_pallete_ram) // point the PPU to palette ram
-    for i,0,until,$20 {
-        ppu_write_data(pallete[i])
-    }
+  byte i
+  read_ppu_status() // read PPU status to reset the high/low latch
+  ppu_set_addr(ppu_pallete_ram) // point the PPU to palette ram
+  for i,0,until,$20 {
+      ppu_write_data(pallete[i])
+  }
 }
 
 inline void sprite_render() {
-    //Push sprite information to the PPU through DMA transfer
-    ppu_oam_dma_write(oam_buffer.addr.hi)
+  //Push sprite information to the PPU through DMA transfer
+  ppu_oam_dma_write(oam_buffer.addr.hi)
 }
 
 inline void set_color_effect(ColorEffect effect) {

@@ -4,10 +4,10 @@ import nes_lib
 import movement_lib
 
 struct Player {
-    word x,
-    word y,
-    word velocity_x,
-    word velocity_y
+  word x,
+  word y,
+  word velocity_x,
+  word velocity_y
 }
 
 Player player
@@ -17,34 +17,38 @@ const byte MAX_VELOCITY = 3
 const byte DECAY_VELOCITY_PER_TICK = $80
 
 void player_tick() {
-    read_joy1()
+  read_joy1()
 
-    if input_b != 1 {
-        if input_dy < 0 {
-            // Up
-            player.velocity_y -= MAX_VELOCITY_PER_TICK
-        } else if input_dy > 0 {
-            // Down
-            player.velocity_y += MAX_VELOCITY_PER_TICK
-        }
-
-        if input_dx < 0 {
-            // Left
-            player.velocity_x -= MAX_VELOCITY_PER_TICK
-        } else if input_dx > 0 {
-            // Right
-            player.velocity_x += MAX_VELOCITY_PER_TICK
-        }
+  if input_b != 1 {
+    if input_dy < 0 {
+      // Up
+      player.velocity_y -= MAX_VELOCITY_PER_TICK
+    } else if input_dy > 0 {
+      // Down
+      player.velocity_y += MAX_VELOCITY_PER_TICK
     }
 
-    cap_velocity(player.velocity_x.hi, player.velocity_x.lo, MAX_VELOCITY)
-    cap_velocity(player.velocity_y.hi, player.velocity_y.lo, MAX_VELOCITY)
+    if input_dx < 0 {
+      // Left
+      player.velocity_x -= MAX_VELOCITY_PER_TICK
+    } else if input_dx > 0 {
+      // Right
+      player.velocity_x += MAX_VELOCITY_PER_TICK
+    }
+  }
 
-    player.x += sbyte(player.velocity_x.hi)
-    player.y += sbyte(player.velocity_y.hi)
+  if (input_start != 0) {
+    spawn_fish()
+  }
 
-    // cap_location_to_active_room(player.x, player.y)
+  cap_velocity(player.velocity_x.hi, player.velocity_x.lo, MAX_VELOCITY)
+  cap_velocity(player.velocity_y.hi, player.velocity_y.lo, MAX_VELOCITY)
 
-    decay_velocity(player.velocity_x.hi, player.velocity_x.lo, DECAY_VELOCITY_PER_TICK)
-    decay_velocity(player.velocity_y.hi, player.velocity_y.lo, DECAY_VELOCITY_PER_TICK)
+  player.x += sbyte(player.velocity_x.hi)
+  player.y += sbyte(player.velocity_y.hi)
+
+  // cap_location_to_active_room(player.x, player.y)
+
+  decay_velocity(player.velocity_x.hi, player.velocity_x.lo, DECAY_VELOCITY_PER_TICK)
+  decay_velocity(player.velocity_y.hi, player.velocity_y.lo, DECAY_VELOCITY_PER_TICK)
 }

@@ -19,7 +19,9 @@ struct Fish {
 
 Fish fish
 
-array(Fish) fish_instances [20]
+const byte FISH_MAX_COUNT = 20
+
+array(Fish) fish_instances [FISH_MAX_COUNT]
 byte active_fish_count = 0
 
 const word FISH_MAX_VELOCITY_PER_TICK = $100
@@ -47,6 +49,20 @@ void init_fish() {
   fish_instances[2] = fish2
 
   active_fish_count = 3
+}
+
+void spawn_fish() {
+  if (active_fish_count >= FISH_MAX_COUNT) {
+    return
+  }
+
+  Fish fish
+  fish.x = $80
+  fish.y = $20
+
+  fish_instances[active_fish_count] = fish
+
+  active_fish_count += 1
 }
 
 void fish_tick() {
