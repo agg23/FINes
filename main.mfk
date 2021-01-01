@@ -1,0 +1,42 @@
+import nes_lib
+import graphics
+import player
+
+byte in_nmi = 0
+
+byte nmi_fail = 0
+
+void main() {
+    init_graphics()
+
+    while(true) {}
+}
+
+void nmi() {
+    if in_nmi != 0 {
+        // Overran NMI
+        nmi_fail = 1
+        asm {
+            kil
+        }
+    }
+
+    in_nmi = 1
+
+    set_color_effect(grey)
+    sprite_render()
+
+    set_color_effect(green)
+    player_tick()
+    set_color_effect(blue)
+
+    set_color_effect(red_blue)
+    sprite_tick()
+    set_color_effect(clear)
+
+    in_nmi = 0
+}
+
+void irq() {
+
+}

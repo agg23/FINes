@@ -1,0 +1,24 @@
+inline byte find_open_object_array_position(pointer objects, byte is_alive_index, byte object_length,
+    byte current_objects_count, byte max_objects) {
+
+    byte i
+    byte o_i
+
+    if current_objects_count >= max_objects {
+        // Do nothing
+        return -1
+    }
+
+    o_i = 0
+
+    for i,0,until,max_objects {
+        if objects[o_i + is_alive_index] == 0 {
+            return i
+        }
+
+        o_i += object_length
+    }
+
+    // Can't spawn
+    return -1
+}

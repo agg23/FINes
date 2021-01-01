@@ -1,0 +1,147 @@
+import nes_graphics
+
+import player
+import enemy
+
+enum ColorEffect {
+    red,
+    blue,
+    green,
+    grey,
+    red_blue,
+    clear
+}
+
+Sprite player_sprite @$200
+byte oam_index = 0
+//array(Sprite) player_projectile_sprites [20] @$204
+
+// enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
+const byte standard_ppu_ctrl = %10010000
+// Same as above, but increment address by 32
+const byte vertical_ppu_ctrl = %10010100
+
+// enable sprites, enable background, no clipping on left side
+const byte default_mask = %00011110
+inline void init_graphics() {
+    //for now, turn off the screen and nmi
+    ppu_ctrl = 0
+    ppu_mask = 0
+
+    init_sprites()
+    load_palletes()
+
+    ppu_ctrl = standard_ppu_ctrl
+    ppu_mask = default_mask
+}
+
+inline void init_sprites() {
+    byte i
+    for i,0,to,255 {
+        if (i & %00000011) == 0 {
+            //each sprite takes up 4 bytes, and we want to edit
+            //the y position of each sprite (0th byte)
+            //so we use the %00000011 mask to write every 4th byte (every 0th sprite byte)
+            
+            oam_buffer[i] = $ef // move the sprite off screen
+        }
+        else {
+            oam_buffer[i] = 0
+        }
+    }
+}
+
+inline void load_palletes() {
+    byte i
+    read_ppu_status() // read PPU status to reset the high/low latch
+    ppu_set_addr(ppu_pallete_ram) // point the PPU to palette ram
+    for i,0,until,$20 {
+        ppu_write_data(pallete[i])
+    }
+}
+
+inline void sprite_render() {
+    //Push sprite information to the PPU through DMA transfer
+    ppu_oam_dma_write(oam_buffer.addr.hi)
+}
+
+inline void set_color_effect(ColorEffect effect) {
+  if (effect == red) {
+    ppu_mask = default_mask | %00100000
+  } else if (effect == green) {
+    ppu_mask = default_mask | %01000000
+  } else if (effect == blue) {
+    ppu_mask = default_mask | %10000000
+  } else if (effect == grey) {
+    ppu_mask = default_mask | %00000001
+  } else if (effect == red_blue) {
+    ppu_mask = default_mask | %10100000
+  } else {
+    ppu_mask = default_mask
+  }
+}
+
+inline void sprite_tick() {
+    oam_index = 0
+
+    update_player()
+    // update_enemies()
+}
+
+inline void update_player() {
+  player_sprite.x = player.x.lo
+  player_sprite.y = player.y.lo
+
+  oam_index += 4
+}
+
+// inline void update_enemies() {
+//     byte i
+//     for i,0,until,MAX_ENEMIES {
+//         // TODO: There is something very weird with overlaping arrays
+//         if enemies_is_alive[i] != 0 {
+//             oam_buffer[oam_index] = 0
+//             // oam_buffer[oam_index] = enemies_y[i]
+//             oam_buffer[oam_index + 1] = $1
+//             oam_buffer[oam_index + 2] = 0
+//             // oam_buffer[oam_index + 3] = enemies_x[i]
+//             oam_buffer[oam_index + 3] = 0
+//         } else {
+//             oam_buffer[oam_index] = $ef
+//             oam_buffer[oam_index + 1] = 0
+//             oam_buffer[oam_index + 2] = 0
+//             oam_buffer[oam_index + 3] = 0
+//         }
+
+//         oam_index += 4
+//     }
+// }
+
+/**
+ * Sets PPU_CTRL to the proper selected nametable
+ */
+inline void set_ppu_ctrl(bool right, bool bottom) {
+  byte temp_ctrl
+  temp_ctrl = standard_ppu_ctrl
+
+  if right {
+    temp_ctrl = temp_ctrl | %1
+  }
+
+  if bottom {
+    temp_ctrl = temp_ctrl | %10
+  }
+
+  ppu_ctrl = temp_ctrl
+}
+
+//  *LEVEL GRAPHICS*
+
+//palletes for entire game (both title and play screens)
+const array pallete = [
+  $22,$29,$1A,$0F,  $22,$36,$17,$0F,  $22,$30,$21,$0F,  $22,$27,$17,$0F, //background palette
+  $22,$1C,$15,$14,  $22,$02,$38,$3C,  $22,$1C,$15,$14,  $22,$02,$38,$3C //sprite palette
+]
+
+//  *CHARACTER ROM (GRAPHICS)*
+segment(chrrom) const array graphics @ $0000 = file("tiles.chr")

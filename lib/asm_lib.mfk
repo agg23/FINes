@@ -1,0 +1,21 @@
+macro asm void add_16_const(byte ref hi, byte ref lo, byte const constant) {
+    clc
+	lda lo
+	adc #constant
+	sta lo
+    bcc ok
+    inc hi
+    ok:
+    // End
+}
+
+macro asm void sub_16_const(byte ref hi, byte ref lo, byte const constant) {
+    sec
+	lda lo
+	sbc #constant
+	sta lo
+    bcs ok
+    dec hi
+    ok:
+    // End
+}

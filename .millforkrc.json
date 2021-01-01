@@ -1,0 +1,5 @@
+{
+  "inputFiles": ["main.mfk"],
+  "platform": "nes_small_4screen",
+  "include": ["lib"]
+}

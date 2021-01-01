@@ -1,0 +1,55 @@
+//This file is for NES specific functions/defintions that are used
+//accross files
+
+inline asm void wait_cycles(byte x) {
+    //burn some cycles
+    WaitScanline:
+        DEX
+        ! BNE WaitScanline
+    ? RTS
+}
+
+inline byte flip_sign(byte a) {
+    //flip the sign of a signed byte
+    if a & %10000000 != 0{
+        a -= 1
+        a ^= $FF
+    }
+    else {
+        a ^= $FF
+        a += 1
+    }
+    return a
+}
+
+inline byte add_clamped(byte first, byte second, byte clamp) {
+    if second > clamp - first {
+        return clamp
+    }
+
+    return first + second
+}
+
+inline byte sub_clamped(byte first, byte second, byte clamp) {
+    if first < second - clamp {
+        return clamp
+    }
+
+    return first - second
+}
+
+inline word add_clamped_word(word first, word second, word clamp) {
+    if second > clamp - first {
+        return clamp
+    }
+
+    return first + second
+}
+
+inline word sub_clamped_word(word first, word second, word clamp) {
+    if first < second - clamp {
+        return clamp
+    }
+
+    return first - second
+}
