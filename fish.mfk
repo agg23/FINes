@@ -4,19 +4,11 @@ import movement_lib
 
 import tank/state
 
-enum Direction {
-  up,
-  down,
-  left,
-  right
-}
-
 struct Fish {
   byte x,
   byte y,
   word velocity_x,
-  word velocity_y,
-  Direction direction
+  word velocity_y
 }
 
 Fish fish
@@ -31,26 +23,9 @@ const byte FISH_MAX_VELOCITY = 2
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
 
 void init_fish() {
-  Fish fish0
-  Fish fish1
-  Fish fish2
-
-  fish0.x = 100
-  fish0.y = 100
-
-  fish_instances[0] = fish0
-
-  fish1.x = 120
-  fish1.y = 90
-
-  fish_instances[1] = fish1
-
-  fish2.x = 90
-  fish2.y = 105
-
-  fish_instances[2] = fish2
-
-  active_fish_count = 3
+  spawn_fish()
+  spawn_fish()
+  spawn_fish()
 }
 
 void spawn_fish() {
@@ -75,7 +50,6 @@ void fish_tick() {
   byte y
   word velocity_x
   word velocity_y
-  Direction direction
   pointer.Fish fish
 
   for i,0,until,active_fish_count {
