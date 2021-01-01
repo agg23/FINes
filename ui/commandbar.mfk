@@ -1,9 +1,5 @@
+import nes_joy
 import fish
-
-// const byte COMMAND_BAR_X_LOW = 0
-// const byte COMMAND_BAR_X_HIGH = $FF
-// const byte COMMAND_BAR_Y_LOW = 0
-// const byte COMMAND_BAR_Y_HIGH = $20
 
 const byte commandbar_item_count = 2
 

@@ -1,0 +1,16 @@
+import tank/state
+
+import square
+
+byte selected_tank = 0
+
+const array(Tank) tanks = [export_square_tank]
+
+void init_tank() {
+  selected_tank = 0
+  active_tank = export_square_tank
+}
+
+void render_tank() {
+  call(active_tank.render_func)
+}

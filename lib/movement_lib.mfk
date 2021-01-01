@@ -20,19 +20,3 @@ macro void decay_velocity(byte hi, byte lo, byte decay) {
     }
   }
 }
-
-macro void cap_fish_location_to_active_tank(byte x, byte y) {
-  // TODO: Add more than square tank
-  
-  if (x > $F0) {
-    x = $F0
-  } else if (x < $10) {
-    x = $10
-  }
-
-  if (y > $E0) {
-    y = $E0
-  } else if (y < $20) {
-    y = $20
-  }
-}

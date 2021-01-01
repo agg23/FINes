@@ -1,10 +1,8 @@
 import nes_graphics
 
 import ui/commandbar
+import tank/tank
 import fish
-
-import player
-import enemy
 
 enum ColorEffect {
     red,
@@ -15,9 +13,7 @@ enum ColorEffect {
     clear
 }
 
-Sprite player_sprite @$200
 byte oam_index = 0
-//array(Sprite) player_projectile_sprites [20] @$204
 
 // enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
 const byte standard_ppu_ctrl = %10010000
@@ -40,6 +36,8 @@ inline void init_graphics() {
   for i,0,until,commandbar_background.length {
     ppu_write_data(commandbar_background[i])
   }
+
+  render_tank()
 
   read_ppu_status()
 
@@ -98,40 +96,9 @@ inline void set_color_effect(ColorEffect effect) {
 inline void sprite_tick() {
     oam_index = 0
 
-    update_player()
     render_fish()
     render_commandbar()
-    // update_enemies()
 }
-
-inline void update_player() {
-  player_sprite.x = player.x.lo
-  player_sprite.y = player.y.lo
-
-  oam_index += 4
-}
-
-// inline void update_enemies() {
-//     byte i
-//     for i,0,until,MAX_ENEMIES {
-//         // TODO: There is something very weird with overlaping arrays
-//         if enemies_is_alive[i] != 0 {
-//             oam_buffer[oam_index] = 0
-//             // oam_buffer[oam_index] = enemies_y[i]
-//             oam_buffer[oam_index + 1] = $1
-//             oam_buffer[oam_index + 2] = 0
-//             // oam_buffer[oam_index + 3] = enemies_x[i]
-//             oam_buffer[oam_index + 3] = 0
-//         } else {
-//             oam_buffer[oam_index] = $ef
-//             oam_buffer[oam_index + 1] = 0
-//             oam_buffer[oam_index + 2] = 0
-//             oam_buffer[oam_index + 3] = 0
-//         }
-
-//         oam_index += 4
-//     }
-// }
 
 /**
  * Sets PPU_CTRL to the proper selected nametable

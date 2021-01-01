@@ -1,8 +1,8 @@
 import nes_lib
 import custom_random
 import graphics
-import player
 import ui/commandbar
+import tank/tank
 import fish
 
 byte in_nmi = 0
@@ -10,9 +10,10 @@ byte in_nmi = 0
 byte nmi_fail = 0
 
 void main() {
-    init_graphics()
     init_random()
+    init_tank()
     init_fish()
+    init_graphics()
 
     while(true) {}
 }
@@ -32,7 +33,6 @@ void nmi() {
     sprite_render()
 
     set_color_effect(green)
-    // player_tick()
     commandbar_tick()
     fish_tick()
     set_color_effect(blue)

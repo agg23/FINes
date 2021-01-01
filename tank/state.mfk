@@ -1,0 +1,26 @@
+struct Tank {
+  function.void.to.void render_func,
+  byte x_low,
+  byte x_high,
+  byte y_low,
+  byte y_high
+}
+
+/**
+ * The tank currently being displayed
+ */
+Tank active_tank
+
+macro void cap_fish_location_to_active_tank(byte x, byte y) {  
+  if (x > active_tank.x_high) {
+    x = active_tank.x_high
+  } else if (x < active_tank.x_low) {
+    x = active_tank.x_low
+  }
+
+  if (y > active_tank.y_high) {
+    y = active_tank.y_high
+  } else if (y < active_tank.y_low) {
+    y = active_tank.y_low
+  }
+}

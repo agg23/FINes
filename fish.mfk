@@ -2,6 +2,8 @@ import random
 import custom_random
 import movement_lib
 
+import tank/state
+
 enum Direction {
   up,
   down,
