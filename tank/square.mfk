@@ -20,13 +20,11 @@ void render_square_tank() {
       ppu_set_addr(a)
       ppu_write_data($2)
 
-      // Reuses i to prevent creating another local
-      for i,0,until,28 {
+      for j,0,until,28 {
         ppu_write_data($1)
       }
 
       ppu_write_data($2)
-      break
     } else {
       a += 1
       ppu_set_addr(a)
@@ -40,7 +38,6 @@ void render_square_tank() {
   read_ppu_status()
   // Second row
   ppu_set_addr(ppu_attrtable0 + $8)
-  // Bottom right palette 1
   for i,0,until,6 {
     ppu_write_data(%01000100)
     for j,0,until,6 {
@@ -48,17 +45,6 @@ void render_square_tank() {
     }
     ppu_write_data(%00010001)
   }
-  // ppu_write_data(%01000000)
-  // for i,0,until,6 {
-  //   // Bottom palette 1
-  //   ppu_write_data(%01010000)
-  // }
-  // // Bottom left palette 1
-  // ppu_write_data(%00010000)
-
-  // for i,0,until,7 {
-    
-  // }
 }
 
 const Tank export_square_tank = Tank(render_square_tank.pointer, $10, 232, $32, $D8)

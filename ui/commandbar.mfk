@@ -2,12 +2,18 @@ import nes_joy
 import fish
 import entity/money
 
-const byte commandbar_item_count = 2
+const byte commandbar_item_count = 3
+
+const byte input_timer_reset = 10
 
 byte selected_command_item = 0
 byte input_timer = 0
 
 void activate_feed() {
+
+}
+
+void activate_fish_inspect() {
 
 }
 
@@ -17,7 +23,7 @@ void activate_spawn() {
   }
 }
 
-const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_spawn.pointer]
+const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_spawn.pointer]
 
 void commandbar_tick() {
   read_joy1()
@@ -28,19 +34,19 @@ void commandbar_tick() {
       if selected_command_item > 0 {
         selected_command_item -= 1
       }
-      input_timer = 5
+      input_timer = input_timer_reset
     } else if input_dx > 0 {
       // Right
       if selected_command_item < commandbar_item_count - 1 {
         selected_command_item += 1
       }
-      input_timer = 5
+      input_timer = input_timer_reset
     }
 
     if input_a != 0 {
       call(menuitem_actions[selected_command_item])
 
-      input_timer = 5
+      input_timer = input_timer_reset
     }
   }
 
@@ -89,9 +95,10 @@ void render_commandbar() {
 }
 
 const array(byte) commandbar_background = [
-  0, $80, $81, 0, $82, $83, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
+  0, $80, $81, 0, $82, $83, 0, $84,
+  $85, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
   //
-  0, $90, $91, 0, $92, $93, 0, 0]
+  0, $90, $91, 0, $92, $93, 0, $94,
+  $95]
