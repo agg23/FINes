@@ -6,42 +6,53 @@ import tank/tank
 import fish
 
 byte in_nmi = 0
-
 byte nmi_fail = 0
 
-void main() {
-    init_random()
-    init_tank()
-    init_fish()
-    init_graphics()
+bool new_frame = false
 
-    while(true) {}
+void main() {
+  init_random()
+  init_tank()
+  init_fish()
+  init_graphics()
+
+  while(true) {
+    // Wait for NMI to complete rendering frame
+    while (new_frame) {}
+
+    commandbar_tick()
+    fish_tick()
+    sprite_tick()
+
+    new_frame = true
+  }
 }
 
 void nmi() {
-    if in_nmi != 0 {
-        // Overran NMI
-        nmi_fail = 1
-        asm {
-            kil
-        }
+  if in_nmi != 0 {
+    // Overran NMI
+    nmi_fail = 1
+    asm {
+      kil
     }
+  }
 
-    in_nmi = 1
+  in_nmi = 1
 
-    set_color_effect(grey)
+  if (new_frame) {
+    set_color_effect(clear)
     sprite_render()
 
-    set_color_effect(green)
-    commandbar_tick()
-    fish_tick()
+    // Wait for frame to start
+    while (ppu_status & %01000000 != 0) {}
+    // Wait for sprite0
+    while (ppu_status & %01000000 == 0) {}
     set_color_effect(blue)
 
-    set_color_effect(red_blue)
-    sprite_tick()
-    set_color_effect(clear)
+    new_frame = false
+  }
 
-    in_nmi = 0
+  in_nmi = 0
 }
 
 void irq() {

@@ -94,10 +94,20 @@ inline void set_color_effect(ColorEffect effect) {
 }
 
 inline void sprite_tick() {
-    oam_index = 0
+  oam_index = 0
 
-    render_fish()
-    render_commandbar()
+  render_sprite0()
+  render_fish()
+  render_commandbar()
+}
+
+inline void render_sprite0() {
+  oam_buffer[oam_index] = 8 * 4
+  oam_buffer[oam_index + 1] = $1
+  oam_buffer[oam_index + 2] = 0
+  oam_buffer[oam_index + 3] = 8
+
+  oam_index += 4
 }
 
 /**
