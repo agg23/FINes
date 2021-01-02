@@ -8,27 +8,29 @@ struct Fish {
   byte x,
   byte y,
   word velocity_x,
-  word velocity_y
+  word velocity_y,
+  bool sex
 }
-
-Fish fish
 
 const byte FISH_MAX_COUNT = 20
 
 array(Fish) fish_instances [FISH_MAX_COUNT]
 byte active_fish_count = 0
 
+byte male_fish_count
+byte female_fish_count
+
 const word FISH_MAX_VELOCITY_PER_TICK = $100
 const byte FISH_MAX_VELOCITY = 2
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
 
 void init_fish() {
-  spawn_fish()
-  spawn_fish()
-  spawn_fish()
+  spawn_fish(true)
+  spawn_fish(true)
+  spawn_fish(false)
 }
 
-void spawn_fish() {
+void spawn_fish(bool sex) {
   if (active_fish_count >= FISH_MAX_COUNT) {
     return
   }
@@ -36,13 +38,25 @@ void spawn_fish() {
   Fish fish
   fish.x = $80
   fish.y = $20
+  fish.sex = sex
 
   fish_instances[active_fish_count] = fish
+
+  if (sex) {
+    male_fish_count += 1
+  } else {
+    female_fish_count += 1
+  }
 
   active_fish_count += 1
 }
 
 void fish_tick() {
+  fish_move()
+  fish_breed()
+}
+
+inline void fish_move() {
   byte temp
   byte i
   byte random_direction
@@ -101,6 +115,22 @@ void fish_tick() {
 
     fish->velocity_x = velocity_x
     fish->velocity_y = velocity_y
+  }
+}
+
+inline void fish_breed() {
+  byte temp
+  if (male_fish_count < 1 || female_fish_count < 1) {
+    // Breeding cannot occur
+    return
+  }
+
+  random_int_const(0, FISH_MAX_COUNT, temp)
+
+  if (temp < (male_fish_count + female_fish_count) / 2 && rand() < 1) {
+    // Breed
+    random_int_const(0, 1, temp)
+    spawn_fish(temp == 1)
   }
 }
 

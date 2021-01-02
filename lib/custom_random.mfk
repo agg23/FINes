@@ -1,21 +1,19 @@
 import random
 
+byte random_int_const_temp
+
 void init_random() {
   init_rand_seed()
 }
 
-// macro void random_int_const(byte const min, byte const max, byte output) {
-//   byte random_int_const_temp
-//   random_int_const_temp = max - min
-//   output = rand()
-//   output = output %% random_int_const_temp
-//   output += min
-// }
+macro void random_int_const(byte const min, byte const max, byte output) {
+  output = rand()
+  output = output %% (max - min)
+  output += min
+}
 
-// macro void random_int_const_min(byte const min, byte max, byte output) {
-//   byte random_int_const_min_temp
-//   random_int_const_min_temp = max - min
-//   output = rand()
-//   output = output %% random_int_const_min_temp
-//   output += min
-// }
+macro void random_int_const_min(byte const min, byte max, byte output) {
+  output = rand()
+  output = output %% (max - min)
+  output += min
+}

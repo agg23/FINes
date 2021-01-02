@@ -4,7 +4,6 @@ import entity/money
 
 const byte commandbar_item_count = 2
 
-// bool bar_active = true
 byte selected_command_item = 0
 byte input_timer = 0
 
@@ -14,7 +13,7 @@ void activate_feed() {
 
 void activate_spawn() {
   if (purchase(10)) {
-    spawn_fish()
+    spawn_fish(false)
   }
 }
 
@@ -89,9 +88,10 @@ void render_commandbar() {
   oam_index += 4
 }
 
-const array(byte) commandbar_background = [0, $80, $81, 0, $82, $83, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0,
-                                //
-                                0, $90, $91, 0, $92, $93, 0, 0]
+const array(byte) commandbar_background = [
+  0, $80, $81, 0, $82, $83, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  //
+  0, $90, $91, 0, $92, $93, 0, 0]
