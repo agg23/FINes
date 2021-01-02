@@ -1,9 +1,12 @@
 import nes_lib
 import custom_random
 import graphics
+
 import ui/commandbar
 import tank/tank
+
 import fish
+import entity/money
 
 byte in_nmi = 0
 byte nmi_fail = 0
@@ -23,7 +26,6 @@ void main() {
     commandbar_tick()
     fish_tick()
     sprite_tick()
-
     new_frame = true
   }
 }
@@ -42,6 +44,10 @@ void nmi() {
   if (new_frame) {
     set_color_effect(clear)
     sprite_render()
+
+    render_money()
+
+    ppu_set_scroll(0, 0)
 
     // Wait for frame to start
     while (ppu_status & %01000000 != 0) {}

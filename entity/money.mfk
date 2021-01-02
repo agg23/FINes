@@ -1,0 +1,26 @@
+import to_decimal
+
+word fish_bucks
+
+void init_money() {
+  // Start with $100
+  fish_bucks = 100
+}
+
+void render_money() {
+  bcdConvert(fish_bucks)
+
+  // Disable rendering
+  ppu_mask = 0
+
+  byte i
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0 + 32 + 24)
+  // Dollar sign
+  ppu_write_data($24)
+  for i,4,downto,0 {
+    ppu_write_data(bcdResult[i] + $30)
+  }
+
+  ppu_mask = %00011110
+}

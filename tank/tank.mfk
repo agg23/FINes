@@ -1,12 +1,15 @@
 import tank/state
 
+import entity/money
+
 import square
 
-byte selected_tank = 0
+byte selected_tank
 
 const array(Tank) tanks = [export_square_tank]
 
 void init_tank() {
+  init_money()
   selected_tank = 0
   active_tank = export_square_tank
 }
