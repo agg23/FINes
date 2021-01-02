@@ -1,10 +1,12 @@
 const byte color_black = $0F
 const byte color_light_grey = $10
+const byte color_light_blue = $31
+const byte color_white = $20
 
 const array pallete = [
   //background palette
   color_black,$29,$1A,color_light_grey,
-  color_black,$36,$17,$0F,
+  color_black,$36,$17,color_light_blue,
   color_black,$30,$21,$0F,
   color_black,$27,$17,$0F,
 

@@ -2,11 +2,20 @@ import tank/state
 
 void render_square_tank() {
   byte i
+  byte j
   word a
-  read_ppu_status()
   a = ppu_nametable0 + $80
+  read_ppu_status()
   for i,0,until,25 {
-    if (i == 24) {
+    if (i == 0) {
+      a += 1
+      ppu_set_addr(a)
+      ppu_write_data($1)
+      a += 32 - 3
+      ppu_set_addr(a)
+      ppu_write_data($1)
+      a += 2
+    } else if (i == 24) {
       a += 1
       ppu_set_addr(a)
       ppu_write_data($2)
@@ -17,17 +26,39 @@ void render_square_tank() {
       }
 
       ppu_write_data($2)
-      return
+      break
     } else {
       a += 1
       ppu_set_addr(a)
-      ppu_write_data($1)
-      a += 32 - 3
-      ppu_set_addr(a)
-      ppu_write_data($1)
-      a += 2
+      for j,0,until,30 {
+        ppu_write_data($1)
+      }
+      a += 31
     }
   }
+
+  read_ppu_status()
+  // Second row
+  ppu_set_addr(ppu_attrtable0 + $8)
+  // Bottom right palette 1
+  for i,0,until,6 {
+    ppu_write_data(%01000100)
+    for j,0,until,6 {
+      ppu_write_data(%01010101)
+    }
+    ppu_write_data(%00010001)
+  }
+  // ppu_write_data(%01000000)
+  // for i,0,until,6 {
+  //   // Bottom palette 1
+  //   ppu_write_data(%01010000)
+  // }
+  // // Bottom left palette 1
+  // ppu_write_data(%00010000)
+
+  // for i,0,until,7 {
+    
+  // }
 }
 
 const Tank export_square_tank = Tank(render_square_tank.pointer, $10, 232, $32, $D8)
