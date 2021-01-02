@@ -21,6 +21,7 @@ byte male_fish_count
 byte female_fish_count
 
 const word FISH_MAX_VELOCITY_PER_TICK = $100
+const word FISH_MAX_VERTICAL_VELOCITY_PER_TICK = $100
 const byte FISH_MAX_VELOCITY = 2
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
 
@@ -57,7 +58,6 @@ void fish_tick() {
 }
 
 inline void fish_move() {
-  byte temp
   byte i
   byte random_direction
   byte x
@@ -74,22 +74,20 @@ inline void fish_move() {
     velocity_x = fish->velocity_x
     velocity_y = fish->velocity_y
 
-    temp = rand()
-
-    if (temp > $E0) {
+    if (rand() < 20) {
       random_direction = rand()
 
-      if random_direction < $10 {
+      if random_direction < $20 {
         // Low chance to move vertically
-        if random_direction < $5 {
+        if random_direction < $10 {
           // Up
-          velocity_y -= FISH_MAX_VELOCITY_PER_TICK
+          velocity_y -= FISH_MAX_VERTICAL_VELOCITY_PER_TICK
         } else {
           // Down
-          velocity_y += FISH_MAX_VELOCITY_PER_TICK
+          velocity_y += FISH_MAX_VERTICAL_VELOCITY_PER_TICK
         }
       } else {
-        if random_direction < $78 {
+        if random_direction < $79 {
           // Left
           velocity_x -= FISH_MAX_VELOCITY_PER_TICK
         } else {
