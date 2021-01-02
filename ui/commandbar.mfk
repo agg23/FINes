@@ -1,5 +1,6 @@
 import nes_joy
 import fish
+import entity/money
 
 const byte commandbar_item_count = 2
 
@@ -12,7 +13,9 @@ void activate_feed() {
 }
 
 void activate_spawn() {
-  spawn_fish()
+  if (purchase(10)) {
+    spawn_fish()
+  }
 }
 
 const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_spawn.pointer]
