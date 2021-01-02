@@ -1,0 +1,16 @@
+const byte color_black = $0F
+const byte color_light_grey = $10
+
+const array pallete = [
+  //background palette
+  color_black,$29,$1A,color_light_grey,
+  color_black,$36,$17,$0F,
+  color_black,$30,$21,$0F,
+  color_black,$27,$17,$0F,
+
+  //sprite palette
+  color_black,$15,$1C,$14,
+  color_black,$02,$38,$3C,
+  color_black,$1C,$15,$14,
+  color_black,$02,color_light_grey,$3C 
+]

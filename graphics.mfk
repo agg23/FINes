@@ -1,5 +1,7 @@
 import nes_graphics
 
+import palette
+
 import ui/commandbar
 import tank/tank
 import fish
@@ -72,6 +74,24 @@ inline void load_palletes() {
   }
 }
 
+inline void sprite_tick() {
+  oam_index = 0
+
+  render_sprite0()
+  render_fish()
+  render_commandbar()
+}
+
+inline void render_sprite0() {
+  oam_buffer[oam_index] = 8 * 5
+  oam_buffer[oam_index + 1] = $1
+  // Pallete 3
+  oam_buffer[oam_index + 2] = $3
+  oam_buffer[oam_index + 3] = 8
+
+  oam_index += 4
+}
+
 inline void sprite_render() {
   //Push sprite information to the PPU through DMA transfer
   ppu_oam_dma_write(oam_buffer.addr.hi)
@@ -93,23 +113,6 @@ inline void set_color_effect(ColorEffect effect) {
   }
 }
 
-inline void sprite_tick() {
-  oam_index = 0
-
-  render_sprite0()
-  render_fish()
-  render_commandbar()
-}
-
-inline void render_sprite0() {
-  oam_buffer[oam_index] = 8 * 4
-  oam_buffer[oam_index + 1] = $1
-  oam_buffer[oam_index + 2] = 0
-  oam_buffer[oam_index + 3] = 8
-
-  oam_index += 4
-}
-
 /**
  * Sets PPU_CTRL to the proper selected nametable
  */
@@ -129,12 +132,6 @@ inline void set_ppu_ctrl(bool right, bool bottom) {
 }
 
 //  *LEVEL GRAPHICS*
-
-//palletes for entire game (both title and play screens)
-const array pallete = [
-  $22,$29,$1A,$0F,  $22,$36,$17,$0F,  $22,$30,$21,$0F,  $22,$27,$17,$0F, //background palette
-  $22,$1C,$15,$14,  $22,$02,$38,$3C,  $22,$1C,$15,$14,  $22,$02,$38,$3C //sprite palette
-]
 
 //  *CHARACTER ROM (GRAPHICS)*
 segment(chrrom) const array graphics @ $0000 = file("tiles.chr")
