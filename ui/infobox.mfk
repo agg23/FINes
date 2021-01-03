@@ -1,0 +1,36 @@
+void render_infobox(byte width, byte height, byte x, byte y, function.byte.to.void render_row_func) {
+  byte i
+  byte j
+  word a
+
+  // Disable rendering
+  ppu_mask = 0
+
+  // Tiles
+  a = ppu_nametable0 + x + (word(y) << 5)
+  read_ppu_status()
+  ppu_set_addr(a)
+  for i,0,until,width {
+    ppu_write_data($1)
+  }
+  a += 32
+  for i,0,until,height - 2 {
+    ppu_set_addr(a)
+    ppu_write_data($1)
+    call(render_row_func, i)
+    ppu_write_data($1)
+    a += 32
+  }
+  a += 32
+  ppu_set_addr(a)
+  for i,0,until,width {
+    ppu_write_data($1)
+  }
+
+  // Attribute tables
+  // TODO
+
+  ppu_mask = %00011110
+
+  ppu_set_scroll(0, 0)
+}

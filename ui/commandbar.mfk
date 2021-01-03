@@ -1,5 +1,7 @@
 import nes_joy
 import fish
+
+import entity/inspect
 import entity/money
 
 const byte commandbar_item_count = 3
@@ -14,7 +16,7 @@ void activate_feed() {
 }
 
 void activate_fish_inspect() {
-
+  start_inspect()
 }
 
 void activate_spawn() {
