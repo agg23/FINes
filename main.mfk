@@ -1,6 +1,7 @@
 import nes_lib
 import custom_random
 import graphics
+import graphics_buffer
 
 import ui/commandbar
 import tank/tank
@@ -52,6 +53,8 @@ void nmi() {
     ppu_mask = %00011110
     set_color_effect(clear)
     sprite_render()
+
+    process_buffered_writes()
 
     ppu_set_scroll(0, 0)
 
