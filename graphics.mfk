@@ -39,7 +39,14 @@ inline void init_graphics() {
     ppu_write_data(commandbar_background[i])
   }
 
-  render_tank()
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable1 + $20)
+  for i,0,until,commandbar_background.length {
+    ppu_write_data(commandbar_background[i])
+  }
+
+  render_tank(ppu_nametable0)
+  render_tank(ppu_nametable1)
 
   read_ppu_status()
 

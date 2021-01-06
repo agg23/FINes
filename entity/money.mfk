@@ -17,20 +17,20 @@ inline bool purchase(byte cost) {
   return true
 }
 
-void render_money() {
+void render_money(word nametable) {
   bcdConvert(fish_bucks)
 
   // Disable rendering
-  ppu_mask = 0
+  // ppu_mask = 0
 
   byte i
   read_ppu_status()
-  ppu_set_addr(ppu_nametable0 + 32 + 24)
+  ppu_set_addr(nametable + 32 + 24)
   // Dollar sign
   ppu_write_data($24)
   for i,4,downto,0 {
     ppu_write_data(bcdResult[i] + $30)
   }
 
-  ppu_mask = %00011110
+  // ppu_mask = %00011110
 }

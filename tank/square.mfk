@@ -1,10 +1,10 @@
 import tank/state
 
-void render_square_tank() {
+void render_square_tank(word nametable) {
   byte i
   byte j
   word a
-  a = ppu_nametable0 + $80
+  a = nametable + $80
   read_ppu_status()
   for i,0,until,25 {
     if (i == 0) {
@@ -35,9 +35,10 @@ void render_square_tank() {
     }
   }
 
+  // Attributes
   read_ppu_status()
   // Second row
-  ppu_set_addr(ppu_attrtable0 + $8)
+  ppu_set_addr(nametable + $3C0 + $8)
   for i,0,until,6 {
     ppu_write_data(%01000100)
     for j,0,until,6 {
