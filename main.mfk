@@ -9,6 +9,8 @@ import tank/tank
 import fish
 import entity/money
 
+import debug/render_stats
+
 byte in_nmi = 0
 byte nmi_fail = 0
 
@@ -29,6 +31,7 @@ void main() {
     commandbar_tick()
     fish_tick()
     sprite_tick()
+    render_stats_tick()
 
     // Wait for sprite0 clear
     while (ppu_status & %01000000 != 0) {}
