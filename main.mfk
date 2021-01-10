@@ -14,7 +14,7 @@ import debug/render_stats
 byte in_nmi = 0
 byte nmi_fail = 0
 
-bool new_frame = false
+volatile bool new_frame = false
 
 void main() {
   init_random()
@@ -31,10 +31,11 @@ void main() {
     commandbar_tick()
     fish_tick()
     sprite_tick()
-    render_stats_tick()
+    // render_stats_tick()
 
     // Wait for sprite0 clear
     while (ppu_status & %01000000 != 0) {}
+    is_rendering = false
 
     new_frame = true
   }
@@ -52,19 +53,19 @@ void nmi() {
   in_nmi = 1
 
   if (new_frame) {
-    set_color_effect(clear)
+    // set_color_effect(clear)
     sprite_render()
-
     process_buffered_writes()
 
-    read_ppu_status()
     ppu_set_scroll(0, 0)
 
     // Wait for frame to start
     while (ppu_status & %01000000 != 0) {}
+    is_rendering = true
     // // Wait for sprite0
     while (ppu_status & %01000000 == 0) {}
-    set_color_effect(blue)
+
+    // set_color_effect(blue)
 
     new_frame = false
   }

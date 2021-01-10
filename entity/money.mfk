@@ -21,6 +21,7 @@ void render_money() {
   array(byte) data [6]
   // Dollar sign
   data[0] = $24
+  // TODO: This does not appear to work when enabling optimization
   bcdConvert(fish_bucks)
 
   // Disable rendering

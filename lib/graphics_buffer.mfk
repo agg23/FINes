@@ -8,8 +8,8 @@ struct BufferCommand {
   bool pending
 }
 
-const byte MAX_WRITE_BUFFER_LENGTH = 64
-const byte MAX_COMMAND_BUFFER_LENGTH = 10
+const byte MAX_WRITE_BUFFER_LENGTH = 255
+const byte MAX_COMMAND_BUFFER_LENGTH = 20
 
 array(byte) write_buffer [MAX_WRITE_BUFFER_LENGTH]
 array(BufferCommand) command_buffer [MAX_COMMAND_BUFFER_LENGTH]
@@ -24,11 +24,10 @@ void init_buffer() {
   first_open_command_index = 0
   first_pending_command_index = 0
   first_open_buffer_index = 0
-  first_data_buffer_index = MAX_WRITE_BUFFER_LENGTH - 1
+  first_data_buffer_index = 0
 }
 
 inline void process_buffered_writes() {
-  // TODO: Check against V-Blank ending and stop processing commands
   byte i
   bool does_wrap
   pointer.BufferCommand command
@@ -38,6 +37,10 @@ inline void process_buffered_writes() {
   } else {
     does_wrap = false
   }
+
+  byte current_command_length
+  byte written_length
+  written_length = 0
 
   if (does_wrap) {
     // TODO: Fix
@@ -54,7 +57,14 @@ inline void process_buffered_writes() {
         return
       }
 
+      current_command_length = command->count
+
+      if (written_length + current_command_length > 36) {
+        return
+      }
+
       process_command(command)
+      written_length += current_command_length
     }
 
     // Queue completely clear. 
@@ -109,7 +119,11 @@ inline void process_command(pointer.BufferCommand command) {
   }
 
   command->pending = false
-  first_pending_command_index += 1
+  if (first_pending_command_index == MAX_COMMAND_BUFFER_LENGTH - 1) {
+    first_pending_command_index = 0
+  } else {
+    first_pending_command_index += 1
+  }
 }
 
 inline void add_buffered_write(word address, bool write_column, pointer.byte data, byte length) {
@@ -139,6 +153,16 @@ inline void add_buffered_write(word address, bool write_column, pointer.byte dat
     return
   }
 
+  pointer.BufferCommand command
+  command = command_buffer[first_open_command_index].pointer
+
+  if (command->pending) {
+    // Overran command buffer
+    asm {
+      kil
+    }
+  }
+
   index = first_open_buffer_index
 
   if (does_wrap) {
@@ -163,8 +187,6 @@ inline void add_buffered_write(word address, bool write_column, pointer.byte dat
     first_open_buffer_index = first_open_buffer_index + length
   }
 
-  pointer.BufferCommand command
-  command = command_buffer[first_open_command_index].pointer
   command->address = address
   command->count = length
   command->index = index

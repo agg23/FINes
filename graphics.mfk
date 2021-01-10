@@ -15,6 +15,8 @@ enum ColorEffect {
     clear
 }
 
+bool is_rendering
+
 byte oam_index = 0
 
 // enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
