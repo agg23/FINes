@@ -17,7 +17,7 @@ inline bool purchase(byte cost) {
   return true
 }
 
-void render_money(word nametable) {
+void render_money() {
   array(byte) data [6]
   // Dollar sign
   data[0] = $24
@@ -38,7 +38,7 @@ void render_money(word nametable) {
   //   ppu_write_data(bcdResult[i] + $30)
   // }
 
-  add_buffered_write(nametable + 32 + 24, false, data.pointer, 6)
+  add_buffered_write(ppu_nametable0 + 32 + 24, false, data.pointer, 6)
 
   // ppu_mask = %00011110
 }

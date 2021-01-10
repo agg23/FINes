@@ -20,7 +20,7 @@ void main() {
   init_fish()
   init_graphics()
 
-  // render_money(ppu_nametable0)
+  render_money()
 
   while(true) {
     // Wait for NMI to complete rendering frame
@@ -31,9 +31,7 @@ void main() {
     sprite_tick()
 
     // Wait for sprite0 clear
-    // while (ppu_status & %01000000 != 0) {}
-
-    render_money(ppu_nametable1)
+    while (ppu_status & %01000000 != 0) {}
 
     new_frame = true
   }
@@ -51,24 +49,19 @@ void nmi() {
   in_nmi = 1
 
   if (new_frame) {
-    read_ppu_status()
     set_color_effect(clear)
     sprite_render()
 
-    // read_ppu_status()
-    // ppu_mask = 0
     process_buffered_writes()
-    read_ppu_status()
-    // ppu_mask = standard_ppu_ctrl
-    // ppu_mask = default_mask
 
+    read_ppu_status()
     ppu_set_scroll(0, 0)
 
     // Wait for frame to start
-    // while (ppu_status & %01000000 != 0) {}
+    while (ppu_status & %01000000 != 0) {}
     // // Wait for sprite0
-    // while (ppu_status & %01000000 == 0) {}
-    // set_color_effect(blue)
+    while (ppu_status & %01000000 == 0) {}
+    set_color_effect(blue)
 
     new_frame = false
   }

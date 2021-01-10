@@ -24,7 +24,7 @@ void activate_spawn() {
     spawn_fish(false)
   }
 
-  render_money(ppu_nametable0)
+  render_money()
 }
 
 const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_spawn.pointer]
