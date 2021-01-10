@@ -33,14 +33,17 @@ inline void process_buffered_writes() {
   bool does_wrap
   pointer.BufferCommand command
 
-  if (first_open_command_index > first_pending_command_index) {
+  if (first_open_command_index < first_pending_command_index) {
     does_wrap = true
   } else {
     does_wrap = false
   }
 
   if (does_wrap) {
-
+    // TODO: Fix
+    asm {
+      kil
+    }
   } else {
     for i,first_pending_command_index,until,first_open_command_index {
       command = command_buffer[i].pointer
@@ -74,8 +77,10 @@ inline void process_command(pointer.BufferCommand command) {
   }
 
   if (command->column) {
+    read_ppu_status()
     ppu_ctrl = vertical_ppu_ctrl
   } else {
+    read_ppu_status()
     ppu_ctrl = standard_ppu_ctrl
   }
 
@@ -107,20 +112,24 @@ inline void process_command(pointer.BufferCommand command) {
   first_pending_command_index += 1
 }
 
-inline void add_buffered_write(word address, bool writeColumn, pointer.byte data, byte length) {
+inline void add_buffered_write(word address, bool write_column, pointer.byte data, byte length) {
   byte i
   byte temp
   byte length_to_end
   bool does_wrap
+  byte index
 
-  if (first_open_buffer_index > first_data_buffer_index) {
-    temp = WRITE_BUFFER_LENGTH - first_open_buffer_index - first_data_buffer_index
+  temp = WRITE_BUFFER_LENGTH - first_open_buffer_index
+  if (temp < length) {
+    // Space until end + index of first data after wrap
+    temp = temp + first_data_buffer_index
     does_wrap = true
   } else {
-    temp = first_data_buffer_index - first_open_buffer_index
+    temp = WRITE_BUFFER_LENGTH - first_open_buffer_index
     does_wrap = false
   }
 
+  // If free space < length
   if (temp < length) {
     // Out of buffer space
     asm {
@@ -129,6 +138,8 @@ inline void add_buffered_write(word address, bool writeColumn, pointer.byte data
 
     return
   }
+
+  index = first_open_buffer_index
 
   if (does_wrap) {
     length_to_end = WRITE_BUFFER_LENGTH - first_open_buffer_index
@@ -152,7 +163,13 @@ inline void add_buffered_write(word address, bool writeColumn, pointer.byte data
     first_open_buffer_index = first_open_buffer_index + length
   }
 
-  command_buffer[first_open_command_index] = BufferCommand(address, length, first_open_buffer_index, writeColumn, true)
+  pointer.BufferCommand command
+  command = command_buffer[first_open_command_index].pointer
+  command->address = address
+  command->count = length
+  command->index = index
+  command->column = write_column
+  command->pending = true
 
   if (first_open_command_index == COMMAND_BUFFER_LENGTH - 1) {
     first_open_command_index = 0
