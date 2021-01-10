@@ -24,22 +24,10 @@ void render_money() {
   // TODO: This does not appear to work when enabling optimization
   bcdConvert(fish_bucks)
 
-  // Disable rendering
-  // ppu_mask = 0
-
   byte i
-  // read_ppu_status()
-  // ppu_set_addr(nametable + 32 + 24)
-  // // Dollar sign
-  // ppu_write_data($24)
   for i,0,until,5 {
     data[i + 1] = bcdResult[4 - i] + $30
   }
-  // for i,4,downto,0 {
-  //   ppu_write_data(bcdResult[i] + $30)
-  // }
 
   add_buffered_write(ppu_nametable0 + 32 + 24, false, data.pointer, 6)
-
-  // ppu_mask = %00011110
 }

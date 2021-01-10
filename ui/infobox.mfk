@@ -9,7 +9,7 @@ void render_infobox(byte width, byte height, byte x, byte y, function.byte.to.vo
   infobox_data_pointer = pointer(data.pointer)
 
   // Tiles
-  a = ppu_nametable0 + x + (word(y) << 5)
+  a = ppu_nametable1 + x + (word(y) << 5)
   for i,0,until,width {
     data[i] = $1
   }

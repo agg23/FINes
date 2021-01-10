@@ -57,6 +57,9 @@ void nmi() {
     sprite_render()
     process_buffered_writes()
 
+    ppu_ctrl = standard_ppu_ctrl
+    ppu_mask = default_mask
+
     ppu_set_scroll(0, 0)
 
     // Wait for frame to start
