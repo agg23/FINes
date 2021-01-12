@@ -50,6 +50,9 @@ void main() {
 
     if (frame == 0) {
       plant_tick()
+      fish_breathe()
+    } else if (frame == $7F) {
+      fish_breathe()
     }
     // render_stats_tick()
 

@@ -71,16 +71,13 @@ macro void render_thick_right(byte x, byte const add, pointer.byte data) {
 
 void plant_tick() {
   byte i
-  byte temp
 
   for i,0,until,MAX_PLANT_COUNT {
     if (not(plant_active[i])) {
       continue
     }
 
-    temp = rand()
-
-    if (temp < $60) {
+    if (rand() < $60) {
       decrease_ammonia(1)
     }
   }

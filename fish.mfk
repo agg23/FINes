@@ -3,6 +3,7 @@ import custom_random
 import movement_lib
 
 import tank/state
+import entity/health
 
 struct Fish {
   byte x,
@@ -129,6 +130,17 @@ inline void fish_breed() {
     // Breed
     random_int_const(0, 1, temp)
     spawn_fish(temp == 1)
+  }
+}
+
+inline void fish_breathe() {
+  // TODO: Base on fish size
+  byte i
+
+  for i,0,until,active_fish_count {
+    if (rand() < $40) {
+      increase_ammonia(1)
+    }
   }
 }
 

@@ -1,6 +1,16 @@
 byte ammonia_level
 byte ph_level
 
+inline void increase_ammonia(byte value) {
+  if ($ff - ammonia_level < value) {
+    ammonia_level = 255
+  } else {
+    ammonia_level += value
+  }
+
+  render_ammonia()
+}
+
 inline void decrease_ammonia(byte value) {
   if (ammonia_level < value) {
     ammonia_level = 0
