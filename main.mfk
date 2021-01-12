@@ -3,6 +3,8 @@ import custom_random
 import graphics
 import graphics_buffer
 
+import sound/sound
+
 import ui/commandbar
 import tank/tank
 
@@ -24,6 +26,8 @@ void main() {
   init_fish()
   init_graphics()
 
+  famistudio_init(0, $A000)
+
   init_plants()
   render_plant()
 
@@ -33,6 +37,8 @@ void main() {
   process_buffered_writes()
 
   enable_graphics()
+
+  famistudio_music_play(0)
 
   while(true) {
     // Wait for NMI to complete rendering frame
@@ -76,6 +82,8 @@ void nmi() {
     ppu_mask = default_mask
 
     ppu_set_scroll(0, 0)
+
+    famistudio_update()
 
     // Wait for frame to start
     while (ppu_status & %01000000 != 0) {}

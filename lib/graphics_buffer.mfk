@@ -81,10 +81,8 @@ inline void process_command(byte command_index) {
   }
 
   if (command_buffer_column[command_index]) {
-    read_ppu_status()
     ppu_ctrl = vertical_ppu_ctrl
   } else {
-    read_ppu_status()
     ppu_ctrl = standard_ppu_ctrl
   }
 
