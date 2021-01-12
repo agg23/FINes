@@ -1,18 +1,15 @@
 import graphics
 
-struct BufferCommand {
-  word address
-  byte count
-  byte index
-  bool column
-  bool pending
-}
-
 const byte MAX_WRITE_BUFFER_LENGTH = 255
 const byte MAX_COMMAND_BUFFER_LENGTH = 20
 
 array(byte) write_buffer [MAX_WRITE_BUFFER_LENGTH]
-array(BufferCommand) command_buffer [MAX_COMMAND_BUFFER_LENGTH]
+
+array(word) command_buffer_address [MAX_COMMAND_BUFFER_LENGTH]
+array(byte) command_buffer_length [MAX_COMMAND_BUFFER_LENGTH]
+array(byte) command_buffer_index [MAX_COMMAND_BUFFER_LENGTH]
+array(bool) command_buffer_column [MAX_COMMAND_BUFFER_LENGTH]
+array(bool) command_buffer_pending [MAX_COMMAND_BUFFER_LENGTH]
 
 byte first_open_command_index
 byte first_pending_command_index
@@ -30,7 +27,6 @@ void init_buffer() {
 inline void process_buffered_writes() {
   byte i
   bool does_wrap
-  pointer.BufferCommand command
 
   if (first_open_command_index < first_pending_command_index) {
     does_wrap = true
@@ -49,21 +45,19 @@ inline void process_buffered_writes() {
     }
   } else {
     for i,first_pending_command_index,until,first_open_command_index {
-      command = command_buffer[i].pointer
-
-      if (command->pending == false) {
+      if (not(command_buffer_pending[i])) {
         // Queue completely clear. 
         init_buffer()
         return
       }
 
-      current_command_length = command->count
+      current_command_length = command_buffer_length[i]
 
       if (written_length + current_command_length > 36) {
         return
       }
 
-      process_command(command)
+      process_command(i)
       written_length += current_command_length
     }
 
@@ -72,21 +66,21 @@ inline void process_buffered_writes() {
   }
 }
 
-inline void process_command(pointer.BufferCommand command) {
+inline void process_command(byte command_index) {
   byte i
   byte index
   byte length_to_end
   bool does_wrap
 
-  index = command->index
+  index = command_buffer_index[command_index]
 
-  if (command->count + index >= MAX_WRITE_BUFFER_LENGTH) {
+  if (command_buffer_length[command_index] + index >= MAX_WRITE_BUFFER_LENGTH) {
     does_wrap = true
   } else {
     does_wrap = false
   }
 
-  if (command->column) {
+  if (command_buffer_column[command_index]) {
     read_ppu_status()
     ppu_ctrl = vertical_ppu_ctrl
   } else {
@@ -94,31 +88,32 @@ inline void process_command(pointer.BufferCommand command) {
     ppu_ctrl = standard_ppu_ctrl
   }
 
-  read_ppu_status()
-  ppu_set_addr(command->address)
-
   if (does_wrap) {
-    length_to_end = MAX_WRITE_BUFFER_LENGTH - command->index
+    length_to_end = MAX_WRITE_BUFFER_LENGTH - command_buffer_index[command_index]
+    read_ppu_status()
+    ppu_set_addr(command_buffer_address[command_index])
     for i,0,until,length_to_end {
       ppu_write_data(write_buffer[index + i])
     }
 
     // length_after_start
-    length_to_end = command->count - length_to_end
+    length_to_end = command_buffer_length[command_index] - length_to_end
     for i,0,until,length_to_end {
       ppu_write_data(write_buffer[i])
     }
 
     first_data_buffer_index = length_to_end
   } else {
-    for i,0,until,command->count {
+    read_ppu_status()
+    ppu_set_addr(command_buffer_address[command_index])
+    for i,0,until,command_buffer_length[command_index] {
       ppu_write_data(write_buffer[index + i])
     }
 
-    first_data_buffer_index += command->count
+    first_data_buffer_index += command_buffer_length[command_index]
   }
 
-  command->pending = false
+  command_buffer_pending[command_index] = false
   if (first_pending_command_index == MAX_COMMAND_BUFFER_LENGTH - 1) {
     first_pending_command_index = 0
   } else {
@@ -153,14 +148,13 @@ inline void add_buffered_write(word address, bool write_column, pointer.byte dat
     return
   }
 
-  pointer.BufferCommand command
-  command = command_buffer[first_open_command_index].pointer
-
-  if (command->pending) {
+  if (command_buffer_pending[first_open_command_index]) {
     // Overran command buffer
     asm {
       kil
     }
+
+    return
   }
 
   index = first_open_buffer_index
@@ -187,11 +181,11 @@ inline void add_buffered_write(word address, bool write_column, pointer.byte dat
     first_open_buffer_index = first_open_buffer_index + length
   }
 
-  command->address = address
-  command->count = length
-  command->index = index
-  command->column = write_column
-  command->pending = true
+  command_buffer_address[first_open_command_index] = address
+  command_buffer_length[first_open_command_index] = length
+  command_buffer_index[first_open_command_index] = index
+  command_buffer_column[first_open_command_index] = write_column
+  command_buffer_pending[first_open_command_index] = true
 
   if (first_open_command_index == MAX_COMMAND_BUFFER_LENGTH - 1) {
     first_open_command_index = 0

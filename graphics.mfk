@@ -49,7 +49,9 @@ inline void init_graphics() {
 
   render_tank(ppu_nametable0)
   render_tank(ppu_nametable1)
+}
 
+inline void enable_graphics() {
   read_ppu_status()
 
   ppu_ctrl = standard_ppu_ctrl

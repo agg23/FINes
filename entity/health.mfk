@@ -1,0 +1,29 @@
+byte ammonia_level
+byte ph_level
+
+inline void decrease_ammonia(byte value) {
+  if (ammonia_level < value) {
+    ammonia_level = 0
+  } else {
+    ammonia_level -= value
+  }
+
+  render_ammonia()
+}
+
+void render_ammonia() {
+  word temp
+  array(byte) data [5]
+
+  temp.hi = 0
+  temp.lo = ammonia_level
+  // TODO: This does not appear to work when enabling optimization
+  bcdConvert(temp)
+
+  byte i
+  for i,0,until,5 {
+    data[i] = bcdResult[4 - i] + $30
+  }
+
+  add_buffered_write(ppu_nametable0 + 32 * 2 + 24, false, data.pointer, 5)
+}

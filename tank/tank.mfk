@@ -1,5 +1,6 @@
 import tank/state
 
+import entity/health
 import entity/money
 
 import square
@@ -10,6 +11,7 @@ const array(Tank) tanks = [export_square_tank]
 
 void init_tank() {
   init_money()
+  ammonia_level = 200
   selected_tank = 0
   active_tank = export_square_tank
 }

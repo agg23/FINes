@@ -8,11 +8,13 @@ import tank/tank
 
 import fish
 import entity/money
+import entity/plant
 
 import debug/render_stats
 
 byte in_nmi = 0
 byte nmi_fail = 0
+byte frame
 
 volatile bool new_frame = false
 
@@ -22,7 +24,15 @@ void main() {
   init_fish()
   init_graphics()
 
+  init_plants()
+  render_plant()
+
+  render_ammonia()
   render_money()
+
+  process_buffered_writes()
+
+  enable_graphics()
 
   while(true) {
     // Wait for NMI to complete rendering frame
@@ -31,6 +41,10 @@ void main() {
     commandbar_tick()
     fish_tick()
     sprite_tick()
+
+    if (frame == 0) {
+      plant_tick()
+    }
     // render_stats_tick()
 
     // Wait for sprite0 clear
@@ -38,6 +52,7 @@ void main() {
     is_rendering = false
 
     new_frame = true
+    frame += 1
   }
 }
 

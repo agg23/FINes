@@ -1,0 +1,87 @@
+import entity/health
+
+import graphics_buffer
+
+enum PlantType {
+  thick
+}
+
+const byte MAX_PLANT_COUNT = 10
+
+array(bool) plant_active [MAX_PLANT_COUNT]
+array(bool) plant_flip [MAX_PLANT_COUNT]
+array(PlantType) plant_type [MAX_PLANT_COUNT]
+array(byte) plant_x [MAX_PLANT_COUNT]
+array(byte) plant_size [MAX_PLANT_COUNT]
+
+void init_plants() {
+  add_plant(thick, 5, 0, false)
+
+  add_plant(thick, 8, 0, true)
+}
+
+void add_plant(PlantType type, byte x, byte size, bool flip) {
+  byte i
+
+  for i,0,until,MAX_PLANT_COUNT {
+    if (not(plant_active[i])) {
+      plant_active[i] = true
+      plant_flip[i] = flip
+      plant_type[i] = type
+      plant_x[i] = x
+      plant_size[i] = size
+
+      return
+    }
+  }
+}
+
+void render_plant() {
+  byte i
+  byte temp
+  array(byte) data [3]
+
+  for i,0,until,MAX_PLANT_COUNT {
+    if (plant_active[i]) {
+      temp = plant_x[i]
+      if (plant_flip[i]) {
+        render_thick_right(temp, 0, data.pointer)
+        render_thick_left(temp, 1, data.pointer)
+      } else {
+        render_thick_left(temp, 0, data.pointer)
+        render_thick_right(temp, 1, data.pointer)
+      }
+    }
+  }
+}
+
+macro void render_thick_left(byte x, byte const add, pointer.byte data) {
+  data[0] = $D0
+  data[1] = $E0
+  data[2] = $F0
+  add_buffered_write(ppu_nametable0 + 32 * 25 + x + add, true, data, 3)
+}
+
+macro void render_thick_right(byte x, byte const add, pointer.byte data) {
+  data[0] = $D1
+  data[1] = $E1
+  data[2] = $F1
+  add_buffered_write(ppu_nametable0 + 32 * 25 + x + add, true, data, 3)
+}
+
+void plant_tick() {
+  byte i
+  byte temp
+
+  for i,0,until,MAX_PLANT_COUNT {
+    if (not(plant_active[i])) {
+      continue
+    }
+
+    temp = rand()
+
+    if (temp < $60) {
+      decrease_ammonia(1)
+    }
+  }
+}
