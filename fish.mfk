@@ -6,7 +6,8 @@ import tank/state
 import entity/health
 
 enum FishType {
-  small,
+  tetra,
+  rasbora,
   cherry_shrimp
 }
 
@@ -31,9 +32,10 @@ const byte FISH_MAX_VELOCITY = 2
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
 
 void init_fish() {
-  spawn_fish(small, true)
+  spawn_fish(tetra, true)
+  spawn_fish(rasbora, true)
   spawn_fish(cherry_shrimp, true)
-  spawn_fish(small, false)
+  spawn_fish(tetra, false)
 }
 
 void spawn_fish(FishType type, bool sex) {
@@ -44,7 +46,7 @@ void spawn_fish(FishType type, bool sex) {
   fish_x[active_fish_count] = $80
   fish_y[active_fish_count] = $20
   fish_velocity_x[active_fish_count] = $250
-  fish_velocity_y[active_fish_count] = $1000
+  fish_velocity_y[active_fish_count] = $500
   fish_type[active_fish_count] = type
   fish_sex[active_fish_count] = sex
 
@@ -72,15 +74,15 @@ inline void fish_move() {
   bool did_change
 
   for i,0,until,active_fish_count {
-    if (fish_type[i] == small) {
-      small_fish_move(i)
+    if (fish_type[i] == tetra || fish_type[i] == rasbora) {
+      tetra_fish_move(i)
     } else if (fish_type[i] == cherry_shrimp) {
       cherry_shrimp_move(i)
     }
   }
 }
 
-inline void small_fish_move(byte i) {
+inline void tetra_fish_move(byte i) {
   byte random_direction
   byte x
   byte y
@@ -188,7 +190,7 @@ inline void fish_breed() {
   if (temp < (male_small_fish_count + female_small_fish_count) / 2 && rand() < 1) {
     // Breed
     random_int_const(0, 1, temp)
-    spawn_fish(small, temp == 1)
+    spawn_fish(tetra, temp == 1)
   }
 }
 
@@ -205,19 +207,56 @@ inline void fish_breathe() {
 
 inline void render_fish() {
   byte i
-  byte direction_mask
+  byte mask
+  bool pos_direction
   for i,0,until,active_fish_count {
-    if (sbyte(fish_velocity_x[i].hi) >= 0) {
-      direction_mask = 0
+    pos_direction = sbyte(fish_velocity_x[i].hi) >= 0
+    if (pos_direction) {
+      mask = 0
     } else {
-      direction_mask = %01000000
+      mask = %01000000
     }
 
-    oam_buffer[oam_index] = fish_y[i]
-    oam_buffer[oam_index + 1] = $80 + byte(fish_type[i])
-    oam_buffer[oam_index + 2] = direction_mask
-    oam_buffer[oam_index + 3] = fish_x[i]
+    if (fish_type[i] == tetra) {
+      render_two_tile_fish(i, mask, pos_direction, 1, tetra_tiles.pointer)
+    } else if (fish_type[i] == rasbora) {
+      render_two_tile_fish(i, mask, pos_direction, 2, rasbora_tiles.pointer)
+    } else {
+      oam_buffer[oam_index] = fish_y[i]
+      oam_buffer[oam_index + 1] = $81
+      oam_buffer[oam_index + 2] = mask
+      oam_buffer[oam_index + 3] = fish_x[i]
 
-    oam_index += 4
+      oam_index += 4
+    }
   }
 }
+
+macro void render_two_tile_fish(byte i, byte mask, bool pos_direction, byte const palette, pointer.byte const data) {
+  oam_buffer[oam_index] = fish_y[i]
+  if (pos_direction) {
+    oam_buffer[oam_index + 1] = data[0]
+  } else {
+    oam_buffer[oam_index + 1] = data[1]
+  }
+  // Palette 1
+  oam_buffer[oam_index + 2] = mask | palette
+  oam_buffer[oam_index + 3] = fish_x[i] - 8
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = fish_y[i]
+  if (pos_direction) {
+    oam_buffer[oam_index + 1] = data[1]
+  } else {
+    oam_buffer[oam_index + 1] = data[0]
+  }
+  // Palette 1
+  oam_buffer[oam_index + 2] = mask | palette
+  oam_buffer[oam_index + 3] = fish_x[i]
+
+  oam_index += 4
+}
+
+const array(byte) tetra_tiles = [$82, $83]
+const array(byte) rasbora_tiles = [$84, $85]

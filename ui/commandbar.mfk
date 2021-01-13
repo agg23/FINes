@@ -21,7 +21,7 @@ void activate_fish_inspect() {
 
 void activate_spawn() {
   if (purchase(10)) {
-    spawn_fish(small, false)
+    spawn_fish(tetra, false)
   }
 
   render_money()
