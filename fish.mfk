@@ -5,11 +5,17 @@ import movement_lib
 import tank/state
 import entity/health
 
+enum FishType {
+  small,
+  cherry_shrimp
+}
+
 struct Fish {
   byte x,
   byte y,
   word velocity_x,
   word velocity_y,
+  FishType type
   bool sex
 }
 
@@ -18,8 +24,8 @@ const byte FISH_MAX_COUNT = 20
 array(Fish) fish_instances [FISH_MAX_COUNT]
 byte active_fish_count = 0
 
-byte male_fish_count
-byte female_fish_count
+byte male_small_fish_count
+byte female_small_fish_count
 
 const word FISH_MAX_VELOCITY_PER_TICK = $100
 const word FISH_MAX_VERTICAL_VELOCITY_PER_TICK = $100
@@ -27,12 +33,12 @@ const byte FISH_MAX_VELOCITY = 2
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
 
 void init_fish() {
-  spawn_fish(true)
-  spawn_fish(true)
-  spawn_fish(false)
+  spawn_fish(small, true)
+  spawn_fish(cherry_shrimp, true)
+  spawn_fish(small, false)
 }
 
-void spawn_fish(bool sex) {
+void spawn_fish(FishType type, bool sex) {
   if (active_fish_count >= FISH_MAX_COUNT) {
     return
   }
@@ -40,14 +46,15 @@ void spawn_fish(bool sex) {
   Fish fish
   fish.x = $80
   fish.y = $20
+  fish.type = type
   fish.sex = sex
 
   fish_instances[active_fish_count] = fish
 
   if (sex) {
-    male_fish_count += 1
+    male_small_fish_count += 1
   } else {
-    female_fish_count += 1
+    female_small_fish_count += 1
   }
 
   active_fish_count += 1
@@ -119,17 +126,17 @@ inline void fish_move() {
 
 inline void fish_breed() {
   byte temp
-  if (male_fish_count < 1 || female_fish_count < 1) {
+  if (male_small_fish_count < 1 || female_small_fish_count < 1) {
     // Breeding cannot occur
     return
   }
 
   random_int_const(0, FISH_MAX_COUNT, temp)
 
-  if (temp < (male_fish_count + female_fish_count) / 2 && rand() < 1) {
+  if (temp < (male_small_fish_count + female_small_fish_count) / 2 && rand() < 1) {
     // Breed
     random_int_const(0, 1, temp)
-    spawn_fish(temp == 1)
+    spawn_fish(small, temp == 1)
   }
 }
 
@@ -158,7 +165,7 @@ inline void render_fish() {
     }
 
     oam_buffer[oam_index] = fish.y
-    oam_buffer[oam_index + 1] = $80
+    oam_buffer[oam_index + 1] = $80 + byte(fish.type)
     oam_buffer[oam_index + 2] = direction_mask
     oam_buffer[oam_index + 3] = fish.x
 
