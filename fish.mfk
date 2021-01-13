@@ -69,58 +69,111 @@ inline void fish_move() {
   byte y
   word velocity_x
   word velocity_y
+  bool did_change
 
   for i,0,until,active_fish_count {
-
-    x = fish_x[i]
-    y = fish_y[i]
-    velocity_x = fish_velocity_x[i]
-    velocity_y = fish_velocity_y[i]
-
-    if (rand() < 20) {
-      random_direction = rand()
-
-      if random_direction < $20 {
-        // Low chance to move vertically
-        if random_direction < $10 {
-          // Up
-          velocity_y -= FISH_MAX_VERTICAL_VELOCITY_PER_TICK
-        } else {
-          // Down
-          velocity_y += FISH_MAX_VERTICAL_VELOCITY_PER_TICK
-        }
-      } else {
-        if random_direction < $79 {
-          // Left
-          velocity_x -= FISH_MAX_VELOCITY_PER_TICK
-        } else {
-          // Right
-          velocity_x += FISH_MAX_VELOCITY_PER_TICK
-        }
-      }
-
-      cap_velocity(velocity_x.hi, velocity_x.lo, FISH_MAX_VELOCITY)
-      cap_velocity(velocity_y.hi, velocity_y.lo, FISH_MAX_VELOCITY)
+    if (fish_type[i] == small) {
+      small_fish_move(i)
+    } else if (fish_type[i] == cherry_shrimp) {
+      cherry_shrimp_move(i)
     }
-
-    x += sbyte(velocity_x.hi)
-    y += sbyte(velocity_y.hi)
-
-    cap_fish_location_to_active_tank(x, y)
-
-    fish_x[i] = x
-    fish_y[i] = y
-
-    // decay_velocity(velocity_x.hi, velocity_x.lo, FISH_DECAY_VELOCITY_PER_TICK)
-    // decay_velocity(velocity_y.hi, velocity_y.lo, FISH_DECAY_VELOCITY_PER_TICK)
-
-    fish_velocity_x[i] = velocity_x
-    fish_velocity_y[i] = velocity_y
   }
 }
 
-inline void cherry_shrimp_move(byte i) {
+inline void small_fish_move(byte i) {
+  byte random_direction
+  byte x
+  byte y
+  word velocity_x
+  word velocity_y
+  bool did_change
 
+  did_change = false
+
+  x = fish_x[i]
+  y = fish_y[i]
+  velocity_x = fish_velocity_x[i]
+  velocity_y = fish_velocity_y[i]
+
+  if (rand() < 20) {
+    random_direction = rand()
+
+    if random_direction < $20 {
+      // Low chance to move vertically
+      if random_direction < $10 {
+        // Up
+        velocity_y -= FISH_MAX_VERTICAL_VELOCITY_PER_TICK
+      } else {
+        // Down
+        velocity_y += FISH_MAX_VERTICAL_VELOCITY_PER_TICK
+      }
+    } else {
+      if random_direction < $79 {
+        // Left
+        velocity_x -= FISH_MAX_VELOCITY_PER_TICK
+      } else {
+        // Right
+        velocity_x += FISH_MAX_VELOCITY_PER_TICK
+      }
+    }
+
+    cap_velocity(velocity_x.hi, velocity_x.lo, FISH_MAX_VELOCITY)
+    cap_velocity(velocity_y.hi, velocity_y.lo, FISH_MAX_VELOCITY)
+  }
+
+  x += sbyte(velocity_x.hi)
+  y += sbyte(velocity_y.hi)
+
+  cap_fish_location_to_active_tank(x, y, did_change)
+
+  if (did_change) {
+    velocity_x = 0
+    velocity_y = 0
+  }
+
+  fish_x[i] = x
+  fish_y[i] = y
+
+  // decay_velocity(velocity_x.hi, velocity_x.lo, FISH_DECAY_VELOCITY_PER_TICK)
+  // decay_velocity(velocity_y.hi, velocity_y.lo, FISH_DECAY_VELOCITY_PER_TICK)
+
+  fish_velocity_x[i] = velocity_x
+  fish_velocity_y[i] = velocity_y
+}
+
+inline void cherry_shrimp_move(byte i) {
+  byte x
+  byte y
+  word velocity_x
+  word velocity_y
+  bool did_change
+
+  did_change = false
+
+  x = fish_x[i]
+  y = fish_y[i]
+  velocity_x = fish_velocity_x[i]
+  velocity_y = fish_velocity_y[i]
+
+  if (rand() < 8) {
+    // Small chance to swim upwards
+    velocity_y -= $400
+  }
+
+  if (velocity_y.hi > $7f) {
+    velocity_y += $80
+  }
+
+  x += sbyte(velocity_x.hi)
+  y += sbyte(velocity_y.hi)
+
+  cap_fish_location_to_active_tank(x, y, did_change)
+
+  fish_x[i] = x
+  fish_y[i] = y
+
+  fish_velocity_x[i] = velocity_x
+  fish_velocity_y[i] = velocity_y
 }
 
 inline void fish_breed() {
