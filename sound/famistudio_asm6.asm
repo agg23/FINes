@@ -153,7 +153,7 @@ FAMISTUDIO_USE_FAMITRACKER_TEMPO = 1
 ; Must be enabled if any song uses the volume track. The volume track allows manipulating the volume at the track level
 ; independently from instruments.
 ; More information at: https://famistudio.org/doc/pianoroll/#editing-volume-tracks-effects
-; FAMISTUDIO_USE_VOLUME_TRACK   = 1
+FAMISTUDIO_USE_VOLUME_TRACK   = 1
 
 ; Must be enabled if any song uses the pitch track. The pitch track allows manipulating the pitch at the track level
 ; independently from instruments.

@@ -1,4 +1,4 @@
-segment(prgrom) const array music @ $A000 = file("MusicTest.bin")
+segment(prgrom) const array music @ $A000 = file("TankMusic1.bin")
 segment(prgrom) const array famitracker @ $C000 = file("famistudio_asm6.bin")
 
 const array famitrack_zp [10] @ $F0
@@ -12,10 +12,10 @@ const array famitrack_ram [$FF] @ $900
  */
 asm void famistudio_init(byte a, word xy) @$C000 extern
 
-asm void famistudio_update() @$C17F extern
+asm void famistudio_update() @$C17B extern
 
 /**
  * Plays a song from the loaded music data (from a previous call to famistudio_init)
  * @param a Song index.
  */
-asm void famistudio_music_play(byte a) @$C0B3 extern
+asm void famistudio_music_play(byte a) @$C0B6 extern
