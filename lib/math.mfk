@@ -1,0 +1,25 @@
+macro void signed_division(sbyte a, byte b, sbyte output) {
+  if (a < 0) {
+    output = (byte(a) / b) | $80
+  } else {
+    output = a / b
+  }
+}
+
+macro void signed_division_const(sbyte a, byte const b, sbyte output) {
+  if (a < 0) {
+    // Output will also be negative
+    output = 0 - ((byte(a) & $7F) / b)
+  } else {
+    output = a / b
+  }
+}
+
+macro void signed16_division_const(signed16 a, byte const b, signed16 output) {
+  if (a < 0) {
+    // Output will also be negative
+    output = 0 - ((word(a) & $7FFF) / b)
+  } else {
+    output = a / b
+  }
+}
