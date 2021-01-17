@@ -15,7 +15,16 @@ macro void signed_division_const(sbyte a, byte const b, sbyte output) {
   }
 }
 
-macro void signed16_division_const(signed16 a, byte const b, word output) {
+macro void signed16_division_const(signed16 a, byte const b, signed16 output) {
+  if (a < 0) {
+    // Output will also be negative
+    output = 0 - ((word(a) & $7FFF) / b)
+  } else {
+    output = a / b
+  }
+}
+
+macro void signed16_division(signed16 a, byte b, signed16 output) {
   if (a < 0) {
     // Output will also be negative
     output = 0 - ((word(a) & $7FFF) / b)
@@ -32,7 +41,7 @@ macro void arithmetic_shift_right(sbyte a) {
   }
 }
 
-macro void signed16_arithmetic_shift_right(signed16 a) {
+inline void signed16_arithmetic_shift_right(signed16 a) {
   asm {
     ldy a.hi
     cpy $80

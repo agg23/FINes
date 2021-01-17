@@ -17,8 +17,8 @@ const byte MAX_FISH_COUNT = 20
 
 array(byte) fish_x [MAX_FISH_COUNT]
 array(byte) fish_y [MAX_FISH_COUNT]
-array(sbyte) fish_velocity_x [MAX_FISH_COUNT]
-array(sbyte) fish_velocity_y [MAX_FISH_COUNT]
+array(signed16) fish_velocity_x [MAX_FISH_COUNT]
+array(signed16) fish_velocity_y [MAX_FISH_COUNT]
 array(FishType) fish_type [MAX_FISH_COUNT]
 array(bool) fish_sex [MAX_FISH_COUNT]
 array(bool) fish_alive [MAX_FISH_COUNT]
@@ -29,8 +29,11 @@ byte male_small_fish_count
 byte female_small_fish_count
 
 const word FISH_MAX_VELOCITY_PER_TICK = 6
-const byte FISH_MAX_VELOCITY = 5
+const word FISH_MAX_VELOCITY = $200
 const byte FISH_DECAY_VELOCITY_PER_TICK = $20
+
+signed16 fish_diff_velocity_x
+signed16 fish_diff_velocity_y
 
 void init_fish() {
   spawn_fish(tetra, true, $80, $26)
@@ -97,46 +100,52 @@ inline void fish_move() {
 }
 
 inline void tetra_fish_move(byte i) {
-  sbyte x_velocity
-  sbyte y_velocity
-  word temp
+  fish_diff_velocity_x = fish_velocity_x[i]
+  fish_diff_velocity_y = fish_velocity_y[i]
 
-  temp = boid_center_mass_step(i)
-  x_velocity = sbyte(temp.hi)
-  y_velocity = sbyte(temp.lo)
+  boid_center_mass_step(i)
 
-  temp = boid_distance_step(i)
-  x_velocity += sbyte(temp.hi)
-  y_velocity += sbyte(temp.lo)
+  boid_distance_step(i)
 
-  temp = boid_average_velocity_step(i)
-  x_velocity += sbyte(temp.hi)
-  y_velocity += sbyte(temp.lo)
+  // boid_average_velocity_step(i)
 
-  arithmetic_shift_right(x_velocity)
-  arithmetic_shift_right(x_velocity)
-  arithmetic_shift_right(x_velocity)
-  arithmetic_shift_right(y_velocity)
-  arithmetic_shift_right(y_velocity)
-  arithmetic_shift_right(y_velocity)
+  bound_position(i)
+
+  if (fish_diff_velocity_x < -FISH_MAX_VELOCITY) {
+    fish_diff_velocity_x = -FISH_MAX_VELOCITY
+  } else if (fish_diff_velocity_x > FISH_MAX_VELOCITY) {
+    fish_diff_velocity_x = FISH_MAX_VELOCITY
+  }
+
+  if (fish_diff_velocity_y < -FISH_MAX_VELOCITY) {
+    fish_diff_velocity_y = -FISH_MAX_VELOCITY
+  } else if (fish_diff_velocity_y > FISH_MAX_VELOCITY) {
+    fish_diff_velocity_y = FISH_MAX_VELOCITY
+  }
+
+  fish_velocity_x[i] = fish_diff_velocity_x
+  fish_velocity_y[i] = fish_diff_velocity_y
+
+  sbyte applied_x_velocity
+  sbyte applied_y_velocity
+
+  applied_x_velocity = fish_diff_velocity_x.hi
+  applied_y_velocity = fish_diff_velocity_y.hi
+
+  // arithmetic_shift_right(applied_x_velocity)
+  // arithmetic_shift_right(applied_y_velocity)
+  // arithmetic_shift_right(x_velocity)
+  // arithmetic_shift_right(x_velocity)
+  // arithmetic_shift_right(y_velocity)
+  // arithmetic_shift_right(y_velocity)
+  // arithmetic_shift_right(y_velocity)
+  // arithmetic_shift_right(y_velocity)
 
   // fish_velocity_x[i] += x_velocity
   // fish_velocity_y[i] += y_velocity
 
   // x_velocity = sbyte(x_velocity) + fish_velocity_x[i]
   // y_velocity = sbyte(y_velocity) + fish_velocity_y[i]
-
-  // if (sbyte(x_velocity) < -FISH_MAX_VELOCITY) {
-  //   x_velocity = -FISH_MAX_VELOCITY
-  // } else if (x_velocity > FISH_MAX_VELOCITY) {
-  //   x_velocity = FISH_MAX_VELOCITY
-  // }
-
-  // if (sbyte(y_velocity) < -FISH_MAX_VELOCITY) {
-  //   y_velocity = -FISH_MAX_VELOCITY
-  // } else if (y_velocity > FISH_MAX_VELOCITY) {
-  //   y_velocity = FISH_MAX_VELOCITY
-  // }
 
   // if (sbyte(y_velocity) < 0) {
   //   y_velocity = -1
@@ -151,34 +160,16 @@ inline void tetra_fish_move(byte i) {
   byte y
   bool did_change
 
-  x = fish_x[i] + x_velocity
-  y = fish_y[i] + y_velocity
+  x = fish_x[i] + applied_x_velocity
+  y = fish_y[i] + applied_y_velocity
 
   cap_fish_location_to_active_tank(x, y, did_change)
 
   fish_x[i] = x
   fish_y[i] = y
-
-  // Decay velocity
-  if (sbyte(x_velocity) < 0) {
-    fish_velocity_x[i] = x_velocity + 1
-  } else if (x_velocity > 0) {
-    fish_velocity_x[i] = x_velocity - 1
-  }
-
-  if (sbyte(y_velocity) < 0) {
-    fish_velocity_y[i] = y_velocity + 1
-  } else if (y_velocity > 0) {
-    fish_velocity_y[i] = y_velocity - 1
-  }
-
-  if (did_change) {
-    fish_velocity_x[i] = fish_velocity_x[i] * -1
-    fish_velocity_y[i] = fish_velocity_y[i] * -1
-  }
 }
 
-inline word boid_center_mass_step(byte i) {
+inline void boid_center_mass_step(byte i) {
   word center
   center = perceived_boid_center(i)
 
@@ -187,27 +178,34 @@ inline word boid_center_mass_step(byte i) {
   word temp_out
 
   stemp = signed16(center.hi) - signed16(fish_x[i])
+  // Want to divide by 128 (shift right 7 times)
+  // Since we're using two ints here, not fractional words, we shift (data << 8) >> 7 = data << 1
+  // fish_diff_velocity_x += stemp << 1
+  // TODO: Removed shift left
   signed16_arithmetic_shift_right(stemp)
-  signed16_arithmetic_shift_right(stemp)
-  signed16_arithmetic_shift_right(stemp)
+  fish_diff_velocity_x += stemp
+  // signed16_arithmetic_shift_right(stemp)
+  // signed16_arithmetic_shift_right(stemp)
+  // signed16_arithmetic_shift_right(stemp)
   // signed16_division_const(stemp, 16, temp_out)
-  output.hi = stemp.lo
+  // output.hi = stemp.lo
 
   stemp = signed16(center.lo) - signed16(fish_y[i])
   signed16_arithmetic_shift_right(stemp)
-  signed16_arithmetic_shift_right(stemp)
-  signed16_arithmetic_shift_right(stemp)
+  fish_diff_velocity_y += stemp
+  // fish_diff_velocity_y += stemp << 1
+  // signed16_arithmetic_shift_right(stemp)
+  // signed16_arithmetic_shift_right(stemp)
+  // signed16_arithmetic_shift_right(stemp)
   // signed16_division_const(stemp, 16, temp_out)
-  output.lo = stemp.lo
-
-  return output
+  // output.lo = stemp.lo
 }
 
-inline word boid_distance_step(byte i) {
+inline void boid_distance_step(byte i) {
   byte j
   word temp
-  sbyte displacement_x
-  sbyte displacement_y
+  signed16 displacement_x
+  signed16 displacement_y
   signed16 x_distance
   signed16 y_distance
 
@@ -220,28 +218,36 @@ inline word boid_distance_step(byte i) {
       x_distance = signed16(fish_x[j]) - signed16(fish_x[i])
       y_distance = signed16(fish_y[j]) - signed16(fish_y[i])
 
-      temp = word(x_distance.lo * x_distance.lo) + word(y_distance.lo * y_distance.lo)
+      // This may not work due to these values being signed
+      temp = word(x_distance * x_distance) + word(y_distance * y_distance)
 
       if (temp < 100) {
-        displacement_x -= sbyte(x_distance.lo)
-        displacement_y -= sbyte(y_distance.lo)
+        // signed16_arithmetic_shift_right(x_distance)
+        displacement_x -= x_distance
+        // signed16_arithmetic_shift_right(y_distance)
+        displacement_y -= y_distance
       }
     }
   }
 
-  arithmetic_shift_right(displacement_x)
-  arithmetic_shift_right(displacement_y)
+  // signed16_arithmetic_shift_right(displacement_x)
+  // arithmetic_shift_right(displacement_x)
+  // signed16_arithmetic_shift_right(displacement_y)
+  // arithmetic_shift_right(displacement_y)
 
-  word output
-  output.hi = displacement_x
-  output.lo = displacement_y
-  return output
+  fish_diff_velocity_x += displacement_x
+  fish_diff_velocity_y += displacement_y
+
+  // word output
+  // output.hi = displacement_x
+  // output.lo = displacement_y
+  // return output
 }
 
-inline word boid_average_velocity_step(byte i) {
+inline void boid_average_velocity_step(byte i) {
   byte j
-  word sum_x
-  word sum_y
+  signed16 sum_x
+  signed16 sum_y
   byte count
 
   for j,0,until,MAX_FISH_COUNT {
@@ -252,22 +258,29 @@ inline word boid_average_velocity_step(byte i) {
     }
   }
 
-  sum_x = sum_x / count
-  sum_y = sum_y / count
+  signed16_division(sum_x, count, sum_x)
+  signed16_division(sum_y, count, sum_y)
 
-  sbyte temp
-  // Will fit in signed byte as velocities must be small (thus their averages will be too)
-  temp = sbyte(sum_x.lo) - fish_velocity_x[i]
-  arithmetic_shift_right(temp)
+  signed16 temp
+  temp = sum_x - fish_velocity_x[i]
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
 
-  word output
-  output.hi = temp
-  
-  temp = sbyte(sum_y.lo) - fish_velocity_y[i]
-  arithmetic_shift_right(temp)
-  output.lo = temp
+  fish_diff_velocity_x += temp.hi
 
-  return output
+  temp = sum_y - fish_velocity_y[i]
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+  // signed16_arithmetic_shift_right(temp)
+
+  fish_diff_velocity_y += temp.lo
 }
 
 inline word perceived_boid_center(byte i) {
@@ -281,7 +294,7 @@ inline word perceived_boid_center(byte i) {
   count = 0
 
   for j,0,until,MAX_FISH_COUNT {
-    if (j != i && fish_alive[j]) {
+    if (fish_alive[j]) {
       sum_x += fish_x[j]
       sum_y += fish_y[j]
       count += 1
@@ -292,6 +305,7 @@ inline word perceived_boid_center(byte i) {
   sum_y = sum_y / count
 
   word output
+  // Output must fit in single byte, as avg of x will always be < 256
   output.hi = sum_x.lo
   output.lo = sum_y.lo
 
@@ -303,6 +317,20 @@ inline word perceived_boid_center(byte i) {
   oam_index += 4
 
   return output
+}
+
+inline void bound_position(byte i) {
+  if (fish_x[i] < active_tank.x_low + 16) {
+    fish_diff_velocity_x += $40
+  } else if (fish_x[i] > active_tank.x_high - 16) {
+    fish_diff_velocity_x -= $40
+  }
+
+  if (fish_y[i] < active_tank.y_low + 16) {
+    fish_diff_velocity_y += $40
+  } else if (fish_y[i] > active_tank.y_high - 16) {
+    fish_diff_velocity_y -= $40
+  }
 }
 
 // inline void cherry_shrimp_move(byte i) {
@@ -376,7 +404,7 @@ inline void render_fish() {
       continue
     }
 
-    pos_direction = sbyte(fish_velocity_x[i]) >= 0
+    pos_direction = fish_velocity_x[i].hi & $80 == 0
     if (pos_direction) {
       mask = 0
     } else {
