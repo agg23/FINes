@@ -52,8 +52,7 @@ inline void init_graphics() {
 }
 
 inline void enable_graphics() {
-  read_ppu_status()
-
+  // TODO: Figure out initial load flicker
   ppu_ctrl = standard_ppu_ctrl
   ppu_mask = default_mask
 
