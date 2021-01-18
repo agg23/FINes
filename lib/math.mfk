@@ -41,18 +41,18 @@ macro void arithmetic_shift_right(sbyte a) {
   }
 }
 
-inline void signed16_arithmetic_shift_right(signed16 a) {
-  asm {
-    ldy a.hi
-    cpy $80
-    bcc .ok
-    inc a.lo
-    bne .ok
-    iny
-    .ok:
-    tya
-    ror
-    ror a.lo
-    sta a.hi
-  }
+// From http://forum.6502.org/viewtopic.php?f=2&t=5317#p63391
+macro asm void signed16_arithmetic_shift_right(signed16 ref input) {
+  lda input.hi
+  cmp #$80
+  ror                  // load the msb
+  ror input.lo      // rotate the lsb as normal
+  tax                  // check sign
+  bpl .done
+  bcc .done
+  inc input.lo      // adjust toward 0 only if
+  bne .done             //   # < 0 and remainder = 1
+  inx
+.done:
+  stx input.hi      // store msb
 }

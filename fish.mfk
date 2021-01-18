@@ -131,12 +131,6 @@ inline void tetra_fish_move(byte i) {
   fish_velocity_x[i] = fish_diff_velocity_x
   fish_velocity_y[i] = fish_diff_velocity_y
 
-  sbyte applied_x_velocity
-  sbyte applied_y_velocity
-
-  applied_x_velocity = fish_diff_velocity_x.hi
-  applied_y_velocity = fish_diff_velocity_y.hi
-
   // arithmetic_shift_right(applied_x_velocity)
   // arithmetic_shift_right(applied_y_velocity)
   // arithmetic_shift_right(x_velocity)
@@ -165,8 +159,8 @@ inline void tetra_fish_move(byte i) {
   byte y
   bool did_change
 
-  x = fish_x[i] + applied_x_velocity
-  y = fish_y[i] + applied_y_velocity
+  x = fish_x[i] + sbyte(fish_diff_velocity_x.hi)
+  y = fish_y[i] + sbyte(fish_diff_velocity_y.hi)
 
   cap_fish_location_to_active_tank(x, y, did_change)
 
@@ -178,9 +172,7 @@ inline void boid_center_mass_step(byte i) {
   word center
   center = perceived_boid_center(i)
 
-  word output
   signed16 stemp
-  word temp_out
 
   stemp = signed16(center.hi) - signed16(fish_x[i])
   // Want to divide by 128 (shift right 7 times)
