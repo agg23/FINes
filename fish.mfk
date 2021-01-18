@@ -36,6 +36,11 @@ signed16 fish_diff_velocity_x
 signed16 fish_diff_velocity_y
 
 void init_fish() {
+  byte i
+  for i,0,until,MAX_FISH_COUNT {
+    fish_alive[i] = false
+  }
+
   spawn_fish(tetra, true, $80, $26)
   spawn_fish(rasbora, true, $60, $84)
   // spawn_fish(cherry_shrimp, true)
@@ -412,9 +417,9 @@ inline void render_fish() {
     }
 
     if (fish_type[i] == tetra) {
-      render_two_tile_fish(i, mask, pos_direction, 1, tetra_tiles.pointer)
+      render_two_tile_fish(i, mask, pos_direction, 1, $82, $83)
     } else if (fish_type[i] == rasbora) {
-      render_two_tile_fish(i, mask, pos_direction, 2, rasbora_tiles.pointer)
+      render_two_tile_fish(i, mask, pos_direction, 2, $84, $85)
     } else {
       oam_buffer[oam_index] = fish_y[i]
       oam_buffer[oam_index + 1] = $81
@@ -426,31 +431,26 @@ inline void render_fish() {
   }
 }
 
-macro void render_two_tile_fish(byte i, byte mask, bool pos_direction, byte const palette, pointer.byte const data) {
+macro void render_two_tile_fish(byte i, byte mask, bool pos_direction, byte const palette, byte const first_tile, byte const second_tile) {
   oam_buffer[oam_index] = fish_y[i]
   if (pos_direction) {
-    oam_buffer[oam_index + 1] = data[0]
+    oam_buffer[oam_index + 1] = first_tile
   } else {
-    oam_buffer[oam_index + 1] = data[1]
+    oam_buffer[oam_index + 1] = second_tile
   }
   // Palette 1
   oam_buffer[oam_index + 2] = mask | palette
   oam_buffer[oam_index + 3] = fish_x[i] - 8
 
-  oam_index += 4
-
-  oam_buffer[oam_index] = fish_y[i]
+  oam_buffer[oam_index + 4] = fish_y[i]
   if (pos_direction) {
-    oam_buffer[oam_index + 1] = data[1]
+    oam_buffer[oam_index + 5] = second_tile
   } else {
-    oam_buffer[oam_index + 1] = data[0]
+    oam_buffer[oam_index + 5] = first_tile
   }
   // Palette 1
-  oam_buffer[oam_index + 2] = mask | palette
-  oam_buffer[oam_index + 3] = fish_x[i]
+  oam_buffer[oam_index + 6] = mask | palette
+  oam_buffer[oam_index + 7] = fish_x[i]
 
-  oam_index += 4
+  oam_index += 8
 }
-
-const array(byte) tetra_tiles = [$82, $83]
-const array(byte) rasbora_tiles = [$84, $85]
