@@ -28,9 +28,9 @@ byte active_fish_count = 0
 byte male_small_fish_count
 byte female_small_fish_count
 
-const word FISH_MAX_VELOCITY_PER_TICK = 6
-const word FISH_MAX_VELOCITY = $200
-const byte FISH_DECAY_VELOCITY_PER_TICK = $20
+const word FISH_MAX_VELOCITY = $600
+const byte FISH_DECAY_VELOCITY_PER_TICK = $2
+const byte FISH_STRATA_VELOCITY_PER_TICK = $8
 
 signed16 fish_diff_velocity_x
 signed16 fish_diff_velocity_y
@@ -41,10 +41,14 @@ void init_fish() {
     fish_alive[i] = false
   }
 
+  // spawn_fish(tetra, true, $80, $26)
+  // spawn_fish(rasbora, true, $60, $84)
+  // // spawn_fish(cherry_shrimp, true)
+  // spawn_fish(tetra, false, $34, $B2)
   spawn_fish(tetra, true, $80, $26)
-  spawn_fish(rasbora, true, $60, $84)
-  // spawn_fish(cherry_shrimp, true)
-  spawn_fish(tetra, false, $34, $B2)
+  spawn_fish(tetra, true, $81, $26)
+  spawn_fish(tetra, true, $80, $27)
+  spawn_fish(tetra, true, $81, $27)
 }
 
 void spawn_fish(FishType type, bool sex, byte x, byte y) {
@@ -114,6 +118,8 @@ inline void tetra_fish_move(byte i) {
 
   // boid_average_velocity_step(i)
 
+  trend_center(i)
+
   bound_position(i)
 
   if (fish_diff_velocity_x < -FISH_MAX_VELOCITY) {
@@ -127,9 +133,6 @@ inline void tetra_fish_move(byte i) {
   } else if (fish_diff_velocity_y > FISH_MAX_VELOCITY) {
     fish_diff_velocity_y = FISH_MAX_VELOCITY
   }
-
-  fish_velocity_x[i] = fish_diff_velocity_x
-  fish_velocity_y[i] = fish_diff_velocity_y
 
   // arithmetic_shift_right(applied_x_velocity)
   // arithmetic_shift_right(applied_y_velocity)
@@ -146,12 +149,6 @@ inline void tetra_fish_move(byte i) {
   // x_velocity = sbyte(x_velocity) + fish_velocity_x[i]
   // y_velocity = sbyte(y_velocity) + fish_velocity_y[i]
 
-  // if (sbyte(y_velocity) < 0) {
-  //   y_velocity = -1
-  // } else if (y_velocity > 0) {
-  //   y_velocity = 1
-  // }
-
   // signed_division_const(x_velocity, 8, x_velocity)
   // signed_division_const(y_velocity, 8, y_velocity)
 
@@ -166,6 +163,21 @@ inline void tetra_fish_move(byte i) {
 
   fish_x[i] = x
   fish_y[i] = y
+
+  if (fish_diff_velocity_x < 0 && fish_diff_velocity_x > -$100) {
+    fish_diff_velocity_x += FISH_DECAY_VELOCITY_PER_TICK
+  } else if (fish_diff_velocity_x > 0 && fish_diff_velocity_x < $100) {
+    fish_diff_velocity_x -= FISH_DECAY_VELOCITY_PER_TICK
+  }
+
+  if (fish_diff_velocity_y < 0) {
+    fish_diff_velocity_y += FISH_DECAY_VELOCITY_PER_TICK
+  } else if (fish_diff_velocity_y > 0) {
+    fish_diff_velocity_y -= FISH_DECAY_VELOCITY_PER_TICK
+  }
+
+  fish_velocity_x[i] = fish_diff_velocity_x
+  fish_velocity_y[i] = fish_diff_velocity_y
 }
 
 inline void boid_center_mass_step(byte i) {
@@ -180,6 +192,7 @@ inline void boid_center_mass_step(byte i) {
   // fish_diff_velocity_x += stemp << 1
   // TODO: Removed shift left
   signed16_arithmetic_shift_right(stemp)
+  // signed16_arithmetic_shift_right(stemp)
   fish_diff_velocity_x += stemp
   // signed16_arithmetic_shift_right(stemp)
   // signed16_arithmetic_shift_right(stemp)
@@ -189,6 +202,7 @@ inline void boid_center_mass_step(byte i) {
 
   stemp = signed16(center.lo) - signed16(fish_y[i])
   signed16_arithmetic_shift_right(stemp)
+  // signed16_arithmetic_shift_right(stemp)
   fish_diff_velocity_y += stemp
   // fish_diff_velocity_y += stemp << 1
   // signed16_arithmetic_shift_right(stemp)
@@ -218,10 +232,12 @@ inline void boid_distance_step(byte i) {
       // This may not work due to these values being signed
       temp = word(x_distance * x_distance) + word(y_distance * y_distance)
 
-      if (temp < 100) {
+      if (temp < 50) {
         // signed16_arithmetic_shift_right(x_distance)
+        // signed16_division_const(x_distance, 10, x_distance)
         displacement_x -= x_distance
         // signed16_arithmetic_shift_right(y_distance)
+        // signed16_division_const(y_distance, 10, y_distance)
         displacement_y -= y_distance
       }
     }
@@ -232,8 +248,14 @@ inline void boid_distance_step(byte i) {
   // signed16_arithmetic_shift_right(displacement_y)
   // arithmetic_shift_right(displacement_y)
 
-  fish_diff_velocity_x += displacement_x
-  fish_diff_velocity_y += displacement_y
+  if (displacement_x != 0) {
+    fish_diff_velocity_x += $80 >> lo(displacement_x >> 4)
+  }
+
+  if (displacement_y != 0) {
+    fish_diff_velocity_y += $80 >> lo(displacement_y >> 4)
+  }
+
 
   // word output
   // output.hi = displacement_x
@@ -316,16 +338,27 @@ inline word perceived_boid_center(byte i) {
   return output
 }
 
+inline void trend_center(byte i) {
+  if (fish_y[i] > $70) {
+    fish_diff_velocity_y -= FISH_STRATA_VELOCITY_PER_TICK
+  } else if (fish_y[i] < $90) {
+    fish_diff_velocity_y += FISH_STRATA_VELOCITY_PER_TICK
+  }
+}
+
 inline void bound_position(byte i) {
-  if (fish_x[i] < active_tank.x_low + 16) {
+  byte temp
+  temp = active_tank.x_low + 16 - fish[x]
+
+  if (fish_x[i] < active_tank.x_low + 8) {
     fish_diff_velocity_x += $40
-  } else if (fish_x[i] > active_tank.x_high - 16) {
+  } else if (fish_x[i] > active_tank.x_high - 8) {
     fish_diff_velocity_x -= $40
   }
 
-  if (fish_y[i] < active_tank.y_low + 16) {
+  if (fish_y[i] < active_tank.y_low + 8) {
     fish_diff_velocity_y += $40
-  } else if (fish_y[i] > active_tank.y_high - 16) {
+  } else if (fish_y[i] > active_tank.y_high - 8) {
     fish_diff_velocity_y -= $40
   }
 }

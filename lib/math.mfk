@@ -56,3 +56,16 @@ macro asm void signed16_arithmetic_shift_right(signed16 ref input) {
 .done:
   stx input.hi      // store msb
 }
+
+inline word absolute_value(signed16 input) {
+  word output
+  if (input < 0) {
+    output.hi = input.hi ^ $FF
+    output.lo = input.lo ^ $FF
+    output += 1
+  } else {
+    output = input
+  }
+
+  return output
+}
