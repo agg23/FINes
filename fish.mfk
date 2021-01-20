@@ -41,14 +41,14 @@ void init_fish() {
     fish_alive[i] = false
   }
 
-  // spawn_fish(tetra, true, $80, $26)
-  // spawn_fish(rasbora, true, $60, $84)
-  // // spawn_fish(cherry_shrimp, true)
-  // spawn_fish(tetra, false, $34, $B2)
   spawn_fish(tetra, true, $80, $26)
-  spawn_fish(tetra, true, $81, $26)
-  spawn_fish(tetra, true, $80, $27)
-  spawn_fish(tetra, true, $81, $27)
+  spawn_fish(rasbora, true, $60, $84)
+  // // spawn_fish(cherry_shrimp, true)
+  spawn_fish(tetra, false, $34, $B2)
+  // spawn_fish(tetra, true, $80, $26)
+  // spawn_fish(tetra, true, $81, $26)
+  // spawn_fish(tetra, true, $80, $27)
+  // spawn_fish(tetra, true, $81, $27)
 }
 
 void spawn_fish(FishType type, bool sex, byte x, byte y) {
@@ -134,24 +134,6 @@ inline void tetra_fish_move(byte i) {
     fish_diff_velocity_y = FISH_MAX_VELOCITY
   }
 
-  // arithmetic_shift_right(applied_x_velocity)
-  // arithmetic_shift_right(applied_y_velocity)
-  // arithmetic_shift_right(x_velocity)
-  // arithmetic_shift_right(x_velocity)
-  // arithmetic_shift_right(y_velocity)
-  // arithmetic_shift_right(y_velocity)
-  // arithmetic_shift_right(y_velocity)
-  // arithmetic_shift_right(y_velocity)
-
-  // fish_velocity_x[i] += x_velocity
-  // fish_velocity_y[i] += y_velocity
-
-  // x_velocity = sbyte(x_velocity) + fish_velocity_x[i]
-  // y_velocity = sbyte(y_velocity) + fish_velocity_y[i]
-
-  // signed_division_const(x_velocity, 8, x_velocity)
-  // signed_division_const(y_velocity, 8, y_velocity)
-
   byte x
   byte y
   bool did_change
@@ -187,29 +169,12 @@ inline void boid_center_mass_step(byte i) {
   signed16 stemp
 
   stemp = signed16(center.hi) - signed16(fish_x[i])
-  // Want to divide by 128 (shift right 7 times)
-  // Since we're using two ints here, not fractional words, we shift (data << 8) >> 7 = data << 1
-  // fish_diff_velocity_x += stemp << 1
-  // TODO: Removed shift left
   signed16_arithmetic_shift_right(stemp)
-  // signed16_arithmetic_shift_right(stemp)
   fish_diff_velocity_x += stemp
-  // signed16_arithmetic_shift_right(stemp)
-  // signed16_arithmetic_shift_right(stemp)
-  // signed16_arithmetic_shift_right(stemp)
-  // signed16_division_const(stemp, 16, temp_out)
-  // output.hi = stemp.lo
 
   stemp = signed16(center.lo) - signed16(fish_y[i])
   signed16_arithmetic_shift_right(stemp)
-  // signed16_arithmetic_shift_right(stemp)
   fish_diff_velocity_y += stemp
-  // fish_diff_velocity_y += stemp << 1
-  // signed16_arithmetic_shift_right(stemp)
-  // signed16_arithmetic_shift_right(stemp)
-  // signed16_arithmetic_shift_right(stemp)
-  // signed16_division_const(stemp, 16, temp_out)
-  // output.lo = stemp.lo
 }
 
 inline void boid_distance_step(byte i) {
@@ -233,20 +198,11 @@ inline void boid_distance_step(byte i) {
       temp = word(x_distance * x_distance) + word(y_distance * y_distance)
 
       if (temp < 50) {
-        // signed16_arithmetic_shift_right(x_distance)
-        // signed16_division_const(x_distance, 10, x_distance)
         displacement_x -= x_distance
-        // signed16_arithmetic_shift_right(y_distance)
-        // signed16_division_const(y_distance, 10, y_distance)
         displacement_y -= y_distance
       }
     }
   }
-
-  // signed16_arithmetic_shift_right(displacement_x)
-  // arithmetic_shift_right(displacement_x)
-  // signed16_arithmetic_shift_right(displacement_y)
-  // arithmetic_shift_right(displacement_y)
 
   if (displacement_x != 0) {
     fish_diff_velocity_x += $80 >> lo(displacement_x >> 4)
@@ -282,23 +238,9 @@ inline void boid_average_velocity_step(byte i) {
 
   signed16 temp
   temp = sum_x - fish_velocity_x[i]
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-
   fish_diff_velocity_x += temp.hi
 
   temp = sum_y - fish_velocity_y[i]
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-  // signed16_arithmetic_shift_right(temp)
-
   fish_diff_velocity_y += temp.lo
 }
 
@@ -328,10 +270,12 @@ inline word perceived_boid_center(byte i) {
   output.hi = sum_x.lo
   output.lo = sum_y.lo
 
+  #if(debug)
   oam_buffer[oam_index] = sum_y.lo
   oam_buffer[oam_index + 1] = $1
   oam_buffer[oam_index + 2] = 0
   oam_buffer[oam_index + 3] = sum_x.lo
+  #endif
 
   oam_index += 4
 
