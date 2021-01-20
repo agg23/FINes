@@ -28,7 +28,7 @@ byte active_fish_count = 0
 byte male_small_fish_count
 byte female_small_fish_count
 
-const word FISH_MAX_VELOCITY = $600
+const word FISH_MAX_VELOCITY = $400
 const byte FISH_DECAY_VELOCITY_PER_TICK = $2
 const byte FISH_STRATA_VELOCITY_PER_TICK = $8
 
@@ -146,6 +146,7 @@ inline void tetra_fish_move(byte i) {
   fish_x[i] = x
   fish_y[i] = y
 
+  // Only decay over certain speed to prevent flashing directions
   if (fish_diff_velocity_x < 0 && fish_diff_velocity_x > -$100) {
     fish_diff_velocity_x += FISH_DECAY_VELOCITY_PER_TICK
   } else if (fish_diff_velocity_x > 0 && fish_diff_velocity_x < $100) {
@@ -170,9 +171,11 @@ inline void boid_center_mass_step(byte i) {
 
   stemp = signed16(center.hi) - signed16(fish_x[i])
   signed16_arithmetic_shift_right(stemp)
+  signed16_arithmetic_shift_right(stemp)
   fish_diff_velocity_x += stemp
 
   stemp = signed16(center.lo) - signed16(fish_y[i])
+  signed16_arithmetic_shift_right(stemp)
   signed16_arithmetic_shift_right(stemp)
   fish_diff_velocity_y += stemp
 }
