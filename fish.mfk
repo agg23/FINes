@@ -136,12 +136,11 @@ inline void tetra_fish_move(byte i) {
 
   byte x
   byte y
-  bool did_change
 
   x = fish_x[i] + sbyte(fish_diff_velocity_x.hi)
   y = fish_y[i] + sbyte(fish_diff_velocity_y.hi)
 
-  cap_fish_location_to_active_tank(x, y, did_change)
+  cap_fish_location_to_active_tank(x, y)
 
   fish_x[i] = x
   fish_y[i] = y
