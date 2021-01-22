@@ -16,6 +16,6 @@ void init_tank() {
   active_tank = export_square_tank
 }
 
-void render_tank(word nametable) {
-  call(active_tank.render_func, nametable)
+void render_tank() {
+  call(active_tank.render_func)
 }

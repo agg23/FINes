@@ -35,6 +35,8 @@ inline void init_graphics() {
   init_sprites()
   load_palletes()
 
+  render_tank()
+
   read_ppu_status()
   ppu_set_addr(ppu_nametable0 + $20)
   for i,0,until,commandbar_background.length {
@@ -46,9 +48,6 @@ inline void init_graphics() {
   for i,0,until,commandbar_background.length {
     ppu_write_data(commandbar_background[i])
   }
-
-  render_tank(ppu_nametable0)
-  render_tank(ppu_nametable1)
 }
 
 inline void enable_graphics() {
@@ -95,8 +94,8 @@ inline void sprite_tick() {
 inline void render_sprite0() {
   oam_buffer[oam_index] = 8 * 5
   oam_buffer[oam_index + 1] = $1
-  // Pallete 3
-  oam_buffer[oam_index + 2] = $3
+  // Pallete 2
+  oam_buffer[oam_index + 2] = $2
   oam_buffer[oam_index + 3] = 8
 
   oam_index += 4

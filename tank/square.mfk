@@ -1,44 +1,55 @@
 import tank/state
 
-void render_square_tank(word nametable) {
+void render_square_tank() {
   byte i
   byte j
-  word a
-  a = nametable + $80
+  
   read_ppu_status()
+  ppu_set_addr(ppu_nametable0)
+  for i,0,until,128 {
+    ppu_write_data($4)
+  }
+
   for i,0,until,25 {
     if (i == 0) {
-      a += 1
-      ppu_set_addr(a)
+      read_ppu_status()
+      ppu_set_addr(ppu_nametable0 + $80)
+      ppu_write_data($4)
       ppu_write_data($1)
-      a += 32 - 3
-      ppu_set_addr(a)
+      for j,0,until,28 {
+        ppu_write_data($4)
+      }
       ppu_write_data($1)
-      a += 2
+      ppu_write_data($4)
     } else if (i == 24) {
-      a += 1
-      ppu_set_addr(a)
+      ppu_write_data($4)
       ppu_write_data($2)
 
       for j,0,until,28 {
         ppu_write_data($1)
       }
 
-      ppu_write_data($2)
+      ppu_write_data($3)
+      ppu_write_data($4)
     } else {
-      a += 1
-      ppu_set_addr(a)
-      for j,0,until,30 {
-        ppu_write_data($1)
+      ppu_write_data($4)
+      ppu_write_data($1)
+      for j,0,until,28 {
+        ppu_write_data($0)
       }
-      a += 31
+      ppu_write_data($1)
+      ppu_write_data($4)
     }
+  }
+
+  for i,0,until,32 {
+    ppu_write_data($4)
   }
 
   // Attributes
   read_ppu_status()
   // Second row
-  ppu_set_addr(nametable + $3C0 + $8)
+  ppu_set_addr(ppu_nametable0 + $4C0 + $8)
   for i,0,until,6 {
     ppu_write_data(%01000100)
     for j,0,until,6 {
@@ -48,4 +59,4 @@ void render_square_tank(word nametable) {
   }
 }
 
-const Tank export_square_tank = Tank(render_square_tank.pointer, $10, 232, $32, $D8)
+const Tank export_square_tank = Tank(render_square_tank.pointer, $10, 232, $42, $D8)

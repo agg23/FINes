@@ -1,5 +1,5 @@
 struct Tank {
-  function.word.to.void render_func,
+  function.void.to.void render_func,
   byte x_low,
   byte x_high,
   byte y_low,
