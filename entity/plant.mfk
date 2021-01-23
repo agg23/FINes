@@ -14,48 +14,84 @@ enum PlantSize {
   large
 }
 
-const byte MAX_PLANT_COUNT = 10 + 1
-const byte PLANT_EDITOR_INDEX = MAX_PLANT_COUNT - 1
+enum PlantPalette {
+  palette_red,
+  palette_green,
+  palette_unset
+}
 
-array(bool) plant_active [MAX_PLANT_COUNT]
-array(PlantType) plant_type [MAX_PLANT_COUNT]
-array(byte) plant_x [MAX_PLANT_COUNT]
-array(PlantSize) plant_size [MAX_PLANT_COUNT]
+const byte MAX_PLANT_COUNT = 10
+const byte PLANT_EDITOR_MAX_PLANT_COUNT = MAX_PLANT_COUNT + 1
+const byte MAX_PLANT_COLUMNS = 30
+
+array(bool) plant_active [PLANT_EDITOR_MAX_PLANT_COUNT]
+array(PlantType) plant_type [PLANT_EDITOR_MAX_PLANT_COUNT]
+array(byte) plant_x [PLANT_EDITOR_MAX_PLANT_COUNT]
+array(PlantSize) plant_size [PLANT_EDITOR_MAX_PLANT_COUNT]
+array(PlantPalette) plant_current_palettes [MAX_PLANT_COLUMNS >> 1]
+array(byte) plant_current_x [MAX_PLANT_COLUMNS]
 
 byte plant_min_x
 byte plant_max_x_bound
 
 void init_plants() {
+  byte i
   plant_min_x = active_tank.x_low >> 3
   plant_max_x_bound = (active_tank.x_high >> 3) - plant_min_x
 
-  add_plant(rotala, 5, large)
+  for i,0,until,MAX_PLANT_COLUMNS {
+    plant_current_x[i] = $FF
+  }
 
-  add_plant(babytears, 8, small)
-  add_plant(babytears, 10, medium)
-  add_plant(babytears, 12, small)
+  for i,0,until,15 {
+    plant_current_palettes[i] = palette_unset
+  }
+
+  add_plant(rotala, 6, large, $FF)
+
+  add_plant(babytears, 8, small, $FF)
+  add_plant(babytears, 10, medium, $FF)
+  add_plant(babytears, 12, small, $FF)
 
 
   // TODO: Adding one more plant crashes the buffer renderer
   // add_plant(babytears, 14, medium)
-  add_plant(anubias, 16, medium)
+  add_plant(anubias, 16, medium, $FF)
   // add_plant(babytears, 20, medium)
 
   // Set defaults for editor
-  plant_size[PLANT_EDITOR_INDEX] = large
+  plant_size[MAX_PLANT_COUNT] = large
 }
 
-void add_plant(PlantType type, byte x, PlantSize size) {
+void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
   byte i
+  byte j
+  byte actual_width
 
   // Last index is reserved for the editor
-  for i,0,until,PLANT_EDITOR_INDEX {
+  for i,0,until,MAX_PLANT_COUNT {
     if (not(plant_active[i])) {
       plant_active[i] = true
       plant_type[i] = type
       plant_x[i] = x
       plant_size[i] = size
 
+      if (plant_expected_width[type] < max_width) {
+        actual_width = plant_expected_width[type]
+      } else if (max_width < plant_min_width[type]) {
+        // Should not happen
+        asm {
+          kil
+        }
+      } else {
+        actual_width = max_width
+      }
+
+      for j,0,until,actual_width {
+        plant_current_x[x + j] = i
+        plant_current_palettes[(x + j) >> 1] = plant_type_palette[type]
+      }
+      
       return
     }
   }
@@ -192,3 +228,8 @@ void plant_tick() {
 inline word plant_tile_height_from_floor(byte height) {
   return ((word(active_tank.y_high) >> 3) - height + 1) * 32
 }
+
+// rotala, anubias, babytears
+const array(byte) plant_expected_width[PlantType] = [1, 3, 2]
+const array(byte) plant_min_width[PlantType] = [1, 3, 1]
+const array(PlantPalette) plant_type_palette[PlantType] = [palette_red, palette_green, palette_green]
