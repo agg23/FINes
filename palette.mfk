@@ -32,3 +32,8 @@ const array pallete = [
   background_backdrop,color_orange,color_light_grey,color_black,
   background_backdrop,color_unused,color_light_grey,color_unused 
 ]
+
+const array plant_palette = [
+  background_backdrop,color_green - $10,0,$3D,
+  background_backdrop,0,color_pink - $10,color_light_orange - $10
+]

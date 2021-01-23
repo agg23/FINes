@@ -6,6 +6,7 @@ import graphics_buffer
 import sound/sound
 
 import ui/commandbar
+import ui/planteditor
 import tank/tank
 
 import fish

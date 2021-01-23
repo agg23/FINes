@@ -1,0 +1,77 @@
+import entity/plant
+import tank/state
+
+byte plant_editor_timer
+bool active_plant_flash
+byte plant_editor_x
+
+void start_plant_editing() {
+  load_plant_palettes()
+  plant_editor_timer = 0
+  active_plant_flash = false
+  plant_editor_x = 0
+}
+
+inline bool plant_editor_tick(byte input_timer) {
+  array(byte) data [10]
+  if (plant_editor_timer == 0) {
+    if (active_plant_flash) {
+      render_rotala(PLANT_EDITOR_INDEX, plant_editor_x + plant_min_x, data.pointer)
+
+      active_plant_flash = false
+    } else {
+      clear_plant_column()
+    }
+
+    plant_editor_timer = 10
+  } else {
+    plant_editor_timer -= 1
+  }
+
+  if (input_timer == 0) {
+    if (input_a != 0) {
+      add_plant(rotala, plant_editor_x, small)
+      clear_plant_column()
+      render_plant_at_x(plant_editor_x)
+      deactivate_commandbar_selection()
+      return true
+    }
+    if (input_dx < 0) {
+      // Left
+
+      if (plant_editor_x > 0) {
+        clear_plant_column()
+        render_plant_at_x(plant_editor_x)
+        plant_editor_x -= 1
+        return true
+      }
+    } else if (input_dx > 0) {
+      // Right
+      if (plant_editor_x < plant_max_x_bound - 1) {
+        clear_plant_column()
+        render_plant_at_x(plant_editor_x)
+        plant_editor_x += 1
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+inline void clear_plant_column() {
+  byte i
+  array(byte) data [10]
+
+  for i,0,until,10 {
+    data[i] = 0
+  }
+
+  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(10) + plant_editor_x + plant_min_x, true, data.pointer, 10)
+
+  active_plant_flash = true
+}
+
+inline void load_plant_palettes() {
+  add_buffered_write(ppu_pallete_ram + 4, false, plant_palette.pointer, 8)
+}
