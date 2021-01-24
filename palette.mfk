@@ -16,7 +16,7 @@ const byte background_backdrop = color_light_blue
 
 const byte color_unused = background_backdrop
 
-const array pallete = [
+const array background_palette = [
   //background palette
   // $06 randomly inserted for secondary command bar color
   background_backdrop,$06,color_black,color_light_grey,

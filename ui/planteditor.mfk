@@ -1,3 +1,5 @@
+import palette
+
 import entity/plant
 import tank/state
 
@@ -14,6 +16,10 @@ void start_plant_editing() {
   plant_editor_x = 0
 }
 
+void stop_plant_editing() {
+  add_buffered_write(ppu_palette_ram + 4, false, pointer.byte(background_palette.pointer + 4), 8)
+}
+
 inline bool plant_editor_tick(byte input_timer) {
   array(byte) data [10]
 
@@ -21,7 +27,7 @@ inline bool plant_editor_tick(byte input_timer) {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      render_rotala(MAX_PLANT_COUNT, plant_editor_x + plant_min_x, data.pointer)
+      render_rotala(MAX_PLANT_COUNT, plant_editor_x, data.pointer)
 
       active_plant_flash = false
     } else {
@@ -38,6 +44,7 @@ inline bool plant_editor_tick(byte input_timer) {
       add_plant(rotala, plant_editor_x, small, $FF)
       clear_plant_column()
       render_plant_at_x(plant_editor_x)
+      stop_plant_editing()
       deactivate_commandbar_selection()
       return true
     }
@@ -118,5 +125,5 @@ inline void clear_plant_column() {
 }
 
 inline void load_plant_palettes() {
-  add_buffered_write(ppu_pallete_ram + 4, false, plant_palette.pointer, 8)
+  add_buffered_write(ppu_palette_ram + 4, false, plant_palette.pointer, 8)
 }

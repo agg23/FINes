@@ -14,7 +14,7 @@ const word ppu_attrtable0 = $23C0
 const word ppu_attrtable1 = $27C0
 const word ppu_attrtable2 = $2BC0
 const word ppu_attrtable3 = $2FC0
-const word ppu_pallete_ram = $3F00
+const word ppu_palette_ram = $3F00
 
 array oam_buffer [256] @$200 // sprite buffer
 

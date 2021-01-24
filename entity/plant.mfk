@@ -118,20 +118,22 @@ void render_plant_at_x(byte x) {
 
 void render_plant_i(byte i, byte x) {
   array(byte) data [10]
-  byte temp
-  temp = x + plant_min_x
 
   if (plant_type[i] == rotala) {
-    render_rotala(i, temp, data.pointer)
+    render_rotala(i, x, data.pointer)
   } else if (plant_type[i] == babytears) {
-    render_babytears(i, temp, data.pointer)
+    render_babytears(i, x, data.pointer)
   } else if (plant_type[i] == anubias) {
-    render_anubias(i, temp, data.pointer)
+    render_anubias(i, x, data.pointer)
   }
 }
 
 inline void render_rotala(byte i, byte x, pointer.byte data) {
+  byte x_offset
   byte count
+
+  x_offset = x + plant_min_x
+
   if (plant_size[i] == large) {
     count = 3
   } else if (plant_size[i] == medium) {
@@ -145,44 +147,52 @@ inline void render_rotala(byte i, byte x, pointer.byte data) {
     data[j] = $88
   }
 
-  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count) + x, true, data, count)
+  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count) + x_offset, true, data, count)
 
-  data[0] = %10101010
+  data[0] = build_attribute_table(x, rotala)
   // active_tank.y_high / 32 * 8
   // TODO: Properly combine these shifts with a mask
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x >> 2), false, data, 1)
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1)
 }
 
 inline void render_babytears(byte i, byte x, pointer.byte data) {
+  byte x_offset
   word height_from_floor
+
+  x_offset = x + plant_min_x
+
   if (plant_size[i] == medium) {
     data[0] = $9E
     data[1] = $9F
 
     height_from_floor = ((word(active_tank.y_high) >> 3) - 1) * 32
 
-    add_buffered_write(ppu_nametable0 + height_from_floor + x, false, data, 2)
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2)
 
     data[0] = $A8
     data[1] = $A9
-    add_buffered_write(ppu_nametable0 + height_from_floor + 32 + x, false, data, 2)
+    add_buffered_write(ppu_nametable0 + height_from_floor + 32 + x_offset, false, data, 2)
   } else if (plant_size[i] == small) {
     data[0] = $9C
     data[1] = $9D
 
     height_from_floor = (word(active_tank.y_high) >> 3) * 32
 
-    add_buffered_write(ppu_nametable0 + height_from_floor + x, false, data, 2)
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2)
   }
 
-  data[0] = %01010101
+  data[0] = build_attribute_table(x, babytears)
+  // data[1] = build_attribute_table(x + 2, babytears)
   // active_tank.y_high / 32 * 8
   // TODO: Properly combine these shifts with a mask
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x >> 2), false, data, 1)
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1)
 }
 
 inline void render_anubias(byte i, byte x, pointer.byte data) {
+  byte x_offset
   word height_from_floor
+
+  x_offset = x + plant_min_x
 
   data[0] = $89
   data[1] = $8C
@@ -191,24 +201,75 @@ inline void render_anubias(byte i, byte x, pointer.byte data) {
 
   height_from_floor = ((word(active_tank.y_high) >> 3) - 3) * 32
 
-  add_buffered_write(ppu_nametable0 + height_from_floor + x, true, data, 4)
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, true, data, 4)
 
   data[0] = $8A
   data[1] = $8D
   data[2] = $98
   data[3] = $9B
-  add_buffered_write(ppu_nametable0 + height_from_floor + x + 1, true, data, 4)
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 1, true, data, 4)
 
   data[0] = $8B
   data[1] = $8E
   data[2] = $99
   data[3] = $0
-  add_buffered_write(ppu_nametable0 + height_from_floor + x + 2, true, data, 4)
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 2, true, data, 4)
 
-  data[0] = %01010101
+  data[0] = build_attribute_table(x, anubias)
+  data[1] = build_attribute_table(x + 2, anubias)
   // active_tank.y_high / 32 * 8
   // TODO: Properly combine these shifts with a mask
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x >> 2), false, data, 1)
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 2)
+}
+
+byte build_attribute_table(byte x, PlantType type) {
+  PlantPalette temp_palette
+  byte prev_palette_number
+  byte next_palette_number
+  byte output
+
+  if ((x + plant_min_x) & 2 != 0) {
+    // Odd position, need to consider previous palette
+    if (x < 3) {
+      // Prev is wall
+      prev_palette_number = 0
+    } else {
+      temp_palette = plant_current_palettes[(x >> 1) - 1]
+
+      prev_palette_number = palette_number_for_palette(temp_palette)
+    }
+
+    next_palette_number = palette_number_for_palette(plant_type_palette[type])
+  } else {
+    // Even position, need to consider next palette
+    if (x > plant_max_x_bound - 3) {
+      // Next is wall
+      next_palette_number = 0
+    } else {
+      temp_palette = plant_current_palettes[(x >> 1) + 1]
+
+      next_palette_number = palette_number_for_palette(temp_palette)
+    }
+
+    prev_palette_number = palette_number_for_palette(plant_type_palette[type])
+  }
+
+  output = next_palette_number
+  output = (output << 2) | prev_palette_number
+  output = (output << 2) | next_palette_number
+  output = (output << 2) | prev_palette_number
+
+  return output
+}
+
+inline byte palette_number_for_palette(PlantPalette type) {
+  if (type == palette_green) {
+    return 1
+  } else if (type == palette_red) {
+    return 2
+  }
+
+  return 0
 }
 
 void plant_tick() {

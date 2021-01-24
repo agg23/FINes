@@ -18,6 +18,10 @@ void activate_feed() {
   start_plant_editing()
 }
 
+void end_feed() {
+  stop_plant_editing()
+}
+
 void activate_fish_inspect() {
   start_inspect()
   deactivate_commandbar_selection()
@@ -38,6 +42,7 @@ bool noop(byte i) {
 
 const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_spawn.pointer]
 const array(function.byte.to.bool) menuitem_ticks = [plant_editor_tick.pointer, noop.pointer, noop.pointer]
+const array(function.byte.to.bool) menuitem_cleanup = [end_feed.pointer, noop.pointer, noop.pointer]
 
 void commandbar_tick() {
   read_joy1()
