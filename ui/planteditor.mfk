@@ -53,21 +53,31 @@ inline bool plant_editor_tick(byte input_timer) {
 
       if (plant_editor_x > 0) {
         clear_plant_column()
-        render_plant_at_x(plant_editor_x)
-        plant_editor_x -= 1
+        temp = find_prev_x(plant_editor_x, rotala)
+
+        if (temp != $FF) {
+          // Found new x
+          plant_editor_x = temp
+        }
+
+        plant_editor_timer = 0
+        active_plant_flash = true
+
         return true
       }
     } else if (input_dx > 0) {
       // Right
       if (plant_editor_x < plant_max_x_bound - 1) {
         clear_plant_column()
-        // render_plant_at_x(plant_editor_x)
         temp = find_next_x(plant_editor_x, rotala)
 
         if (temp != $FF) {
           // Found new x
           plant_editor_x = temp
         }
+
+        plant_editor_timer = 0
+        active_plant_flash = true
 
         return true
       }
@@ -77,7 +87,7 @@ inline bool plant_editor_tick(byte input_timer) {
   return false
 }
 
-byte find_next_x(byte x, PlantType type) {
+inline byte find_next_x(byte x, PlantType type) {
   byte i
   byte count
 
@@ -96,12 +106,46 @@ byte find_next_x(byte x, PlantType type) {
   return $FF
 }
 
+byte find_prev_x(byte x, PlantType type) {
+  byte i
+  byte count
+
+  for i,x - 1,downto,0 {
+    if (plant_current_x[i] == $FF) {
+      // Free space. Check if plant fits
+      count = available_width_before_x(i, type)
+
+      if (count >= plant_min_width[type]) {
+        // Plant fits
+        return i
+      }
+    }
+  }
+
+  return $FF
+}
+
 inline byte available_width_at_x(byte x, PlantType type) {
   byte i
   byte count
   count = 0
   for i,0,until,plant_expected_width[type] {
     if (plant_current_palettes[(i + x) >> 1] == palette_unset || plant_current_palettes[(i + x) >> 1] == plant_type_palette[type]) {
+      count += 1
+    } else {
+      return count
+    }
+  }
+
+  return count
+}
+
+inline byte available_width_before_x(byte x, PlantType type) {
+  byte i
+  byte count
+  count = 0
+  for i,0,until,plant_expected_width[type] {
+    if (plant_current_palettes[(x - 1) >> 1] == palette_unset || plant_current_palettes[(x - 1) >> 1] == plant_type_palette[type]) {
       count += 1
     } else {
       return count
