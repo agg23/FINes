@@ -1,5 +1,5 @@
 {
   "inputFiles": ["main.mfk"],
-  "platform": "nes_small_vertical",
+  "platform": "nes_mapper3_vertical",
   "include": ["lib"]
 }

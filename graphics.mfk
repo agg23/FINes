@@ -15,9 +15,9 @@ enum ColorEffect {
     clear
 }
 
-bool is_rendering
-
 byte oam_index = 0
+
+bool enable_sprite0
 
 // enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
 const byte standard_ppu_ctrl = %10010000
@@ -43,19 +43,31 @@ inline void init_graphics() {
     ppu_write_data(commandbar_background[i])
   }
 
-  read_ppu_status()
-  ppu_set_addr(ppu_nametable1 + $20)
-  for i,0,until,commandbar_background.length {
-    ppu_write_data(commandbar_background[i])
-  }
+  enable_sprite0 = true
 }
 
 inline void enable_graphics() {
+  ppu_wait_vblank()
+  ppu_set_scroll(0, 0)
+
   // TODO: Figure out initial load flicker
   ppu_ctrl = standard_ppu_ctrl
   ppu_mask = default_mask
+}
 
-  ppu_set_scroll(0, 0)
+inline void wait_for_sprite0_nmi() {
+  if (enable_sprite0) {
+    wait_for_sprite0_clear()
+    // Wait for sprite0
+    while (ppu_status & %01000000 == 0) {}
+  }
+}
+
+inline void wait_for_sprite0_clear() {
+  if (enable_sprite0) {
+    // Wait for frame to start
+    while (ppu_status & %01000000 != 0) {}
+  }
 }
 
 inline void init_sprites() {
@@ -143,4 +155,4 @@ inline void set_ppu_ctrl(bool right, bool bottom) {
 //  *LEVEL GRAPHICS*
 
 //  *CHARACTER ROM (GRAPHICS)*
-segment(chrrom) const array graphics @ $0000 = file("tiles.chr")
+segment(chrrom) const array graphics @ $0000 = file("tiles2.chr")

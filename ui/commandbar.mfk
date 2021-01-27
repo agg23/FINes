@@ -1,6 +1,7 @@
 import nes_joy
 import fish
 
+import ui/shop
 import ui/planteditor
 
 import entity/inspect
@@ -23,7 +24,9 @@ void end_feed() {
 }
 
 void activate_fish_inspect() {
-  start_inspect()
+  // start_inspect()
+  init_shop()
+
   deactivate_commandbar_selection()
 }
 

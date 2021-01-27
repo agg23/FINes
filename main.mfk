@@ -57,9 +57,7 @@ void main() {
     }
     // render_stats_tick()
 
-    // Wait for sprite0 clear
-    while (ppu_status & %01000000 != 0) {}
-    is_rendering = false
+    wait_for_sprite0_clear()
 
     new_frame = true
     frame += 1
@@ -89,11 +87,7 @@ void nmi() {
 
     famistudio_update()
 
-    // Wait for frame to start
-    while (ppu_status & %01000000 != 0) {}
-    is_rendering = true
-    // // Wait for sprite0
-    while (ppu_status & %01000000 == 0) {}
+    wait_for_sprite0_nmi()
 
     // set_color_effect(blue)
 
