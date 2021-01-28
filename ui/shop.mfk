@@ -1,5 +1,7 @@
 import graphics
 
+import bank
+
 void init_shop() {
   byte i
   byte j
@@ -23,11 +25,7 @@ void init_shop() {
   render_shop_tank(16, 8)
   render_shop_tank(22, 8)
 
-  asm {
-    !lda #1
-    !sta $FFFF
-    !sta $FFFF
-  }
+  set_bank_1()
 
   enable_graphics()
 }
