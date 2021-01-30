@@ -97,10 +97,6 @@ inline void load_palettes() {
 
 inline void sprite_tick() {
   oam_index = 0
-
-  render_sprite0()
-  render_fish()
-  render_commandbar()
 }
 
 inline void render_sprite0() {

@@ -1,4 +1,7 @@
 import palette
+import input
+
+import ui/screen
 
 import entity/plant
 import tank/state
@@ -9,18 +12,21 @@ PlantType plant_editor_type
 byte plant_editor_x
 
 void start_plant_editing() {
+  currentScreen = plant_editor
   load_plant_palettes()
   plant_editor_timer = 0
-  active_plant_flash = false
+  active_plant_flash = true
   plant_editor_type = rotala
   plant_editor_x = 0
 }
 
 void stop_plant_editing() {
   add_buffered_write(ppu_palette_ram + 4, false, pointer.byte(background_palette.pointer + 4), 8)
+
+  currentScreen = aquarium
 }
 
-inline bool plant_editor_tick(byte input_timer) {
+inline bool plant_editor_tick() {
   array(byte) data [10]
 
   byte temp
@@ -39,7 +45,13 @@ inline bool plant_editor_tick(byte input_timer) {
     plant_editor_timer -= 1
   }
 
-  if (input_timer == 0) {
+  if (input_can_be_consumed) {  
+    if (input_b != 0) {
+      clear_plant_column()
+      stop_plant_editing()
+      deactivate_commandbar_selection()
+      return true
+    }
     if (input_a != 0) {
       add_plant(rotala, plant_editor_x, small, $FF)
       clear_plant_column()

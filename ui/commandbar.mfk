@@ -1,4 +1,4 @@
-import nes_joy
+import input
 import fish
 
 import ui/shop
@@ -9,11 +9,8 @@ import entity/money
 
 const byte commandbar_item_count = 3
 
-const byte input_timer_reset = 10
-
 byte selected_command_item = 0
 bool selection_is_active
-byte input_timer = 0
 
 void activate_feed() {
   start_plant_editing()
@@ -44,18 +41,20 @@ bool noop(byte i) {
 }
 
 const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_spawn.pointer]
-const array(function.byte.to.bool) menuitem_ticks = [plant_editor_tick.pointer, noop.pointer, noop.pointer]
-const array(function.byte.to.bool) menuitem_cleanup = [end_feed.pointer, noop.pointer, noop.pointer]
+// const array(function.byte.to.bool) menuitem_ticks = [plant_editor_tick.pointer, noop.pointer, noop.pointer]
+// const array(function.byte.to.bool) menuitem_cleanup = [end_feed.pointer, noop.pointer, noop.pointer]
 
-void commandbar_tick() {
-  read_joy1()
+bool commandbar_tick() {
+  if (not(input_can_be_consumed)) {
+    return false
+  }
 
   if (selection_is_active) {
     // TODO: Handle B back button
 
-    if (call(menuitem_ticks[selected_command_item], input_timer)) {
-      input_timer = input_timer_reset
-    }
+    // if (call(menuitem_ticks[selected_command_item], input_timer)) {
+    //   return true
+    // }
   } else {
     if (input_timer == 0) {
       if input_dx < 0 {
@@ -63,27 +62,25 @@ void commandbar_tick() {
         if selected_command_item > 0 {
           selected_command_item -= 1
         }
-        input_timer = input_timer_reset
+        return true
       } else if input_dx > 0 {
         // Right
         if selected_command_item < commandbar_item_count - 1 {
           selected_command_item += 1
         }
-        input_timer = input_timer_reset
+        return true
       }
 
       if input_a != 0 {
         selection_is_active = true
         call(menuitem_actions[selected_command_item])
 
-        input_timer = input_timer_reset
+        return true
       }
     }
   }
 
-  if input_timer > 0 {
-    input_timer -= 1
-  }
+  return false
 }
 
 inline void deactivate_commandbar_selection() {

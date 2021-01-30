@@ -213,12 +213,6 @@ inline void boid_distance_step(byte i) {
   if (displacement_y != 0) {
     fish_diff_velocity_y += $80 >> lo(displacement_y >> 4)
   }
-
-
-  // word output
-  // output.hi = displacement_x
-  // output.lo = displacement_y
-  // return output
 }
 
 inline void boid_average_velocity_step(byte i) {
@@ -277,9 +271,9 @@ inline word perceived_boid_center(byte i) {
   oam_buffer[oam_index + 1] = $1
   oam_buffer[oam_index + 2] = 0
   oam_buffer[oam_index + 3] = sum_x.lo
+  oam_index += 4
   #endif
 
-  oam_index += 4
 
   return output
 }

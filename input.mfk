@@ -1,0 +1,23 @@
+import nes_joy
+
+import ui/screen
+
+const byte input_timer_reset = 10
+byte input_timer = 0
+byte last_input = 0
+bool input_can_be_consumed = true
+bool input_consumed = false
+
+
+inline void input_and_screen_tick() {
+  read_joy1()
+
+  input_can_be_consumed = input_timer == 0
+  input_consumed = screen_tick()
+
+  if (input_can_be_consumed && input_consumed) {
+    input_timer = input_timer_reset
+  } else if (input_timer > 0) {
+    input_timer -= 1
+  }
+}

@@ -1,0 +1,22 @@
+import graphics
+import ui/commandbar
+import fish
+
+bool aquarium_tick() {
+  bool did_use_input
+  render_sprite0()
+  did_use_input = commandbar_tick()
+  fish_tick()
+
+  render_commandbar()
+  render_fish()
+
+  if (frame == 0) {
+    plant_tick()
+    fish_breathe()
+  } else if (frame == $7F) {
+    fish_breathe()
+  }
+
+  return did_use_input
+}

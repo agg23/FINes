@@ -1,0 +1,19 @@
+import ui/aquarium
+import ui/planteditor
+import ui/shop
+
+enum Screen {
+  aquarium,
+  plant_editor,
+  shop
+}
+
+Screen currentScreen = aquarium
+
+bool screen_tick() {
+  return [currentScreen] {
+    aquarium @ aquarium_tick
+    plant_editor @ plant_editor_tick
+    shop @ shop_tick
+  }
+}

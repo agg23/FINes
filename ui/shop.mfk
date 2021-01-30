@@ -47,7 +47,7 @@ void init_shop() {
   enable_graphics()
 }
 
-inline void shop_tick() {
+inline bool shop_tick() {
   byte x
   byte y
   byte mask
@@ -63,6 +63,8 @@ inline void shop_tick() {
   x = (8 + 8) * 8
 
   render_two_tile_fish(x, y, mask, direction, 2, $84, $85)
+
+  return false
 }
 
 inline void render_shop_tank(byte x, byte y) {
