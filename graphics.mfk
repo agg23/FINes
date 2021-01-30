@@ -2,8 +2,6 @@ import nes_graphics
 
 import palette
 
-import ui/commandbar
-import tank/tank
 import fish
 
 enum ColorEffect {
@@ -27,23 +25,11 @@ const byte vertical_ppu_ctrl = %10010100
 // enable sprites, enable background, no clipping on left side
 const byte default_mask = %00011110
 inline void init_graphics() {
-  byte i
   //for now, turn off the screen and nmi
   ppu_ctrl = 0
   ppu_mask = 0
 
   init_sprites()
-  load_palettes()
-
-  render_tank()
-
-  read_ppu_status()
-  ppu_set_addr(ppu_nametable0 + $20)
-  for i,0,until,commandbar_background.length {
-    ppu_write_data(commandbar_background[i])
-  }
-
-  enable_sprite0 = true
 }
 
 inline void enable_graphics() {
@@ -83,15 +69,6 @@ inline void init_sprites() {
     else {
       oam_buffer[i] = 0
     }
-  }
-}
-
-inline void load_palettes() {
-  byte i
-  read_ppu_status() // read PPU status to reset the high/low latch
-  ppu_set_addr(ppu_palette_ram) // point the PPU to palette ram
-  for i,0,until,$20 {
-    ppu_write_data(background_palette[i])
   }
 }
 
@@ -148,7 +125,4 @@ inline void set_ppu_ctrl(bool right, bool bottom) {
   ppu_ctrl = temp_ctrl
 }
 
-//  *LEVEL GRAPHICS*
-
-//  *CHARACTER ROM (GRAPHICS)*
 segment(chrrom) const array graphics @ $0000 = file("tiles2.chr")

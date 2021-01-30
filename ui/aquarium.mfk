@@ -20,3 +20,22 @@ bool aquarium_tick() {
 
   return did_use_input
 }
+
+void draw_aquarium() {
+  draw_tank()
+  draw_commandbar()
+  draw_plants()
+
+  load_aquarium_palettes()
+
+  enable_sprite0 = true
+}
+
+inline void load_aquarium_palettes() {
+  byte i
+  read_ppu_status()
+  ppu_set_addr(ppu_palette_ram)
+  for i,0,until,$20 {
+    ppu_write_data(aquarium_palette[i])
+  }
+}

@@ -12,18 +12,16 @@ PlantType plant_editor_type
 byte plant_editor_x
 
 void start_plant_editing() {
-  currentScreen = plant_editor
-  load_plant_palettes()
   plant_editor_timer = 0
   active_plant_flash = true
   plant_editor_type = rotala
   plant_editor_x = 0
+
+  set_screen(plant_editor)
 }
 
 void stop_plant_editing() {
-  add_buffered_write(ppu_palette_ram + 4, false, pointer.byte(background_palette.pointer + 4), 8)
-
-  currentScreen = aquarium
+  set_screen(aquarium)
 }
 
 inline bool plant_editor_tick() {
@@ -33,7 +31,7 @@ inline bool plant_editor_tick() {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      render_rotala(MAX_PLANT_COUNT, plant_editor_x, data.pointer)
+      draw_rotala(MAX_PLANT_COUNT, plant_editor_x, data.pointer)
 
       active_plant_flash = false
     } else {
@@ -47,15 +45,12 @@ inline bool plant_editor_tick() {
 
   if (input_can_be_consumed) {  
     if (input_b != 0) {
-      clear_plant_column()
       stop_plant_editing()
       deactivate_commandbar_selection()
       return true
     }
     if (input_a != 0) {
       add_plant(rotala, plant_editor_x, small, $FF)
-      clear_plant_column()
-      render_plant_at_x(plant_editor_x)
       stop_plant_editing()
       deactivate_commandbar_selection()
       return true
@@ -178,6 +173,10 @@ inline void clear_plant_column() {
   add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(10) + plant_editor_x + plant_min_x, true, data.pointer, 10)
 
   active_plant_flash = true
+}
+
+void draw_plant_editor() {
+  load_plant_palettes()
 }
 
 inline void load_plant_palettes() {

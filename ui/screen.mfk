@@ -8,7 +8,7 @@ enum Screen {
   shop
 }
 
-Screen currentScreen = aquarium
+Screen currentScreen
 
 bool screen_tick() {
   return [currentScreen] {
@@ -16,4 +16,30 @@ bool screen_tick() {
     plant_editor @ plant_editor_tick
     shop @ shop_tick
   }
+}
+
+void draw_screen() {
+  return [currentScreen] {
+    aquarium @ draw_aquarium
+    plant_editor @ draw_plant_editor
+    shop @ draw_shop
+  }
+}
+
+void set_screen(Screen new_screen) {
+  if (new_screen == currentScreen) {
+    return
+  }
+
+  currentScreen = new_screen
+
+  // Draw new screen
+  ppu_mask = 0
+  ppu_ctrl = 0
+
+  ppu_wait_vblank()
+
+  draw_screen()
+
+  enable_graphics()
 }

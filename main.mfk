@@ -29,10 +29,12 @@ void main() {
   init_fish()
   init_graphics()
 
-  famistudio_init(0, $A000)
-
   init_plants()
-  render_plant()
+
+  set_screen(aquarium)
+  draw_screen()
+
+  famistudio_init(0, $A000)
 
   render_ammonia()
   render_money()

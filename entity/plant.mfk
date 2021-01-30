@@ -97,38 +97,38 @@ void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
   }
 }
 
-void render_plant() {
+void draw_plants() {
   byte i
   byte temp
   for i,0,until,MAX_PLANT_COUNT {
     if (plant_active[i]) {
-      render_plant_i(i, plant_x[i])
+      draw_plant_i(i, plant_x[i])
     }
   }
 }
 
-void render_plant_at_x(byte x) {
+void draw_plant_at_x(byte x) {
   byte i
   for i,0,until,MAX_PLANT_COUNT {
     if (plant_active[i] && plant_x[i] == x) {
-      render_plant_i(i, x)
+      draw_plant_i(i, x)
     }
   }
 }
 
-void render_plant_i(byte i, byte x) {
+void draw_plant_i(byte i, byte x) {
   array(byte) data [10]
 
   if (plant_type[i] == rotala) {
-    render_rotala(i, x, data.pointer)
+    draw_rotala(i, x, data.pointer)
   } else if (plant_type[i] == babytears) {
-    render_babytears(i, x, data.pointer)
+    draw_babytears(i, x, data.pointer)
   } else if (plant_type[i] == anubias) {
-    render_anubias(i, x, data.pointer)
+    draw_anubias(i, x, data.pointer)
   }
 }
 
-inline void render_rotala(byte i, byte x, pointer.byte data) {
+inline void draw_rotala(byte i, byte x, pointer.byte data) {
   byte x_offset
   byte count
 
@@ -155,7 +155,7 @@ inline void render_rotala(byte i, byte x, pointer.byte data) {
   add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1)
 }
 
-inline void render_babytears(byte i, byte x, pointer.byte data) {
+inline void draw_babytears(byte i, byte x, pointer.byte data) {
   byte x_offset
   word height_from_floor
 
@@ -188,7 +188,7 @@ inline void render_babytears(byte i, byte x, pointer.byte data) {
   add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1)
 }
 
-inline void render_anubias(byte i, byte x, pointer.byte data) {
+inline void draw_anubias(byte i, byte x, pointer.byte data) {
   byte x_offset
   word height_from_floor
 

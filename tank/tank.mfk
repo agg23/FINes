@@ -16,6 +16,6 @@ void init_tank() {
   active_tank = export_square_tank
 }
 
-void render_tank() {
-  call(active_tank.render_func)
+void draw_tank() {
+  call(active_tank.draw_func)
 }

@@ -126,6 +126,15 @@ void render_commandbar() {
   oam_index += 4
 }
 
+void draw_commandbar() {
+  byte i
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0 + $20)
+  for i,0,until,commandbar_background.length {
+    ppu_write_data(commandbar_background[i])
+  }
+}
+
 const array(byte) commandbar_background = [
   $4, $80, $81, $4, $82, $83, $4, $84,
   $85, $4, $4, $4, $4, $4, $4, $4,
