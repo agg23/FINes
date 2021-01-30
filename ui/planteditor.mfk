@@ -1,5 +1,6 @@
 import palette
 import input
+import bank
 
 import ui/screen
 
@@ -177,6 +178,8 @@ inline void clear_plant_column() {
 
 void draw_plant_editor() {
   load_plant_palettes()
+
+  set_bank_0()
 }
 
 inline void load_plant_palettes() {

@@ -77,9 +77,9 @@ void nmi() {
     ppu_ctrl = standard_ppu_ctrl
     ppu_mask = default_mask
 
-    ppu_set_scroll(0, 0)
-
     famistudio_update()
+
+    ppu_set_scroll(0, 0)
 
     wait_for_sprite0_nmi()
 

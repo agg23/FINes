@@ -1,3 +1,12 @@
+asm void set_bank_0() {
+  .set_bank_0_operand:
+  !lda #0
+  // Write to location of #1 byte
+  // This prevents bus conflict issues by ensuring bit 1 is set
+  !sta .set_bank_0_operand + 1
+  rts
+}
+
 asm void set_bank_1() {
   .set_bank_1_operand:
   !lda #1

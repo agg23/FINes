@@ -1,4 +1,6 @@
 import graphics
+import bank
+
 import ui/commandbar
 
 import fish
@@ -33,6 +35,7 @@ void draw_aquarium() {
   draw_ammonia()
 
   load_aquarium_palettes()
+  set_bank_0()
 
   enable_sprite0 = true
 }
