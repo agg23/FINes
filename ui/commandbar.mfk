@@ -32,7 +32,6 @@ void activate_spawn() {
     spawn_fish(tetra, false, $80, $20)
   }
 
-  render_money()
   deactivate_commandbar_selection()
 }
 

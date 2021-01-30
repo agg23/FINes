@@ -14,10 +14,12 @@ inline bool purchase(byte cost) {
 
   fish_bucks -= cost
 
+  draw_money()
+
   return true
 }
 
-void render_money() {
+void draw_money() {
   array(byte) data [6]
   // Dollar sign
   data[0] = $24

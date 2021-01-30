@@ -1,3 +1,5 @@
+import graphics_buffer
+
 import ui/aquarium
 import ui/planteditor
 import ui/shop
@@ -34,11 +36,13 @@ void set_screen(Screen new_screen) {
   currentScreen = new_screen
 
   // Draw new screen
+  drawing_enabled = false
   ppu_mask = 0
   ppu_ctrl = 0
 
   ppu_wait_vblank()
 
+  clear_buffer()
   draw_screen()
 
   enable_graphics()

@@ -1,6 +1,9 @@
 import graphics
 import ui/commandbar
+
 import fish
+import entity/money
+import entity/health
 
 bool aquarium_tick() {
   bool did_use_input
@@ -25,6 +28,9 @@ void draw_aquarium() {
   draw_tank()
   draw_commandbar()
   draw_plants()
+
+  draw_money()
+  draw_ammonia()
 
   load_aquarium_palettes()
 

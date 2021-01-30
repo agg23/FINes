@@ -15,6 +15,8 @@ enum ColorEffect {
 
 byte oam_index = 0
 
+bool drawing_enabled
+
 bool enable_sprite0
 
 // enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
@@ -39,6 +41,8 @@ inline void enable_graphics() {
   // TODO: Figure out initial load flicker
   ppu_ctrl = standard_ppu_ctrl
   ppu_mask = default_mask
+
+  drawing_enabled = true
 }
 
 inline void wait_for_sprite0_nmi() {

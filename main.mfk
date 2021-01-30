@@ -12,8 +12,6 @@ import ui/planteditor
 import tank/tank
 
 import fish
-import entity/money
-import entity/plant
 
 import debug/render_stats
 
@@ -36,9 +34,6 @@ void main() {
 
   famistudio_init(0, $A000)
 
-  render_ammonia()
-  render_money()
-
   process_buffered_writes()
 
   enable_graphics()
@@ -60,6 +55,10 @@ void main() {
 }
 
 void nmi() {
+  if (not(drawing_enabled)) {
+    return
+  }
+
   if in_nmi != 0 {
     // Overran NMI
     nmi_fail = 1

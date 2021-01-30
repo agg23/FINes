@@ -24,6 +24,15 @@ void init_buffer() {
   first_data_buffer_index = 0
 }
 
+void clear_buffer() {
+  byte i
+  for i,0,until,MAX_COMMAND_BUFFER_LENGTH {
+    command_buffer_pending[i] = false
+  }
+
+  init_buffer()
+}
+
 inline void process_buffered_writes() {
   byte i
   bool does_wrap
@@ -119,12 +128,29 @@ inline void process_command(byte command_index) {
   }
 }
 
-inline void add_buffered_write(word address, bool write_column, pointer.byte data, byte length) {
+void add_buffered_write(word address, bool write_column, pointer.byte data, byte length) {
   byte i
   byte temp
   byte length_to_end
   bool does_wrap
   byte index
+
+  if (not(drawing_enabled)) {
+    // The PPU is not currently enabled. Just write directly to PPU
+    if (write_column) {
+      ppu_ctrl = vertical_ppu_ctrl
+    } else {
+      ppu_ctrl = standard_ppu_ctrl
+    }
+
+    read_ppu_status()
+    ppu_set_addr(address)
+    for i,0,until,length {
+      ppu_write_data(data[i])
+    }
+
+    return
+  }
 
   temp = MAX_WRITE_BUFFER_LENGTH - first_open_buffer_index
   if (temp < length) {

@@ -49,8 +49,8 @@ void draw_square_tank() {
   // Attributes
   read_ppu_status()
   // Second row
-  ppu_set_addr(ppu_nametable0 + $4C0 + $8)
-  for i,0,until,6 {
+  ppu_set_addr(ppu_attrtable0 + $10)
+  for i,0,until,5 {
     ppu_write_data(%01000100)
     for j,0,until,6 {
       ppu_write_data(%01010101)
