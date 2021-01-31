@@ -47,6 +47,7 @@ void main() {
 
     sprite_tick()
     input_and_screen_tick()
+    clear_remaining_oam()
 
     // wait_for_sprite0_clear()
 

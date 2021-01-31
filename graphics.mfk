@@ -65,19 +65,8 @@ inline void wait_for_sprite0_clear() {
 }
 
 inline void init_sprites() {
-  byte i
-  for i,0,to,255 {
-    if (i & %00000011) == 0 {
-      //each sprite takes up 4 bytes, and we want to edit
-      //the y position of each sprite (0th byte)
-      //so we use the %00000011 mask to write every 4th byte (every 0th sprite byte)
-      
-      oam_buffer[i] = $ef // move the sprite off screen
-    }
-    else {
-      oam_buffer[i] = 0
-    }
-  }
+  oam_index = 0
+  clear_remaining_oam()
 }
 
 inline void sprite_tick() {
@@ -92,6 +81,21 @@ inline void render_sprite0() {
   oam_buffer[oam_index + 3] = 8
 
   oam_index += 4
+}
+
+inline void clear_remaining_oam() {
+  byte i
+  for i,oam_index,until,255 {
+    if (i & %00000011) == 0 {
+      //each sprite takes up 4 bytes, and we want to edit
+      //the y position of each sprite (0th byte)
+      //so we use the %00000011 mask to write every 4th byte (every 0th sprite byte)
+      
+      oam_buffer[i] = $ef // move the sprite off screen
+    } else {
+      oam_buffer[i] = 0
+    }
+  }
 }
 
 inline void sprite_render() {

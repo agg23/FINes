@@ -13,13 +13,6 @@ void close_shop() {
 }
 
 inline bool shop_tick() {
-  byte x
-  byte y
-  byte mask
-  bool direction
-  mask = 0
-  direction = true
-
   if (input_can_be_consumed) {  
     if (input_b != 0) {
       close_shop()
@@ -27,6 +20,19 @@ inline bool shop_tick() {
       return true
     }
   }
+
+  render_shop_fish()
+
+  return false
+}
+
+inline void render_shop_fish() {
+  byte x
+  byte y
+  byte mask
+  bool direction
+  mask = 0
+  direction = true
 
   x = 8 * 8
   y = 6 * 8
@@ -36,11 +42,9 @@ inline bool shop_tick() {
   x = (8 + 8) * 8
 
   render_two_tile_fish(x, y, mask, direction, 2, $84, $85)
-
-  return false
 }
 
-inline void render_shop_tank(byte x, byte y) {
+inline void draw_shop_tank(byte x, byte y) {
   word address
   byte i
   byte j
@@ -57,7 +61,7 @@ inline void render_shop_tank(byte x, byte y) {
   }
 }
 
-inline void write_shop_text(byte x, byte y, pointer.byte text, byte length) {
+inline void draw_shop_text(byte x, byte y, pointer.byte text, byte length) {
   byte i
 
   ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
@@ -78,25 +82,25 @@ void draw_shop() {
     }
   }
 
-  render_shop_tank(6, 4)
-  render_shop_tank(14, 4)
-  render_shop_tank(22, 4)
+  draw_shop_tank(6, 4)
+  draw_shop_tank(14, 4)
+  draw_shop_tank(22, 4)
 
-  render_shop_tank(6, 16)
-  render_shop_tank(14, 16)
-  render_shop_tank(22, 16)
+  draw_shop_tank(6, 16)
+  draw_shop_tank(14, 16)
+  draw_shop_tank(22, 16)
 
-  write_shop_text(5, 10, tetra_name_text.pointer, tetra_name_text.length)
-  write_shop_text(5, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  write_shop_text(5, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
+  draw_shop_text(5, 10, tetra_name_text.pointer, tetra_name_text.length)
+  draw_shop_text(5, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
+  draw_shop_text(5, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
 
-  write_shop_text(12, 10, raspbora_name_text.pointer, raspbora_name_text.length)
-  write_shop_text(13, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  write_shop_text(13, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
+  draw_shop_text(12, 10, raspbora_name_text.pointer, raspbora_name_text.length)
+  draw_shop_text(13, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
+  draw_shop_text(13, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
 
-  write_shop_text(22, 10, cory_name_text.pointer, cory_name_text.length)
-  write_shop_text(21, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  write_shop_text(21, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
+  draw_shop_text(22, 10, cory_name_text.pointer, cory_name_text.length)
+  draw_shop_text(21, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
+  draw_shop_text(21, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
 
   set_bank_1()
 
