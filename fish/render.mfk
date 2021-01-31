@@ -1,0 +1,33 @@
+import ui/shared
+import fish/fish
+
+import fish/tetra
+import fish/rasbora
+
+/**
+* @param center_length If provided (non-zero), center the text within this length, preferring the left side
+*/
+inline void draw_fish_name(FishType type, byte x, byte y, byte center_length) {
+  if (type == tetra) {
+    draw_text(x, y, tetra_name_text.pointer, tetra_name_text.length, center_length)
+  } else if (type == rasbora) {
+    draw_text(x, y, rasbora_name_text.pointer, rasbora_name_text.length, center_length)
+  }
+}
+
+inline void draw_fish_any_price(FishType type, byte x, byte y) {
+  if (type == tetra) {
+    draw_text(x, y, tetra_any_price_text.pointer, tetra_any_price_text.length, 0)
+  } else if (type == rasbora) {
+    draw_text(x, y, rasbora_any_price_text.pointer, rasbora_any_price_text.length, 0)
+  }
+}
+
+inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_direction) {
+  if (type == tetra) {
+    render_tetra(x, y, mask, pos_direction)
+  } else if (type == rasbora) {
+    render_rasbora(x, y, mask, pos_direction)
+  }
+}
+ 

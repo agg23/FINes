@@ -3,7 +3,7 @@ import bank
 
 import ui/commandbar
 
-import fish
+import fish/fish
 import entity/money
 import entity/health
 

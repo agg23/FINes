@@ -1,0 +1,23 @@
+import fish/shared
+
+// Make sure to update text arrays
+const byte RASBORA_ANY_PRICE = 15
+const byte RASBORA_SEXED_PRICE = 26
+
+macro void render_rasbora(byte x, byte y, byte mask, bool pos_direction) {
+  render_two_tile_fish(x, y, mask, pos_direction, 2, rasbora_tiles[0], rasbora_tiles[1])
+}
+
+const array(byte) rasbora_tiles = [$84, $85]
+
+const array(byte) rasbora_name_text = [
+  "Rasbora" ascii
+]
+
+const array(byte) rasbora_any_price_text = [
+  "15" ascii
+]
+
+const array(byte) rasbora_sexed_price_text = [
+  "26" ascii
+]

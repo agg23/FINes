@@ -11,7 +11,7 @@ import ui/commandbar
 import ui/planteditor
 import tank/tank
 
-import fish
+import fish/fish
 
 import debug/render_stats
 

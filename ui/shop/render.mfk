@@ -1,7 +1,12 @@
 import ui/shared
 import ui/shop
 
+import fish/render
+
 inline void render_shop_fish() {
+  byte i
+  byte j
+
   byte x
   byte y
   byte mask
@@ -9,14 +14,11 @@ inline void render_shop_fish() {
   mask = 0
   direction = true
 
-  x = 8 * 8
-  y = 6 * 8
-
-  render_two_tile_fish(x, y, mask, direction, 1, $82, $83)
-
-  x = (8 + 8) * 8
-
-  render_two_tile_fish(x, y, mask, direction, 2, $84, $85)
+  for i,0,until,SHOP_ROW_COUNT {
+    for j,0,until,SHOP_COLUMN_COUNT {
+      render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 48 + i * 12 * 8, 0, true)
+    }
+  }
 }
 
 inline void render_shop_tank_highlight() {
@@ -58,7 +60,7 @@ inline void render_shop_price_highlight() {
   render_cursor(x_low, x_high, y_low, y_high)
 }
 
-inline void draw_shop_tank(byte x, byte y) {
+inline void draw_shop_tank(FishType type, byte x, byte y) {
   word address
   byte i
   byte j
@@ -73,16 +75,16 @@ inline void draw_shop_tank(byte x, byte y) {
 
     address += 32
   }
-}
 
-inline void draw_shop_text(byte x, byte y, pointer.byte text, byte length) {
-  byte i
+  draw_fish_name(type, x - 2, y + 6, 8)
 
-  ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
+  // Any
+  draw_text(x - 1, y + 8, any_price_text.pointer, any_price_text.length, 0)
+  draw_fish_any_price(type, x + any_price_text.length, y + 8)
 
-  for i,0,until,length {
-    ppu_write_data(text[i] + $80)
-  }
+  // Sexed
+  draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
+  draw_fish_any_price(type, x + sexed_price_text.length, y + 9)
 }
 
 void draw_shop() {
@@ -96,25 +98,11 @@ void draw_shop() {
     }
   }
 
-  draw_shop_tank(6, 4)
-  draw_shop_tank(14, 4)
-  draw_shop_tank(22, 4)
-
-  draw_shop_tank(6, 16)
-  draw_shop_tank(14, 16)
-  draw_shop_tank(22, 16)
-
-  draw_shop_text(5, 10, tetra_name_text.pointer, tetra_name_text.length)
-  draw_shop_text(5, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  draw_shop_text(5, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
-
-  draw_shop_text(12, 10, raspbora_name_text.pointer, raspbora_name_text.length)
-  draw_shop_text(13, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  draw_shop_text(13, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
-
-  draw_shop_text(22, 10, cory_name_text.pointer, cory_name_text.length)
-  draw_shop_text(21, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  draw_shop_text(21, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
+  for i,0,until,SHOP_ROW_COUNT {
+    for j,0,until,SHOP_COLUMN_COUNT {
+      draw_shop_tank(shop_fish_tanks[i * 3 + j], 6 + j * 8, 4 + i * 12)
+    }
+  }
 
   set_bank_1()
 
@@ -129,22 +117,14 @@ const array(byte) shop_tank = [
   13, 14, 14, 15
 ]
 
-const array(byte) tetra_name_text = [
-  "Tetra" ascii
-]
-
-const array(byte) raspbora_name_text = [
-  "Rasbora" ascii
-]
-
 const array(byte) cory_name_text = [
   "Cory" ascii
 ]
 
-const array(byte) any_price_placeholder_text = [
-  "Any 13" ascii
+const array(byte) any_price_text = [
+  "Any" ascii
 ]
 
-const array(byte) specific_price_placeholder_text = [
-  "M/F 25" ascii
+const array(byte) sexed_price_text = [
+  "M/F" ascii
 ]

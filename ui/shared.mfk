@@ -27,3 +27,20 @@ macro void render_cursor(byte x_low, byte x_high, byte y_low, byte y_high) {
 
   oam_index += 4
 }
+
+/**
+* @param center_length If provided (non-zero), center the text within this length, preferring the left side
+*/
+inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte center_length) {
+  byte i
+  
+  if (center_length != 0) {
+    x += (center_length - length) / 2
+  }
+
+  ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
+
+  for i,0,until,length {
+    ppu_write_data(text[i] + $80)
+  }
+}

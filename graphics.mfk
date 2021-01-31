@@ -2,7 +2,7 @@ import nes_graphics
 
 import palette
 
-import fish
+import fish/fish
 
 enum ColorEffect {
     red,

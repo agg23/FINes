@@ -1,5 +1,5 @@
 import input
-import fish
+import fish/fish
 
 import ui/shared
 import ui/shop

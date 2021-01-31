@@ -5,7 +5,7 @@ import entity/money
 
 import ui/shop/render
 
-import fish
+import fish/fish
 
 enum ShopSelectionState {
   tank,
@@ -145,3 +145,8 @@ inline bool shop_price_selection_input_tick() {
 
   return false
 }
+
+const array(FishType) shop_fish_tanks = [
+  tetra, rasbora, tetra,
+  tetra, tetra, tetra
+]
