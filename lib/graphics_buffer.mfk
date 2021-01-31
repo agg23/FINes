@@ -90,8 +90,10 @@ inline void process_command(byte command_index) {
   }
 
   if (command_buffer_column[command_index]) {
+    read_ppu_status()
     ppu_ctrl = vertical_ppu_ctrl
   } else {
+    read_ppu_status()
     ppu_ctrl = standard_ppu_ctrl
   }
 
@@ -128,18 +130,20 @@ inline void process_command(byte command_index) {
   }
 }
 
-void add_buffered_write(word address, bool write_column, pointer.byte data, byte length) {
+void add_buffered_write(word address, bool write_column, pointer.byte data, byte length, bool always_buffer) {
   byte i
   byte temp
   byte length_to_end
   bool does_wrap
   byte index
 
-  if (not(drawing_enabled)) {
+  if (not(drawing_enabled) && not(always_buffer)) {
     // The PPU is not currently enabled. Just write directly to PPU
     if (write_column) {
+      read_ppu_status()
       ppu_ctrl = vertical_ppu_ctrl
     } else {
+      read_ppu_status()
       ppu_ctrl = standard_ppu_ctrl
     }
 

@@ -16,6 +16,6 @@ void render_stats_tick() {
   if (command_buffer_length != last_command_buffer_length) {
     last_command_buffer_length = command_buffer_length
     data[0] = $30 + command_buffer_length
-    add_buffered_write(ppu_nametable0 + 64 + 29, false, data.pointer, 1)
+    add_buffered_write(ppu_nametable0 + 64 + 29, false, data.pointer, 1, false)
   }
 }

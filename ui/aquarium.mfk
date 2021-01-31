@@ -41,10 +41,5 @@ void draw_aquarium() {
 }
 
 inline void load_aquarium_palettes() {
-  byte i
-  read_ppu_status()
-  ppu_set_addr(ppu_palette_ram)
-  for i,0,until,$20 {
-    ppu_write_data(aquarium_palette[i])
-  }
+  add_buffered_write(ppu_palette_ram, false, aquarium_palette.pointer, $20, true)
 }

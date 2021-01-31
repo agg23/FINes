@@ -30,20 +30,6 @@ inline bool plant_editor_tick() {
 
   byte temp
 
-  if (plant_editor_timer == 0) {
-    if (active_plant_flash) {
-      draw_rotala(MAX_PLANT_COUNT, plant_editor_x, data.pointer)
-
-      active_plant_flash = false
-    } else {
-      clear_plant_column()
-    }
-
-    plant_editor_timer = 10
-  } else {
-    plant_editor_timer -= 1
-  }
-
   if (input_can_be_consumed) {  
     if (input_b != 0) {
       stop_plant_editing()
@@ -90,6 +76,20 @@ inline bool plant_editor_tick() {
         return true
       }
     }
+  }
+
+  if (plant_editor_timer == 0) {
+    if (active_plant_flash) {
+      draw_rotala(MAX_PLANT_COUNT, plant_editor_x, data.pointer)
+
+      active_plant_flash = false
+    } else {
+      clear_plant_column()
+    }
+
+    plant_editor_timer = 10
+  } else {
+    plant_editor_timer -= 1
   }
 
   return false
@@ -171,7 +171,7 @@ inline void clear_plant_column() {
     data[i] = 0
   }
 
-  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(10) + plant_editor_x + plant_min_x, true, data.pointer, 10)
+  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(10) + plant_editor_x + plant_min_x, true, data.pointer, 10, false)
 
   active_plant_flash = true
 }
@@ -183,5 +183,5 @@ void draw_plant_editor() {
 }
 
 inline void load_plant_palettes() {
-  add_buffered_write(ppu_palette_ram + 4, false, plant_palette.pointer, 8)
+  add_buffered_write(ppu_palette_ram + 4, false, plant_palette.pointer, 8, true)
 }

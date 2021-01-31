@@ -27,7 +27,10 @@ const byte vertical_ppu_ctrl = %10010100
 // enable sprites, enable background, no clipping on left side
 const byte default_mask = %00011110
 inline void init_graphics() {
+  ppu_wait_vblank()
+
   //for now, turn off the screen and nmi
+  read_ppu_status()
   ppu_ctrl = 0
   ppu_mask = 0
 
@@ -35,11 +38,12 @@ inline void init_graphics() {
 }
 
 inline void enable_graphics() {
-  ppu_wait_vblank()
-  ppu_set_scroll(0, 0)
-
   // TODO: Figure out initial load flicker
+  // Reset vblank flag
+  read_ppu_status()
   ppu_ctrl = standard_ppu_ctrl
+  read_ppu_status()
+  ppu_set_scroll(0, 0)
   ppu_mask = default_mask
 
   drawing_enabled = true
@@ -126,6 +130,7 @@ inline void set_ppu_ctrl(bool right, bool bottom) {
     temp_ctrl = temp_ctrl | %10
   }
 
+  read_ppu_status()
   ppu_ctrl = temp_ctrl
 }
 

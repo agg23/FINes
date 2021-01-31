@@ -10,6 +10,7 @@ enum Screen {
   shop
 }
 
+bool buffer_screen_draw = false
 Screen currentScreen
 
 bool screen_tick() {
@@ -34,16 +35,24 @@ void set_screen(Screen new_screen) {
   }
 
   currentScreen = new_screen
+  buffer_screen_draw = true
+}
 
+void screen_transfer_tick() {
+  // Wait for NMI to disable rendering and NMIs
   // Draw new screen
   drawing_enabled = false
+  buffer_screen_draw = false
+  read_ppu_status()
+  ppu_ctrl = standard_ppu_ctrl
   ppu_mask = 0
-  ppu_ctrl = 0
 
   ppu_wait_vblank()
 
   clear_buffer()
   draw_screen()
+
+  ppu_wait_vblank()
 
   enable_graphics()
 }

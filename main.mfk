@@ -22,10 +22,11 @@ byte frame
 volatile bool new_frame = false
 
 void main() {
+  init_graphics()
+
   init_random()
   init_tank()
   init_fish()
-  init_graphics()
 
   init_plants()
 
@@ -55,7 +56,19 @@ void main() {
 }
 
 void nmi() {
+  if (buffer_screen_draw) {
+    screen_transfer_tick()
+    nmi_always_run()
+    return
+  }
+  // } else if (buffer_graphics_enable) {
+  //   enable_graphics()
+  //   buffer_graphics_enable = false
+  //   return
+  // }
+
   if (not(drawing_enabled)) {
+    nmi_always_run()
     return
   }
 
@@ -72,23 +85,28 @@ void nmi() {
   if (new_frame) {
     // set_color_effect(clear)
     sprite_render()
+
     process_buffered_writes()
 
+    read_ppu_status()
     ppu_ctrl = standard_ppu_ctrl
-    ppu_mask = default_mask
-
-    famistudio_update()
-
+    read_ppu_status()
     ppu_set_scroll(0, 0)
 
-    wait_for_sprite0_nmi()
+    // wait_for_sprite0_nmi()
 
     // set_color_effect(blue)
 
     new_frame = false
   }
 
+  nmi_always_run()
+
   in_nmi = 0
+}
+
+void nmi_always_run() {
+  famistudio_update()
 }
 
 void irq() {

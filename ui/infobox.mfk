@@ -14,14 +14,14 @@ void render_infobox(byte width, byte height, byte x, byte y, function.byte.to.vo
     data[i] = $1
   }
 
-  add_buffered_write(a, false, data.pointer, width)
+  add_buffered_write(a, false, data.pointer, width, false)
 
   a += 32
   for i,0,until,height - 2 {
     data[0] = $1
     call(render_row_func, i)
     data[width - 1] = $1
-    add_buffered_write(a, false, data.pointer, width)
+    add_buffered_write(a, false, data.pointer, width, false)
     a += 32
   }
 
@@ -30,7 +30,7 @@ void render_infobox(byte width, byte height, byte x, byte y, function.byte.to.vo
     data[i] = $1
   }
 
-  add_buffered_write(a, false, data.pointer, width)
+  add_buffered_write(a, false, data.pointer, width, false)
 
   // Attribute tables
   // TODO
