@@ -1,10 +1,39 @@
 import graphics
 
 import bank
+import entity/money
+
+import ui/shop/render
 
 import fish
 
+enum ShopSelectionState {
+  tank,
+  price,
+  sex
+}
+
+enum ShopPriceSelectionState {
+  any,
+  price_selection_sex,
+  male,
+  female
+}
+
+const byte SHOP_COLUMN_COUNT = 3
+const byte SHOP_ROW_COUNT = 2
+
+byte current_shop_row
+byte current_shop_column
+ShopSelectionState shop_state
+ShopPriceSelectionState shop_price_state
+
 void init_shop() {
+  current_shop_row = 0
+  current_shop_column = 0
+  shop_state = tank
+  shop_price_state = any
+
   set_screen(shop)
 }
 
@@ -13,124 +42,106 @@ void close_shop() {
 }
 
 inline bool shop_tick() {
-  if (input_can_be_consumed) {  
+  render_shop_fish()
+
+  return [shop_state] {
+    tank @ shop_tank_selection_tick
+    price @ shop_price_selection_tick
+  }
+}
+
+inline bool shop_tank_selection_tick() {
+  bool temp
+  temp = shop_tank_selection_input_tick()
+
+  render_shop_tank_highlight()
+
+  return temp
+}
+
+inline bool shop_tank_selection_input_tick() {
+  if (input_can_be_consumed) {
     if (input_b != 0) {
       close_shop()
       deactivate_commandbar_selection()
       return true
+    } else if (input_a != 0) {
+      shop_state = price
+      shop_price_state = any
+
+      return true
+    } else if (input_dx > 0 && current_shop_column < SHOP_COLUMN_COUNT - 1) {
+      // Right
+      current_shop_column += 1
+
+      return true
+    } else if (input_dx < 0 && current_shop_column > 0) {
+      // Left
+      current_shop_column -= 1
+
+      return true
+    } else if (input_dy > 0 && current_shop_row < SHOP_ROW_COUNT - 1) {
+      // Bottom
+      current_shop_row += 1
+
+      return true
+    } else if (input_dy < 0 && current_shop_row > 0) {
+      // Top
+      current_shop_row -= 1
+
+      return true
     }
   }
-
-  render_shop_fish()
 
   return false
 }
 
-inline void render_shop_fish() {
-  byte x
-  byte y
-  byte mask
-  bool direction
-  mask = 0
-  direction = true
+inline bool shop_price_selection_tick() {
+  bool temp
+  temp = shop_price_selection_input_tick()
 
-  x = 8 * 8
-  y = 6 * 8
+  render_shop_price_highlight()
 
-  render_two_tile_fish(x, y, mask, direction, 1, $82, $83)
-
-  x = (8 + 8) * 8
-
-  render_two_tile_fish(x, y, mask, direction, 2, $84, $85)
+  return temp
 }
 
-inline void draw_shop_tank(byte x, byte y) {
-  word address
-  byte i
-  byte j
+inline bool shop_price_selection_input_tick() {
+  if (input_can_be_consumed) {
+    if (input_b != 0) {
+      if (shop_price_state == male || shop_price_state == female) {
+        shop_price_state = price_selection_sex
+      } else {
+        shop_state = tank
+      }
 
-  address = ppu_nametable0 + 32 * word(y) + word(x)
+      return true
+    } else if (input_a != 0) {
+      if (shop_price_state == any) {
+        purchase(13)
+      } else if (shop_price_state == price_selection_sex) {
+        shop_price_state = male
+      } else {
+        // Male/female
+        purchase(25)
+      }
 
-  for i,0,until,5 {
-    ppu_set_addr(address)
-    for j,0,until,4 {
-      ppu_write_data(shop_tank[i * 4 + j])
-    }
-
-    address += 32
-  }
-}
-
-inline void draw_shop_text(byte x, byte y, pointer.byte text, byte length) {
-  byte i
-
-  ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
-
-  for i,0,until,length {
-    ppu_write_data(text[i] + $80)
-  }
-}
-
-void draw_shop() {
-  byte i
-  byte j
-  ppu_set_addr(ppu_nametable0)
-
-  for i,0,until,30 {
-    for j,0,until,32 {
-      ppu_write_data(0)
+      return true
+    } else if (input_dy > 0 && shop_price_state == any) {
+      // Bottom
+      shop_price_state = price_selection_sex
+      return true
+    } else if (input_dy < 0 && shop_price_state == price_selection_sex) {
+      // Top
+      shop_price_state = any
+      return true
+    } else if (input_dx > 0 && shop_price_state == male) {
+      shop_price_state = female
+      return true
+    } else if (input_dx < 0 && shop_price_state == female) {
+      shop_price_state = male
+      return true
     }
   }
 
-  draw_shop_tank(6, 4)
-  draw_shop_tank(14, 4)
-  draw_shop_tank(22, 4)
-
-  draw_shop_tank(6, 16)
-  draw_shop_tank(14, 16)
-  draw_shop_tank(22, 16)
-
-  draw_shop_text(5, 10, tetra_name_text.pointer, tetra_name_text.length)
-  draw_shop_text(5, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  draw_shop_text(5, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
-
-  draw_shop_text(12, 10, raspbora_name_text.pointer, raspbora_name_text.length)
-  draw_shop_text(13, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  draw_shop_text(13, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
-
-  draw_shop_text(22, 10, cory_name_text.pointer, cory_name_text.length)
-  draw_shop_text(21, 12, any_price_placeholder_text.pointer, any_price_placeholder_text.length)
-  draw_shop_text(21, 13, specific_price_placeholder_text.pointer, specific_price_placeholder_text.length)
-
-  set_bank_1()
-
-  enable_sprite0 = false
+  return false
 }
-
-const array(byte) shop_tank = [
-  1, 2, 3, 4,
-  5, 6, 7, 8,
-  9, 0, 0, 10,
-  11, 0, 0, 12,
-  13, 14, 14, 15
-]
-
-const array(byte) tetra_name_text = [
-  "Tetra" ascii
-]
-
-const array(byte) raspbora_name_text = [
-  "Rasbora" ascii
-]
-
-const array(byte) cory_name_text = [
-  "Cory" ascii
-]
-
-const array(byte) any_price_placeholder_text = [
-  "Any 13" ascii
-]
-
-const array(byte) specific_price_placeholder_text = [
-  "M/F 25" ascii
-]

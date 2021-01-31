@@ -1,0 +1,29 @@
+macro void render_cursor(byte x_low, byte x_high, byte y_low, byte y_high) {
+  oam_buffer[oam_index] = y_low
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = 0
+  oam_buffer[oam_index + 3] = x_low
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = y_low
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = %01000000
+  oam_buffer[oam_index + 3] = x_high
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = y_high
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = %10000000
+  oam_buffer[oam_index + 3] = x_low
+
+  oam_index += 4
+
+  oam_buffer[oam_index] = y_high
+  oam_buffer[oam_index + 1] = $48
+  oam_buffer[oam_index + 2] = %11000000
+  oam_buffer[oam_index + 3] = x_high
+
+  oam_index += 4
+}
