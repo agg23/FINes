@@ -179,20 +179,20 @@ inline void boid_center_mass_step(byte i) {
   fish_diff_velocity_y += stemp
 }
 
-macro void fish_fast_distance_square(signed16 input, byte output) {
+macro void fish_fast_distance_square(sbyte input, byte output) {
   // sqrt(255) = 15
-  if (input.hi & $80 != 0) {
+  if (input < 0) {
     // Square will not fit within byte
-    if (input.hi < $FF || input.lo < $FF - 14) {
+    if (input < -15) {
       output = $FF
     } else {
-      output = $FF - input.lo + 1
-      output = input.lo * input.lo
+      output = $FF - input + 1
+      output = input * input
     }
-  } else if (input.hi != 0 || input.lo > 15) {
+  } else if (input > 15) {
     output = $FF
   } else {
-    output = input.lo * input.lo
+    output = input * input
   }
 }
 
@@ -203,8 +203,8 @@ inline void boid_distance_step(byte i) {
   word temp
   signed16 displacement_x
   signed16 displacement_y
-  signed16 x_distance
-  signed16 y_distance
+  sbyte x_distance
+  sbyte y_distance
 
   displacement_x = 0
   displacement_y = 0
@@ -212,8 +212,8 @@ inline void boid_distance_step(byte i) {
   for j,0,until,MAX_FISH_COUNT {
     if (i != j && fish_alive[j]) {
       // Naive fast distance
-      x_distance = signed16(fish_x[j]) - signed16(fish_x[i])
-      y_distance = signed16(fish_y[j]) - signed16(fish_y[i])
+      x_distance = sbyte(fish_x[j] - fish_x[i])
+      y_distance = sbyte(fish_y[j] - fish_y[i])
 
       fish_fast_distance_square(x_distance, x_squared)
       fish_fast_distance_square(y_distance, y_squared)
