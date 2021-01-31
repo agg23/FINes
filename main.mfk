@@ -48,7 +48,7 @@ void main() {
     sprite_tick()
     input_and_screen_tick()
 
-    wait_for_sprite0_clear()
+    // wait_for_sprite0_clear()
 
     new_frame = true
     frame += 1
@@ -61,11 +61,6 @@ void nmi() {
     nmi_always_run()
     return
   }
-  // } else if (buffer_graphics_enable) {
-  //   enable_graphics()
-  //   buffer_graphics_enable = false
-  //   return
-  // }
 
   if (not(drawing_enabled)) {
     nmi_always_run()

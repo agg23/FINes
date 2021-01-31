@@ -179,8 +179,27 @@ inline void boid_center_mass_step(byte i) {
   fish_diff_velocity_y += stemp
 }
 
+macro void fish_fast_distance_square(signed16 input, byte output) {
+  // sqrt(255) = 15
+  if (input.hi & $80 != 0) {
+    // Square will not fit within byte
+    if (input.hi < $FF || input.lo < $FF - 14) {
+      output = $FF
+    } else {
+      output = $FF - input.lo + 1
+      output = input.lo * input.lo
+    }
+  } else if (input.hi != 0 || input.lo > 15) {
+    output = $FF
+  } else {
+    output = input.lo * input.lo
+  }
+}
+
 inline void boid_distance_step(byte i) {
   byte j
+  byte x_squared
+  byte y_squared
   word temp
   signed16 displacement_x
   signed16 displacement_y
@@ -196,8 +215,9 @@ inline void boid_distance_step(byte i) {
       x_distance = signed16(fish_x[j]) - signed16(fish_x[i])
       y_distance = signed16(fish_y[j]) - signed16(fish_y[i])
 
-      // This may not work due to these values being signed
-      temp = word(x_distance * x_distance) + word(y_distance * y_distance)
+      fish_fast_distance_square(x_distance, x_squared)
+      fish_fast_distance_square(y_distance, y_squared)
+      temp = word(x_squared) + word(y_squared)
 
       if (temp < 50) {
         displacement_x -= x_distance
