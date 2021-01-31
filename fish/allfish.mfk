@@ -4,6 +4,26 @@ import fish/fish
 import fish/tetra
 import fish/rasbora
 
+byte fish_any_price(FishType type) {
+  if (type == tetra) {
+    return TETRA_ANY_PRICE
+  } else if (type == rasbora) {
+    return RASBORA_ANY_PRICE
+  }
+
+  return 0
+}
+
+byte fish_sexed_price(FishType type) {
+  if (type == tetra) {
+    return TETRA_SEXED_PRICE
+  } else if (type == rasbora) {
+    return RASBORA_SEXED_PRICE
+  }
+
+  return 0
+}
+
 /**
 * @param center_length If provided (non-zero), center the text within this length, preferring the left side
 */
@@ -30,4 +50,3 @@ inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_
     render_rasbora(x, y, mask, pos_direction)
   }
 }
- 

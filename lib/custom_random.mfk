@@ -17,3 +17,7 @@ macro void random_int_const_min(byte const min, byte max, byte output) {
   output = output %% (max - min)
   output += min
 }
+
+inline bool random_bool() {
+  return rand() > $FF
+}

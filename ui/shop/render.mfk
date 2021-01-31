@@ -1,7 +1,7 @@
 import ui/shared
 import ui/shop
 
-import fish/render
+import fish/allfish
 
 inline void render_shop_fish() {
   byte i
