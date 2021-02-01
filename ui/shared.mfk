@@ -41,6 +41,6 @@ inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte cente
   ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
 
   for i,0,until,length {
-    ppu_write_data(text[i] + $80)
+    ppu_write_data(text[i])
   }
 }
