@@ -34,6 +34,8 @@ inline void init_graphics() {
   ppu_ctrl = 0
   ppu_mask = 0
 
+  clear_nametables()
+
   init_sprites()
 }
 
@@ -61,6 +63,20 @@ inline void wait_for_sprite0_clear() {
   if (enable_sprite0) {
     // Wait for frame to start
     while (ppu_status & %01000000 != 0) {}
+  }
+}
+
+inline void clear_nametables() {
+  byte i
+  byte j
+
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0)
+
+  for i,0,until,8 {
+    for j,0,until,256 {
+      ppu_write_data(0)
+    }
   }
 }
 

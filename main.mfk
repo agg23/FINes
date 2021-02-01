@@ -24,6 +24,8 @@ volatile bool new_frame = false
 void main() {
   init_graphics()
 
+  init_rw_memory()
+
   init_random()
   init_tank()
   init_fish()
