@@ -39,6 +39,10 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[15])
     ppu_write_data(shop_tank[19])
   }
+
+  ppu_ctrl = standard_ppu_ctrl
+
+  draw_text(13, 2, plant_screen_text.pointer, plant_screen_text.length, 0)
 }
 
 void draw_shop_plant(PlantType type, byte x, byte y, bool is_last) {
@@ -82,3 +86,7 @@ void draw_shop_plant(PlantType type, byte x, byte y, bool is_last) {
 
   draw_plant_price(type, x, y + 9)
 }
+
+const array(byte) plant_screen_text = [
+  "Plants" ascii
+]
