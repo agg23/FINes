@@ -4,6 +4,7 @@ import bank
 import custom_random
 import entity/money
 
+import ui/screen
 import ui/shop/render
 import ui/shop/fish/fish
 
@@ -40,7 +41,7 @@ ShopPriceSelectionState shop_price_state
 void init_shop() {
   current_shop_row = 0
   current_shop_column = 0
-  shop_screen = plants
+  shop_screen = fish
   shop_state = tank
   shop_price_state = any
 
@@ -91,6 +92,17 @@ inline bool shop_tank_selection_input_tick() {
     if (input_b != 0) {
       close_shop()
       deactivate_commandbar_selection()
+      return true
+    } else if (input_select != 0) {
+      if (shop_screen == fish) {
+        shop_screen = plants
+      } else if (shop_screen == plants) {
+        shop_screen = fish
+      }
+
+      // Request screen redraw
+      set_screen_forcibly(shop)
+
       return true
     } else if (input_a != 0) {
       if (shop_screen == fish) {
