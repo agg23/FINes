@@ -1,6 +1,7 @@
 import palette
 import input
 import bank
+import entity/money
 
 import ui/screen
 
@@ -12,10 +13,10 @@ bool active_plant_flash
 PlantType plant_editor_type
 byte plant_editor_x
 
-void start_plant_editing() {
+void start_plant_editing(PlantType type) {
   plant_editor_timer = 0
   active_plant_flash = true
-  plant_editor_type = rotala
+  plant_editor_type = type
   plant_editor_x = 0
 
   set_screen(plant_editor)
@@ -32,12 +33,14 @@ inline bool plant_editor_tick() {
 
   if (input_can_be_consumed) {  
     if (input_b != 0) {
+      refund(plant_price(plant_editor_type))
+
       stop_plant_editing()
       deactivate_commandbar_selection()
       return true
     }
     if (input_a != 0) {
-      add_plant(rotala, plant_editor_x, small, $FF)
+      add_plant(plant_editor_type, plant_editor_x, small, $FF)
       stop_plant_editing()
       deactivate_commandbar_selection()
       return true
@@ -47,7 +50,7 @@ inline bool plant_editor_tick() {
 
       if (plant_editor_x > 0) {
         clear_plant_column()
-        temp = find_prev_x(plant_editor_x, rotala)
+        temp = find_prev_x(plant_editor_x, plant_editor_type)
 
         if (temp != $FF) {
           // Found new x
@@ -63,7 +66,7 @@ inline bool plant_editor_tick() {
       // Right
       if (plant_editor_x < plant_max_x_bound - 1) {
         clear_plant_column()
-        temp = find_next_x(plant_editor_x, rotala)
+        temp = find_next_x(plant_editor_x, plant_editor_type)
 
         if (temp != $FF) {
           // Found new x
@@ -80,7 +83,7 @@ inline bool plant_editor_tick() {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      draw_plant_of_type(rotala, large, plant_editor_x)
+      draw_plant_of_type(plant_editor_type, large, plant_editor_x)
 
       active_plant_flash = false
     } else {

@@ -14,11 +14,11 @@ byte selected_command_item = 0
 bool selection_is_active
 
 void activate_feed() {
-  start_plant_editing()
+  // start_plant_editing()
 }
 
 void end_feed() {
-  stop_plant_editing()
+  // stop_plant_editing()
 }
 
 void activate_fish_inspect() {

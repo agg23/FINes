@@ -19,6 +19,12 @@ inline bool purchase(byte cost) {
   return true
 }
 
+inline void refund(byte cost) {
+  fish_bucks += cost
+
+  draw_money()
+}
+
 void draw_money() {
   array(byte) data [6]
   // Dollar sign

@@ -8,7 +8,7 @@ void purchase_plant() {
   type = shop_plant_tanks[current_shop_row * 2 + current_shop_column]
 
   if (purchase(plant_price(type))) {
-    start_plant_editing()
+    start_plant_editing(type)
   }
 }
 
