@@ -2,7 +2,7 @@ import graphics_buffer
 
 import ui/aquarium
 import ui/planteditor
-import ui/shop
+import ui/shop/shop
 
 enum Screen {
   aquarium,

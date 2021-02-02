@@ -1,6 +1,8 @@
 import entity/health
 
-import graphics_buffer
+import plants/anubias
+import plants/babytears
+import plants/rotala
 
 enum PlantType {
   rotala
@@ -21,13 +23,12 @@ enum PlantPalette {
 }
 
 const byte MAX_PLANT_COUNT = 10
-const byte PLANT_EDITOR_MAX_PLANT_COUNT = MAX_PLANT_COUNT + 1
 const byte MAX_PLANT_COLUMNS = 30
 
-array(bool) plant_active [PLANT_EDITOR_MAX_PLANT_COUNT]
-array(PlantType) plant_type [PLANT_EDITOR_MAX_PLANT_COUNT]
-array(byte) plant_x [PLANT_EDITOR_MAX_PLANT_COUNT]
-array(PlantSize) plant_size [PLANT_EDITOR_MAX_PLANT_COUNT]
+array(bool) plant_active [MAX_PLANT_COUNT]
+array(PlantType) plant_type [MAX_PLANT_COUNT]
+array(byte) plant_x [MAX_PLANT_COUNT]
+array(PlantSize) plant_size [MAX_PLANT_COUNT]
 array(PlantPalette) plant_current_palettes [MAX_PLANT_COLUMNS >> 1]
 array(byte) plant_current_x [MAX_PLANT_COLUMNS]
 
@@ -58,9 +59,6 @@ void init_plants() {
   // add_plant(babytears, 14, medium)
   add_plant(anubias, 16, medium, $FF)
   // add_plant(babytears, 20, medium)
-
-  // Set defaults for editor
-  plant_size[MAX_PLANT_COUNT] = large
 }
 
 void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
@@ -68,7 +66,6 @@ void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
   byte j
   byte actual_width
 
-  // Last index is reserved for the editor
   for i,0,until,MAX_PLANT_COUNT {
     if (not(plant_active[i])) {
       plant_active[i] = true
@@ -117,109 +114,19 @@ void draw_plant_at_x(byte x) {
 }
 
 void draw_plant_i(byte i, byte x) {
+  draw_plant_of_type(plant_type[i], plant_size[i], x)
+}
+
+void draw_plant_of_type(PlantType type, PlantSize size, byte x) {
   array(byte) data [10]
 
-  if (plant_type[i] == rotala) {
-    draw_rotala(i, x, data.pointer)
-  } else if (plant_type[i] == babytears) {
-    draw_babytears(i, x, data.pointer)
-  } else if (plant_type[i] == anubias) {
-    draw_anubias(i, x, data.pointer)
+  if (type == rotala) {
+    draw_rotala(size, x, data.pointer)
+  } else if (type == babytears) {
+    draw_babytears(size, x, data.pointer)
+  } else if (type == anubias) {
+    draw_anubias(size, x, data.pointer)
   }
-}
-
-inline void draw_rotala(byte i, byte x, pointer.byte data) {
-  byte x_offset
-  byte count
-
-  x_offset = x + plant_min_x
-
-  if (plant_size[i] == large) {
-    count = 3
-  } else if (plant_size[i] == medium) {
-    count = 2
-  } else {
-    count = 1
-  }
-
-  byte j
-  for j,0,until,count {
-    data[j] = $88
-  }
-
-  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count) + x_offset, true, data, count, false)
-
-  data[0] = build_attribute_table(x, rotala)
-  // active_tank.y_high / 32 * 8
-  // TODO: Properly combine these shifts with a mask
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1, false)
-}
-
-inline void draw_babytears(byte i, byte x, pointer.byte data) {
-  byte x_offset
-  word height_from_floor
-
-  x_offset = x + plant_min_x
-
-  if (plant_size[i] == medium) {
-    data[0] = $9E
-    data[1] = $9F
-
-    height_from_floor = ((word(active_tank.y_high) >> 3) - 1) * 32
-
-    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2, false)
-
-    data[0] = $A8
-    data[1] = $A9
-    add_buffered_write(ppu_nametable0 + height_from_floor + 32 + x_offset, false, data, 2, false)
-  } else if (plant_size[i] == small) {
-    data[0] = $9C
-    data[1] = $9D
-
-    height_from_floor = (word(active_tank.y_high) >> 3) * 32
-
-    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2, false)
-  }
-
-  data[0] = build_attribute_table(x, babytears)
-  // data[1] = build_attribute_table(x + 2, babytears)
-  // active_tank.y_high / 32 * 8
-  // TODO: Properly combine these shifts with a mask
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1, false)
-}
-
-inline void draw_anubias(byte i, byte x, pointer.byte data) {
-  byte x_offset
-  word height_from_floor
-
-  x_offset = x + plant_min_x
-
-  data[0] = $89
-  data[1] = $8C
-  data[2] = $8F
-  data[3] = $9A
-
-  height_from_floor = ((word(active_tank.y_high) >> 3) - 3) * 32
-
-  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, true, data, 4, false)
-
-  data[0] = $8A
-  data[1] = $8D
-  data[2] = $98
-  data[3] = $9B
-  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 1, true, data, 4, false)
-
-  data[0] = $8B
-  data[1] = $8E
-  data[2] = $99
-  data[3] = $0
-  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 2, true, data, 4, false)
-
-  data[0] = build_attribute_table(x, anubias)
-  data[1] = build_attribute_table(x + 2, anubias)
-  // active_tank.y_high / 32 * 8
-  // TODO: Properly combine these shifts with a mask
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 2, false)
 }
 
 byte build_attribute_table(byte x, PlantType type) {

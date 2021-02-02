@@ -4,7 +4,7 @@ import bank
 
 import ui/screen
 
-import entity/plant
+import plants/plants
 import tank/state
 
 byte plant_editor_timer
@@ -22,7 +22,7 @@ void start_plant_editing() {
 }
 
 void stop_plant_editing() {
-  set_screen(aquarium)
+  set_screen(shop)
 }
 
 inline bool plant_editor_tick() {
@@ -80,7 +80,7 @@ inline bool plant_editor_tick() {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      draw_rotala(MAX_PLANT_COUNT, plant_editor_x, data.pointer)
+      draw_plant_of_type(rotala, large, plant_editor_x)
 
       active_plant_flash = false
     } else {
@@ -177,6 +177,8 @@ inline void clear_plant_column() {
 }
 
 void draw_plant_editor() {
+  draw_aquarium()
+
   load_plant_palettes()
 
   set_bank_0()

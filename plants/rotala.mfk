@@ -1,0 +1,41 @@
+import graphics_buffer
+
+import plants/plants
+
+// Make sure to update text arrays
+const byte ROTALA_PRICE = 20
+
+inline void draw_rotala(PlantSize size, byte x, pointer.byte data) {
+  byte x_offset
+  byte count
+
+  x_offset = x + plant_min_x
+
+  if (size == large) {
+    count = 3
+  } else if (size == medium) {
+    count = 2
+  } else {
+    count = 1
+  }
+
+  byte j
+  for j,0,until,count {
+    data[j] = $88
+  }
+
+  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count) + x_offset, true, data, count, false)
+
+  data[0] = build_attribute_table(x, rotala)
+  // active_tank.y_high / 32 * 8
+  // TODO: Properly combine these shifts with a mask
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1, false)
+}
+
+const array(byte) rotala_name_text = [
+  "Rotala" ascii
+]
+
+const array(byte) rotala_price_text = [
+  "20" ascii
+]

@@ -1,0 +1,128 @@
+import graphics
+
+import bank
+import custom_random
+import entity/money
+
+import ui/shop/render
+import ui/shop/fish/fish
+
+import fish/fish
+
+enum ShopScreen {
+  fish,
+  plants,
+  buffs
+}
+
+enum ShopSelectionState {
+  tank,
+  price,
+  sex
+}
+
+enum ShopPriceSelectionState {
+  any,
+  price_selection_sex,
+  male,
+  female
+}
+
+const byte SHOP_COLUMN_COUNT = 3
+const byte SHOP_ROW_COUNT = 2
+
+byte current_shop_row
+byte current_shop_column
+ShopScreen shop_screen
+ShopSelectionState shop_state
+ShopPriceSelectionState shop_price_state
+
+void init_shop() {
+  current_shop_row = 0
+  current_shop_column = 0
+  shop_screen = plants
+  shop_state = tank
+  shop_price_state = any
+
+  set_screen(shop)
+}
+
+void close_shop() {
+  set_screen(aquarium)
+}
+
+inline bool shop_tick() {
+  render_shop_sprites()
+
+  return [shop_state] {
+    tank @ shop_tank_selection_tick
+    price @ shop_fish_price_selection_tick
+    default @ bool_noop
+  }
+}
+
+inline bool bool_noop() {
+  return false
+}
+
+void noop() {
+
+}
+
+inline void render_shop_sprites() {
+  if (shop_screen == fish) {
+    render_shop_fish()
+  }
+
+  // TODO
+}
+
+inline bool shop_tank_selection_tick() {
+  bool temp
+  temp = shop_tank_selection_input_tick()
+
+  render_shop_tank_highlight()
+
+  return temp
+}
+
+inline bool shop_tank_selection_input_tick() {
+  if (input_can_be_consumed) {
+    if (input_b != 0) {
+      close_shop()
+      deactivate_commandbar_selection()
+      return true
+    } else if (input_a != 0) {
+      if (shop_screen == fish) {
+        shop_state = price
+        shop_price_state = any
+      } else if (shop_screen == plants) {
+        purchase_plant()
+      }
+
+      return true
+    } else if (input_dx > 0 && current_shop_column < SHOP_COLUMN_COUNT - 1) {
+      // Right
+      current_shop_column += 1
+
+      return true
+    } else if (input_dx < 0 && current_shop_column > 0) {
+      // Left
+      current_shop_column -= 1
+
+      return true
+    } else if (input_dy > 0 && current_shop_row < SHOP_ROW_COUNT - 1) {
+      // Bottom
+      current_shop_row += 1
+
+      return true
+    } else if (input_dy < 0 && current_shop_row > 0) {
+      // Top
+      current_shop_row -= 1
+
+      return true
+    }
+  }
+
+  return false
+}

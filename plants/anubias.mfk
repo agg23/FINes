@@ -1,0 +1,49 @@
+import graphics_buffer
+
+import plants/plants
+
+// Make sure to update text arrays
+const byte ANUBIAS_PRICE = 15
+
+// TODO: Size is unused
+inline void draw_anubias(PlantSize size, byte x, pointer.byte data) {
+  byte x_offset
+  word height_from_floor
+
+  x_offset = x + plant_min_x
+
+  data[0] = $89
+  data[1] = $8C
+  data[2] = $8F
+  data[3] = $9A
+
+  height_from_floor = ((word(active_tank.y_high) >> 3) - 3) * 32
+
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, true, data, 4, false)
+
+  data[0] = $8A
+  data[1] = $8D
+  data[2] = $98
+  data[3] = $9B
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 1, true, data, 4, false)
+
+  data[0] = $8B
+  data[1] = $8E
+  data[2] = $99
+  data[3] = $0
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 2, true, data, 4, false)
+
+  data[0] = build_attribute_table(x, anubias)
+  data[1] = build_attribute_table(x + 2, anubias)
+  // active_tank.y_high / 32 * 8
+  // TODO: Properly combine these shifts with a mask
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 2, false)
+}
+
+const array(byte) anubias_name_text = [
+  "Anubias" ascii
+]
+
+const array(byte) anubias_price_text = [
+  "15" ascii
+]

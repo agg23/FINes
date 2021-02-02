@@ -1,0 +1,75 @@
+import ui/shop/render
+
+inline bool shop_fish_price_selection_tick() {
+  bool temp
+  temp = shop_fish_price_selection_input_tick()
+
+  render_shop_price_highlight()
+
+  return temp
+}
+
+inline bool shop_fish_price_selection_input_tick() {
+  if (input_can_be_consumed) {
+    if (input_b != 0) {
+      if (shop_price_state == male || shop_price_state == female) {
+        shop_price_state = price_selection_sex
+      } else {
+        shop_state = tank
+      }
+
+      return true
+    } else if (input_a != 0) {
+      if (shop_price_state == any) {
+        purchase_fish()
+      } else if (shop_price_state == price_selection_sex) {
+        shop_price_state = male
+      } else {
+        // Male/female
+        purchase_fish()
+      }
+
+      return true
+    } else if (input_dy > 0 && shop_price_state == any) {
+      // Bottom
+      shop_price_state = price_selection_sex
+      return true
+    } else if (input_dy < 0 && shop_price_state == price_selection_sex) {
+      // Top
+      shop_price_state = any
+      return true
+    } else if (input_dx > 0 && shop_price_state == male) {
+      shop_price_state = female
+      return true
+    } else if (input_dx < 0 && shop_price_state == female) {
+      shop_price_state = male
+      return true
+    }
+  }
+
+  return false
+}
+
+void purchase_fish() {
+  FishType type
+  type = shop_fish_tanks[current_shop_row * 2 + current_shop_column]
+
+  if (shop_price_state == any) {
+    if (purchase(fish_any_price(type))) {
+      // Purchase successful
+      // TODO: Make better fish spawn position
+      spawn_fish(type, random_bool(), $80, $20)
+    }
+  } else {
+    if (purchase(fish_sexed_price(type))) {
+      // Purchase successful
+      // TODO: Make better fish spawn position
+      spawn_fish(type, shop_price_state == male, $80, $20)
+    }
+  }
+}
+
+const array(FishType) shop_fish_tanks = [
+  tetra, rasbora, tetra,
+  tetra, tetra, tetra
+]

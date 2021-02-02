@@ -1,0 +1,47 @@
+import graphics_buffer
+
+import plants/plants
+
+// Make sure to update text arrays
+const byte BABYTEARS_PRICE = 15
+
+inline void draw_babytears(PlantSize size, byte x, pointer.byte data) {
+  byte x_offset
+  word height_from_floor
+
+  x_offset = x + plant_min_x
+
+  if (size == medium) {
+    data[0] = $9E
+    data[1] = $9F
+
+    height_from_floor = ((word(active_tank.y_high) >> 3) - 1) * 32
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2, false)
+
+    data[0] = $A8
+    data[1] = $A9
+    add_buffered_write(ppu_nametable0 + height_from_floor + 32 + x_offset, false, data, 2, false)
+  } else if (size == small) {
+    data[0] = $9C
+    data[1] = $9D
+
+    height_from_floor = (word(active_tank.y_high) >> 3) * 32
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2, false)
+  }
+
+  data[0] = build_attribute_table(x, babytears)
+  // data[1] = build_attribute_table(x + 2, babytears)
+  // active_tank.y_high / 32 * 8
+  // TODO: Properly combine these shifts with a mask
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 1, false)
+}
+
+const array(byte) babytears_name_text = [
+  "B. Tears" ascii
+]
+
+const array(byte) babytears_price_text = [
+  "25" ascii
+]

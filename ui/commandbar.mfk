@@ -2,7 +2,7 @@ import input
 import fish/fish
 
 import ui/shared
-import ui/shop
+import ui/shop/shop
 import ui/planteditor
 
 import entity/inspect

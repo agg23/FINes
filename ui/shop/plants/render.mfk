@@ -1,0 +1,84 @@
+import ui/shop/fish/render
+import ui/shop/plants/plants
+
+import plants/allplants
+
+void draw_shop_plants_screen() {
+  word row_address
+  byte i
+  byte j
+
+  for i,0,until,SHOP_ROW_COUNT {
+    row_address = ppu_nametable0 + 4 * 32 + word(i) * word(32 * 12)
+
+    ppu_ctrl = vertical_ppu_ctrl
+
+    read_ppu_status()
+    ppu_set_addr(row_address + 4)
+    ppu_write_data(shop_tank[0])
+    ppu_write_data(shop_tank[4])
+    ppu_write_data(shop_tank[8])
+    ppu_write_data(shop_tank[12])
+    ppu_write_data(shop_tank[12])
+    ppu_write_data(shop_tank[12])
+    ppu_write_data(shop_tank[16])
+
+    for j,0,until,SHOP_COLUMN_COUNT {
+      draw_shop_plant(shop_plant_tanks[i * 3 + j], 5 + j * 8, 4 + i * 12, j == SHOP_COLUMN_COUNT - 1)
+
+      ppu_ctrl = vertical_ppu_ctrl
+    }
+
+    read_ppu_status()
+    ppu_set_addr(row_address + 32 - 5)
+    ppu_write_data(shop_tank[3])
+    ppu_write_data(shop_tank[7])
+    ppu_write_data(shop_tank[11])
+    ppu_write_data(shop_tank[15])
+    ppu_write_data(shop_tank[15])
+    ppu_write_data(shop_tank[15])
+    ppu_write_data(shop_tank[19])
+  }
+}
+
+void draw_shop_plant(PlantType type, byte x, byte y, bool is_last) {
+  word address
+  byte i
+  byte temp
+  byte count
+
+  if (is_last) {
+    count = 6
+  } else {
+    // Fill gap between tanks
+    count = 8
+  }
+
+  address = ppu_nametable0 + 32 * word(y) + word(x)
+
+  for i,0,until,count {
+    if (i & 1 == 0) {
+      temp = 0
+    } else {
+      temp = 1
+    }
+
+    read_ppu_status()
+    ppu_set_addr(address)
+    ppu_write_data(shop_tank[1 + temp])
+    ppu_write_data(shop_tank[5 + temp])
+    ppu_write_data(shop_tank[9 + temp])
+    ppu_write_data(shop_tank[13 + temp])
+    ppu_write_data(shop_tank[13 + temp])
+    ppu_write_data(shop_tank[13 + temp])
+    ppu_write_data(shop_tank[17 + temp])
+
+    address += 1
+  }
+
+  ppu_ctrl = standard_ppu_ctrl
+
+  draw_plant_name(type, x - 1, y + 8, 8)
+
+  draw_plant_price(type, x, y + 9)
+}
