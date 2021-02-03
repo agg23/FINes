@@ -189,8 +189,10 @@ macro void fish_fast_distance_square(sbyte input, byte output) {
     if (input < -15) {
       output = $FF
     } else {
-      output = $FF - input + 1
-      output = input * input
+      output = $FF - byte(input)
+      // Separate operation to prevent const being >=256
+      output += 1
+      output = output * output
     }
   } else if (input > 15) {
     output = $FF
