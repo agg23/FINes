@@ -81,19 +81,7 @@ void nmi() {
   in_nmi = 1
 
   if (new_frame) {
-    // set_color_effect(clear)
-    sprite_render()
-
-    process_buffered_writes()
-
-    read_ppu_status()
-    ppu_ctrl = standard_ppu_ctrl
-    read_ppu_status()
-    ppu_set_scroll(0, 0)
-
-    // wait_for_sprite0_nmi()
-
-    // set_color_effect(blue)
+    nmi_frame()
 
     new_frame = false
   }
@@ -101,6 +89,22 @@ void nmi() {
   nmi_always_run()
 
   in_nmi = 0
+}
+
+void nmi_frame() {
+  // set_color_effect(clear)
+  sprite_render()
+
+  process_buffered_writes()
+
+  read_ppu_status()
+  ppu_ctrl = standard_ppu_ctrl
+  read_ppu_status()
+  ppu_set_scroll(0, 0)
+
+  // wait_for_sprite0_nmi()
+
+  // set_color_effect(blue)
 }
 
 void nmi_always_run() {

@@ -10,13 +10,20 @@ import tank/state
 
 byte plant_editor_timer
 bool active_plant_flash
+/**
+* Optimization to prevent writing attr updates unless the plant just moved
+*/
+bool active_plant_write_attr
 PlantType plant_editor_type
 byte plant_editor_x
+byte plant_editor_width
 
 void start_plant_editing(PlantType type) {
   plant_editor_timer = 0
   active_plant_flash = true
+  active_plant_write_attr = true
   plant_editor_type = type
+  plant_editor_width = plant_expected_width[type]
   plant_editor_x = 0
 
   set_screen(plant_editor)
@@ -59,6 +66,7 @@ inline bool plant_editor_tick() {
 
         plant_editor_timer = 0
         active_plant_flash = true
+        active_plant_write_attr = true
 
         return true
       }
@@ -75,6 +83,7 @@ inline bool plant_editor_tick() {
 
         plant_editor_timer = 0
         active_plant_flash = true
+        active_plant_write_attr = true
 
         return true
       }
@@ -83,11 +92,14 @@ inline bool plant_editor_tick() {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      draw_plant_of_type(plant_editor_type, large, plant_editor_x)
+      draw_plant_of_type(plant_editor_type, large, plant_editor_x, active_plant_write_attr)
 
       active_plant_flash = false
+      active_plant_write_attr = false
     } else {
       clear_plant_column()
+
+      active_plant_flash = true
     }
 
     plant_editor_timer = 10
@@ -168,15 +180,18 @@ inline byte available_width_before_x(byte x, PlantType type) {
 
 inline void clear_plant_column() {
   byte i
+  word height_from_floor
   array(byte) data [10]
+
+  height_from_floor = plant_tile_height_from_floor(plant_max_editor_height[plant_editor_type])
 
   for i,0,until,10 {
     data[i] = 0
   }
 
-  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(10) + plant_editor_x + plant_min_x, true, data.pointer, 10, false)
-
-  active_plant_flash = true
+  for i,0,until,plant_editor_width {
+    add_buffered_write(ppu_nametable0 + height_from_floor + plant_editor_x + plant_min_x + i, true, data.pointer, plant_max_editor_height[plant_editor_type], false)
+  }
 }
 
 void draw_plant_editor() {

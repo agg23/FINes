@@ -114,18 +114,18 @@ void draw_plant_at_x(byte x) {
 }
 
 void draw_plant_i(byte i, byte x) {
-  draw_plant_of_type(plant_type[i], plant_size[i], x)
+  draw_plant_of_type(plant_type[i], plant_size[i], x, true)
 }
 
-void draw_plant_of_type(PlantType type, PlantSize size, byte x) {
+void draw_plant_of_type(PlantType type, PlantSize size, byte x, bool write_attr) {
   array(byte) data [10]
 
   if (type == rotala) {
-    draw_rotala(size, x, data.pointer)
+    draw_rotala(size, x, data.pointer, write_attr)
   } else if (type == babytears) {
-    draw_babytears(size, x, data.pointer)
+    draw_babytears(size, x, data.pointer, write_attr)
   } else if (type == anubias) {
-    draw_anubias(size, x, data.pointer)
+    draw_anubias(size, x, data.pointer, write_attr)
   }
 }
 
@@ -200,4 +200,5 @@ inline word plant_tile_height_from_floor(byte height) {
 // rotala, anubias, babytears
 const array(byte) plant_expected_width[PlantType] = [1, 3, 2]
 const array(byte) plant_min_width[PlantType] = [1, 3, 1]
+const array(byte) plant_max_editor_height[PlantType] = [3, 4, 2]
 const array(PlantPalette) plant_type_palette[PlantType] = [palette_red, palette_green, palette_green]
