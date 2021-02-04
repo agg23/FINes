@@ -80,6 +80,7 @@ void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
         asm {
           kil
         }
+        return
       } else {
         actual_width = max_width
       }

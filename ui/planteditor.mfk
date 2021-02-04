@@ -114,7 +114,7 @@ inline byte find_next_x(byte x, PlantType type) {
   byte i
   byte count
 
-  for i,x + 1,until,plant_max_x_bound {
+  for i, x + 1,until,plant_max_x_bound {
     if (plant_current_x[i] == $FF) {
       // Free space. Check if plant fits
       count = available_width_at_x(i, type)
@@ -151,9 +151,11 @@ byte find_prev_x(byte x, PlantType type) {
 inline byte available_width_at_x(byte x, PlantType type) {
   byte i
   byte count
+  PlantPalette plant_palette
   count = 0
   for i,0,until,plant_expected_width[type] {
-    if (plant_current_palettes[(i + x) >> 1] == palette_unset || plant_current_palettes[(i + x) >> 1] == plant_type_palette[type]) {
+    plant_palette = plant_current_palettes[(i + x) >> 1]
+    if (plant_palette == palette_unset || plant_palette == plant_type_palette[type]) {
       count += 1
     } else {
       return count
@@ -166,9 +168,11 @@ inline byte available_width_at_x(byte x, PlantType type) {
 inline byte available_width_before_x(byte x, PlantType type) {
   byte i
   byte count
+  PlantPalette plant_palette
   count = 0
   for i,0,until,plant_expected_width[type] {
-    if (plant_current_palettes[(x - 1) >> 1] == palette_unset || plant_current_palettes[(x - 1) >> 1] == plant_type_palette[type]) {
+    plant_palette = plant_current_palettes[x >> 1]
+    if (plant_palette == palette_unset || plant_palette == plant_type_palette[type]) {
       count += 1
     } else {
       return count
