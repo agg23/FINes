@@ -41,7 +41,7 @@ byte plant_max_x_bound
 void init_plants() {
   byte i
   plant_min_x = active_tank.x_low >> 3
-  plant_max_x_bound = (active_tank.x_high >> 3) - plant_min_x
+  plant_max_x_bound = (active_tank.x_high >> 3) - plant_min_x + 1
 
   for i,0,until,MAX_PLANT_COLUMNS {
     plant_at_x[i] = $FF

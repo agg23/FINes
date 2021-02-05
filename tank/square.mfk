@@ -59,4 +59,4 @@ void draw_square_tank() {
   }
 }
 
-const Tank export_square_tank = Tank(draw_square_tank.pointer, $10, 232, $42, $D8)
+const Tank export_square_tank = Tank(draw_square_tank.pointer, $10, $E0, $42, $D8)

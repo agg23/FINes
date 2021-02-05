@@ -73,7 +73,7 @@ inline bool plant_editor_tick() {
       }
     } else if (input_dx > 0) {
       // Right
-      if (plant_editor_x < plant_max_x_bound - 1) {
+      if (plant_editor_x < plant_max_x_bound) {
         clear_plant_column()
         wtemp = find_next_x(plant_editor_x, plant_editor_type)
 
@@ -122,7 +122,7 @@ inline word find_next_x(byte x, PlantType type) {
 
   output.hi = $FF
 
-  for i, x + 1,until,plant_max_x_bound {
+  for i, x + 1,until,plant_max_x_bound + 1 {
     if (plant_at_x[i] == $FF) {
       // Free space. Check if plant fits
       count = available_width_at_x(i, type)
@@ -173,7 +173,7 @@ inline byte available_width_at_x(byte x, PlantType type) {
   PlantPalette plant_palette
   count = 0
   for i,0,until,plant_expected_width[type] {
-    if (plant_at_x[x + i] != $FF) {
+    if (x + i > plant_max_x_bound || plant_at_x[x + i] != $FF) {
       // Existing plant in this location
       return count
     }
