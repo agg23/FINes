@@ -36,7 +36,7 @@ void stop_plant_editing() {
 inline bool plant_editor_tick() {
   array(byte) data [10]
 
-  byte temp
+  word wtemp
 
   if (input_can_be_consumed) {  
     if (input_b != 0) {
@@ -57,11 +57,12 @@ inline bool plant_editor_tick() {
 
       if (plant_editor_x > 0) {
         clear_plant_column()
-        temp = find_prev_x(plant_editor_x, plant_editor_type)
+        wtemp = find_prev_x(plant_editor_x, plant_editor_type)
 
-        if (temp != $FF) {
+        if (wtemp.hi != $FF) {
           // Found new x
-          plant_editor_x = temp
+          plant_editor_x = wtemp.hi
+          plant_editor_width = wtemp.lo
         }
 
         plant_editor_timer = 0
@@ -74,11 +75,12 @@ inline bool plant_editor_tick() {
       // Right
       if (plant_editor_x < plant_max_x_bound - 1) {
         clear_plant_column()
-        temp = find_next_x(plant_editor_x, plant_editor_type)
+        wtemp = find_next_x(plant_editor_x, plant_editor_type)
 
-        if (temp != $FF) {
+        if (wtemp.hi != $FF) {
           // Found new x
-          plant_editor_x = temp
+          plant_editor_x = wtemp.hi
+          plant_editor_width = wtemp.lo
         }
 
         plant_editor_timer = 0
@@ -92,7 +94,7 @@ inline bool plant_editor_tick() {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      draw_plant_of_type(plant_editor_type, large, plant_editor_x, active_plant_write_attr)
+      draw_plant_of_type(plant_editor_type, large, plant_editor_x, active_plant_write_attr, plant_editor_width)
 
       active_plant_flash = false
       active_plant_write_attr = false
@@ -110,51 +112,73 @@ inline bool plant_editor_tick() {
   return false
 }
 
-inline byte find_next_x(byte x, PlantType type) {
+/**
+* @returns hi(x position), lo(plant width)
+*/
+inline word find_next_x(byte x, PlantType type) {
   byte i
   byte count
+  word output
+
+  output.hi = $FF
 
   for i, x + 1,until,plant_max_x_bound {
-    if (plant_current_x[i] == $FF) {
+    if (plant_at_x[i] == $FF) {
       // Free space. Check if plant fits
       count = available_width_at_x(i, type)
 
       if (count >= plant_min_width[type]) {
         // Plant fits
-        return i
+        output.hi = i
+        output.lo = count
+        return output
       }
     }
   }
 
-  return $FF
+  return output
 }
 
-byte find_prev_x(byte x, PlantType type) {
+/**
+* @returns hi(x position), lo(plant width)
+*/
+inline word find_prev_x(byte x, PlantType type) {
   byte i
   byte count
+  word output
+
+  output.hi = $FF
 
   for i,x - 1,downto,0 {
-    if (plant_current_x[i] == $FF) {
+    if (plant_at_x[i] == $FF) {
       // Free space. Check if plant fits
-      count = available_width_before_x(i, type)
+      count = available_width_at_x(i, type)
 
       if (count >= plant_min_width[type]) {
         // Plant fits
-        return i
+        output.hi = i
+        output.lo = count
+        return output
       }
     }
   }
 
-  return $FF
+  return output
 }
 
 inline byte available_width_at_x(byte x, PlantType type) {
   byte i
+  byte j
   byte count
   PlantPalette plant_palette
   count = 0
   for i,0,until,plant_expected_width[type] {
-    plant_palette = plant_current_palettes[(i + x) >> 1]
+    if (plant_at_x[x + i] != $FF) {
+      // Existing plant in this location
+      return count
+    }
+
+    plant_palette = plant_current_palettes[(x + i) >> 1]
     if (plant_palette == palette_unset || plant_palette == plant_type_palette[type]) {
       count += 1
     } else {

@@ -34,11 +34,7 @@ inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_a
   add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 2, true, data, 4, false)
 
   if (write_attr) {
-    data[0] = build_attribute_table(x, anubias)
-    data[1] = build_attribute_table(x + 2, anubias)
-    // active_tank.y_high / 32 * 8
-    // TODO: Properly combine these shifts with a mask
-    add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, 2, false)
+    build_and_write_plant_attribute_table(x_offset, anubias, 3)
   }
 }
 

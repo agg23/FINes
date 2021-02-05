@@ -1,5 +1,7 @@
 import entity/health
 
+import tank/state
+
 import plants/anubias
 import plants/babytears
 import plants/rotala
@@ -30,7 +32,8 @@ array(PlantType) plant_type [MAX_PLANT_COUNT]
 array(byte) plant_x [MAX_PLANT_COUNT]
 array(PlantSize) plant_size [MAX_PLANT_COUNT]
 array(PlantPalette) plant_current_palettes [MAX_PLANT_COLUMNS >> 1]
-array(byte) plant_current_x [MAX_PLANT_COLUMNS]
+array(byte) plant_at_x [MAX_PLANT_COLUMNS]
+array(byte) plant_current_width [MAX_PLANT_COLUMNS]
 
 byte plant_min_x
 byte plant_max_x_bound
@@ -41,7 +44,7 @@ void init_plants() {
   plant_max_x_bound = (active_tank.x_high >> 3) - plant_min_x
 
   for i,0,until,MAX_PLANT_COLUMNS {
-    plant_current_x[i] = $FF
+    plant_at_x[i] = $FF
   }
 
   for i,0,until,15 {
@@ -85,8 +88,10 @@ void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
         actual_width = max_width
       }
 
+      plant_current_width[i] = actual_width
+
       for j,0,until,actual_width {
-        plant_current_x[x + j] = i
+        plant_at_x[x + j] = i
         plant_current_palettes[(x + j) >> 1] = plant_type_palette[type]
       }
       
@@ -115,69 +120,123 @@ void draw_plant_at_x(byte x) {
 }
 
 void draw_plant_i(byte i, byte x) {
-  draw_plant_of_type(plant_type[i], plant_size[i], x, true)
+  draw_plant_of_type(plant_type[i], plant_size[i], x, true, plant_current_width[i])
 }
 
-void draw_plant_of_type(PlantType type, PlantSize size, byte x, bool write_attr) {
+void draw_plant_of_type(PlantType type, PlantSize size, byte x, bool write_attr, byte width) {
   array(byte) data [10]
 
   if (type == rotala) {
     draw_rotala(size, x, data.pointer, write_attr)
   } else if (type == babytears) {
-    draw_babytears(size, x, data.pointer, write_attr)
+    draw_babytears(size, x, data.pointer, write_attr, width)
   } else if (type == anubias) {
     draw_anubias(size, x, data.pointer, write_attr)
   }
 }
 
-byte build_attribute_table(byte x, PlantType type) {
+void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte width) {
+  array(byte) data [2]
+  byte x
+  byte output
   PlantPalette temp_palette
   byte prev_palette_number
   byte next_palette_number
-  byte output
+  PlantPalette plant_palette_for_type
 
-  if ((x + plant_min_x) & 2 != 0) {
-    // Odd position, need to consider previous palette
-    if (x < 3) {
+  x = x_offset - plant_min_x
+
+  plant_palette_for_type = plant_type_palette[type]
+
+  // Either sits in the middle of a attr table entry, or spans two entries
+  if (x_offset >> 2 == (x_offset + width - 1) >> 2) {
+    // Entirely within attr table entry
+
+    if ((x_offset >> 1) & 1 != 0) {
+      next_palette_number = palette_number_for_palette[plant_palette_for_type]
+
+      // Odd 16x16, use previous palette
+      if (x_offset < 3 + plant_min_x) {
+        // Prev is wall
+        prev_palette_number = 0
+      } else {
+        temp_palette = plant_current_palettes[(x >> 1) - 1]
+
+        if (temp_palette == palette_unset) {
+          // No palette set behind
+          prev_palette_number = next_palette_number
+        } else {
+          prev_palette_number = palette_number_for_palette[temp_palette]
+        }
+      }
+    } else {
+      prev_palette_number = palette_number_for_palette[plant_palette_for_type]
+
+      // Even 16x16, use next palette
+      if (x_offset + width > plant_max_x_bound + plant_min_x - 2) {
+        // Next is wall
+        next_palette_number = 0
+      } else {
+        temp_palette = plant_current_palettes[(x >> 1) + 1]
+
+        if (temp_palette == palette_unset) {
+          // No palette set in front
+          next_palette_number = prev_palette_number
+        } else {
+          next_palette_number = palette_number_for_palette[temp_palette]
+        }
+      }
+    }
+
+    // next_palette_number = palette_number_for_palette[plant_palette_for_type]
+    // TODO: This does not consider say a single width plant (rotala), as it always will "fit" as per the check above. This needs to also
+    // check whether it's in the first or second half of the attr entry, and select the colors as required
+    build_attribute_table_entry(prev_palette_number, next_palette_number, prev_palette_number, next_palette_number, output)
+
+    data[0] = output
+    write_plant_attribute_table(x_offset, data.pointer, 1)
+  } else {
+    // Spans two entries
+    if (x_offset < 3 + plant_min_x) {
       // Prev is wall
       prev_palette_number = 0
     } else {
       temp_palette = plant_current_palettes[(x >> 1) - 1]
-
-      prev_palette_number = palette_number_for_palette(temp_palette)
+      prev_palette_number = palette_number_for_palette[temp_palette]
     }
+    next_palette_number = palette_number_for_palette[plant_palette_for_type]
 
-    next_palette_number = palette_number_for_palette(plant_type_palette[type])
-  } else {
-    // Even position, need to consider next palette
-    if (x > plant_max_x_bound - 3) {
+    // Write prev attr table entry
+    build_attribute_table_entry(prev_palette_number, next_palette_number, prev_palette_number, next_palette_number, output)
+    data[0] = output
+
+    if (x_offset + width > plant_max_x_bound + plant_min_x - 3) {
       // Next is wall
       next_palette_number = 0
     } else {
       temp_palette = plant_current_palettes[(x >> 1) + 1]
-
-      next_palette_number = palette_number_for_palette(temp_palette)
+      next_palette_number = palette_number_for_palette[temp_palette]
     }
 
-    prev_palette_number = palette_number_for_palette(plant_type_palette[type])
+    prev_palette_number = palette_number_for_palette[plant_palette_for_type]
+
+    // Write next attr table entry
+    build_attribute_table_entry(prev_palette_number, next_palette_number, prev_palette_number, next_palette_number, output)
+
+    data[1] = output
+    write_plant_attribute_table(x_offset, data.pointer, 2)
   }
-
-  output = next_palette_number
-  output = (output << 2) | prev_palette_number
-  output = (output << 2) | next_palette_number
-  output = (output << 2) | prev_palette_number
-
-  return output
 }
 
-inline byte palette_number_for_palette(PlantPalette type) {
-  if (type == palette_green) {
-    return 1
-  } else if (type == palette_red) {
-    return 2
-  }
+macro void write_plant_attribute_table(byte x_offset, pointer.byte data, byte const length) {
+  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, length, false)
+}
 
-  return 0
+macro void build_attribute_table_entry(byte top_left, byte top_right, byte bottom_left, byte bottom_right, byte output) {
+  output = bottom_right
+  output = (output << 2) | bottom_left
+  output = (output << 2) | top_right
+  output = (output << 2) | top_left
 }
 
 void plant_tick() {
@@ -203,3 +262,4 @@ const array(byte) plant_expected_width[PlantType] = [1, 3, 2]
 const array(byte) plant_min_width[PlantType] = [1, 3, 1]
 const array(byte) plant_max_editor_height[PlantType] = [3, 4, 2]
 const array(PlantPalette) plant_type_palette[PlantType] = [palette_red, palette_green, palette_green]
+const array(byte) palette_number_for_palette[PlantPalette] = [2, 1, 0]
