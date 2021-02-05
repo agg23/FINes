@@ -173,7 +173,7 @@ void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte w
       prev_palette_number = palette_number_for_palette[plant_palette_for_type]
 
       // Even 16x16, use next palette
-      if (x_offset + width > plant_max_x_bound + plant_min_x - 2) {
+      if (x_offset + width > plant_max_x_bound + plant_min_x - 1) {
         // Next is wall
         next_palette_number = 0
       } else {
