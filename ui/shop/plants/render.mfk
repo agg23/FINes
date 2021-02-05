@@ -24,7 +24,7 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[16])
 
     for j,0,until,SHOP_COLUMN_COUNT {
-      draw_shop_plant(shop_plant_tanks[i * 3 + j], 5 + j * 8, 4 + i * 12, j == SHOP_COLUMN_COUNT - 1)
+      draw_shop_plant(i, j)
 
       ppu_ctrl = vertical_ppu_ctrl
     }
@@ -45,18 +45,24 @@ void draw_shop_plants_screen() {
   draw_text(13, 2, plant_screen_text.pointer, plant_screen_text.length, 0)
 }
 
-void draw_shop_plant(PlantType type, byte x, byte y, bool is_last) {
+void draw_shop_plant(byte row, byte column) {
+  PlantType type
   word address
   byte i
   byte temp
   byte count
+  byte x
+  byte y
 
-  if (is_last) {
+  if (column == SHOP_COLUMN_COUNT - 1) {
     count = 6
   } else {
     // Fill gap between tanks
     count = 8
   }
+
+  x = 5 + column * 8
+  y = 4 + row * 12
 
   address = ppu_nametable0 + 32 * word(y) + word(x)
 
@@ -82,11 +88,20 @@ void draw_shop_plant(PlantType type, byte x, byte y, bool is_last) {
 
   ppu_ctrl = standard_ppu_ctrl
 
+  type = shop_plant_tanks[row * SHOP_COLUMN_COUNT + column]
   draw_plant_name(type, x - 1, y + 8, 8)
 
-  draw_plant_price(type, x, y + 9)
+  if (is_shop_item_enabled(row, column)) {
+    draw_plant_price(type, x, y + 9)
+  } else {
+    draw_text(x - 1, y + 9, plant_no_room_text.pointer, plant_no_room_text.length, 0)
+  }
 }
 
 const array(byte) plant_screen_text = [
   "Plants" ascii
+]
+
+const array(byte) plant_no_room_text = [
+  "No room" ascii
 ]

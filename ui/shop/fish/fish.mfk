@@ -1,5 +1,12 @@
 import ui/shop/render
 
+void init_fish_shop() {
+  byte i
+  for i,0,until,SHOP_ITEM_COUNT {
+    shop_item_enabled[i] = true
+  }
+}
+
 inline bool shop_fish_price_selection_tick() {
   bool temp
   temp = shop_fish_price_selection_input_tick()
@@ -52,7 +59,7 @@ inline bool shop_fish_price_selection_input_tick() {
 
 void purchase_fish() {
   FishType type
-  type = shop_fish_tanks[current_shop_row * 3 + current_shop_column]
+  type = shop_fish_tanks[current_shop_row * SHOP_COLUMN_COUNT + current_shop_column]
 
   if (shop_price_state == any) {
     if (purchase(fish_any_price(type))) {

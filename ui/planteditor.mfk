@@ -19,18 +19,22 @@ byte plant_editor_x
 byte plant_editor_width
 
 void start_plant_editing(PlantType type) {
+  word available_position
   plant_editor_timer = 0
   active_plant_flash = true
   active_plant_write_attr = true
   plant_editor_type = type
-  plant_editor_width = plant_expected_width[type]
-  plant_editor_x = 0
+
+  available_position = find_next_x(-1, type)
+  plant_editor_x = available_position.hi
+  plant_editor_width = available_position.lo
 
   set_screen(plant_editor)
 }
 
 void stop_plant_editing() {
   set_screen(shop)
+  init_plants_shop()
 }
 
 inline bool plant_editor_tick() {

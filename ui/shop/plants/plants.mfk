@@ -3,9 +3,23 @@ import ui/shop/render
 import plants/plants
 import plants/allplants
 
+void init_plants_shop() {
+  byte i
+  byte temp
+  for i,0,until,SHOP_ITEM_COUNT {
+    temp = hi(find_next_x(0, shop_plant_tanks[i]))
+    if (temp != $FF) {
+      shop_item_enabled[i] = true
+    } else {
+      shop_item_enabled[i] = false
+    }
+  }
+}
+
 void purchase_plant() {
   PlantType type
-  type = shop_plant_tanks[current_shop_row * 3 + current_shop_column]
+
+  type = shop_plant_tanks[current_shop_row * SHOP_COLUMN_COUNT + current_shop_column]
 
   if (purchase(plant_price(type))) {
     start_plant_editing(type)

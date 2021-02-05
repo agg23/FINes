@@ -31,17 +31,19 @@ enum ShopPriceSelectionState {
 
 const byte SHOP_COLUMN_COUNT = 3
 const byte SHOP_ROW_COUNT = 2
+const byte SHOP_ITEM_COUNT = SHOP_COLUMN_COUNT * SHOP_ROW_COUNT
 
 byte current_shop_row
 byte current_shop_column
 ShopScreen shop_screen
 ShopSelectionState shop_state
 ShopPriceSelectionState shop_price_state
+array(bool) shop_item_enabled [SHOP_ITEM_COUNT]
 
 void init_shop() {
   current_shop_row = 0
   current_shop_column = 0
-  shop_screen = fish
+  set_shop_screen(fish)
   shop_state = tank
   shop_price_state = any
 
@@ -50,6 +52,18 @@ void init_shop() {
 
 void close_shop() {
   set_screen(aquarium)
+}
+
+void set_shop_screen(ShopScreen new_shop_screen) {
+  shop_screen = new_shop_screen
+
+  current_shop_row = 0
+  current_shop_column = 0
+
+  return [shop_screen] {
+    fish @ init_fish_shop
+    plants @ init_plants_shop
+  }
 }
 
 inline bool shop_tick() {
@@ -95,9 +109,9 @@ inline bool shop_tank_selection_input_tick() {
       return true
     } else if (input_select != 0) {
       if (shop_screen == fish) {
-        shop_screen = plants
+        set_shop_screen(plants)
       } else if (shop_screen == plants) {
-        shop_screen = fish
+        set_shop_screen(fish)
       }
 
       // Request screen redraw
@@ -105,6 +119,10 @@ inline bool shop_tank_selection_input_tick() {
 
       return true
     } else if (input_a != 0) {
+      if (not(shop_item_enabled[current_shop_row * SHOP_COLUMN_COUNT + current_shop_column])) {
+        return false
+      }
+
       if (shop_screen == fish) {
         shop_state = price
         shop_price_state = any
@@ -113,16 +131,30 @@ inline bool shop_tank_selection_input_tick() {
       }
 
       return true
-    } else if (input_dx > 0 && current_shop_column < SHOP_COLUMN_COUNT - 1) {
+    } else if (input_dx > 0) {
       // Right
-      current_shop_column += 1
+      if (current_shop_column < SHOP_COLUMN_COUNT - 1) {
+        current_shop_column += 1
 
-      return true
-    } else if (input_dx < 0 && current_shop_column > 0) {
+        return true
+      } else if (current_shop_row < SHOP_ROW_COUNT - 1) {
+        current_shop_row += 1
+        current_shop_column = 0
+
+        return true
+      }
+    } else if (input_dx < 0) {
       // Left
-      current_shop_column -= 1
+      if (current_shop_column > 0) {
+        current_shop_column -= 1
 
-      return true
+        return true
+      } else if (current_shop_row > 0) {
+        current_shop_row -= 1
+        current_shop_column = SHOP_COLUMN_COUNT - 1
+
+        return true
+      }
     } else if (input_dy > 0 && current_shop_row < SHOP_ROW_COUNT - 1) {
       // Bottom
       current_shop_row += 1
@@ -137,4 +169,8 @@ inline bool shop_tank_selection_input_tick() {
   }
 
   return false
+}
+
+bool is_shop_item_enabled(byte shop_row, byte shop_column) {
+  return shop_item_enabled[shop_row * SHOP_COLUMN_COUNT + shop_column]
 }
