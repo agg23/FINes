@@ -52,7 +52,7 @@ inline bool shop_fish_price_selection_input_tick() {
 
 void purchase_fish() {
   FishType type
-  type = shop_fish_tanks[current_shop_row * 2 + current_shop_column]
+  type = shop_fish_tanks[current_shop_row * 3 + current_shop_column]
 
   if (shop_price_state == any) {
     if (purchase(fish_any_price(type))) {

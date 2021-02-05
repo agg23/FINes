@@ -5,7 +5,7 @@ import plants/allplants
 
 void purchase_plant() {
   PlantType type
-  type = shop_plant_tanks[current_shop_row * 2 + current_shop_column]
+  type = shop_plant_tanks[current_shop_row * 3 + current_shop_column]
 
   if (purchase(plant_price(type))) {
     start_plant_editing(type)
