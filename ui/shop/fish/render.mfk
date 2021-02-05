@@ -7,7 +7,7 @@ void draw_shop_fish_screen() {
 
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
-      draw_shop_tank(shop_fish_tanks[i * 3 + j], 6 + j * 8, 4 + i * 12)
+      draw_shop_tank(shop_fish_tanks[i * 3 + j], 6 + j * 8, 5 + i * 12)
     }
   }
 
@@ -54,7 +54,7 @@ inline void render_shop_fish() {
 
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
-      render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 48 + i * 12 * 8, 0, true)
+      render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 58 + i * 12 * 8, 0, true)
     }
   }
 }

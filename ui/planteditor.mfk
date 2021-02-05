@@ -98,7 +98,7 @@ inline bool plant_editor_tick() {
 
   if (plant_editor_timer == 0) {
     if (active_plant_flash) {
-      draw_plant_of_type(plant_editor_type, large, plant_editor_x, active_plant_write_attr, plant_editor_width)
+      draw_plant_of_type(plant_editor_type, large, plant_editor_x, active_plant_write_attr, plant_editor_width, 0)
 
       active_plant_flash = false
       active_plant_write_attr = false
@@ -198,7 +198,7 @@ inline void clear_plant_column() {
   word height_from_floor
   array(byte) data [10]
 
-  height_from_floor = plant_tile_height_from_floor(plant_max_editor_height[plant_editor_type])
+  height_from_floor = plant_tile_height_from_floor(plant_max_editor_height[plant_editor_type], 0)
 
   for i,0,until,10 {
     data[i] = 0

@@ -5,7 +5,7 @@ import plants/plants
 // Make sure to update text arrays
 const byte ROTALA_PRICE = 20
 
-inline void draw_rotala(PlantSize size, byte x, pointer.byte data, bool write_attr) {
+inline void draw_rotala(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
   byte x_offset
   byte count
 
@@ -24,10 +24,10 @@ inline void draw_rotala(PlantSize size, byte x, pointer.byte data, bool write_at
     data[j] = $88
   }
 
-  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count) + x_offset, true, data, count, false)
+  add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count, custom_bottom_y) + x_offset, true, data, count, false)
 
   if (write_attr) {
-    build_and_write_plant_attribute_table(x_offset, rotala, 1)
+    build_and_write_plant_attribute_table(x_offset, rotala, 1, custom_bottom_y)
   }
 }
 

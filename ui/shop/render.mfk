@@ -11,7 +11,7 @@ inline void render_shop_tank_highlight() {
   byte y_low
   byte y_high
   x_low = 32 + current_shop_column * 8 * 8
-  y_low = 24 + current_shop_row * 12 * 8
+  y_low = 32 + current_shop_row * 12 * 8
   x_high = x_low + 7 * 8
   y_high = y_low + 11 * 8 - 4
 
@@ -24,7 +24,7 @@ inline void render_shop_price_highlight() {
   byte y_low
   byte y_high
   x_low = 40 + current_shop_column * 8 * 8 - 4
-  y_low = 12 * 8 + current_shop_row * 12 * 8 - 2
+  y_low = 13 * 8 + current_shop_row * 12 * 8 - 2
 
   if (shop_price_state != any) {
     y_low += 8

@@ -2,6 +2,7 @@ import ui/shop/fish/render
 import ui/shop/plants/plants
 
 import plants/allplants
+import plants/plants
 
 void draw_shop_plants_screen() {
   word row_address
@@ -9,7 +10,7 @@ void draw_shop_plants_screen() {
   byte j
 
   for i,0,until,SHOP_ROW_COUNT {
-    row_address = ppu_nametable0 + 4 * 32 + word(i) * word(32 * 12)
+    row_address = ppu_nametable0 + 5 * 32 + word(i) * word(32 * 12)
 
     ppu_ctrl = vertical_ppu_ctrl
 
@@ -62,7 +63,7 @@ void draw_shop_plant(byte row, byte column) {
   }
 
   x = 5 + column * 8
-  y = 4 + row * 12
+  y = 5 + row * 12
 
   address = ppu_nametable0 + 32 * word(y) + word(x)
 
@@ -89,6 +90,10 @@ void draw_shop_plant(byte row, byte column) {
   ppu_ctrl = standard_ppu_ctrl
 
   type = shop_plant_tanks[row * SHOP_COLUMN_COUNT + column]
+
+  temp = plant_expected_width[type]
+  draw_plant_of_type(type, large, x - plant_min_x + ((8 - temp) >> 1), true, temp, y + 6)
+
   draw_plant_name(type, x - 1, y + 8, 8)
 
   if (is_shop_item_enabled(row, column)) {

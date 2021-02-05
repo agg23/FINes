@@ -5,7 +5,7 @@ import plants/plants
 // Make sure to update text arrays
 const byte BABYTEARS_PRICE = 15
 
-inline void draw_babytears(PlantSize size, byte x, pointer.byte data, bool write_attr, byte width) {
+inline void draw_babytears(PlantSize size, byte x, pointer.byte data, bool write_attr, byte width, byte custom_bottom_y) {
   byte x_offset
   word height_from_floor
 
@@ -15,7 +15,7 @@ inline void draw_babytears(PlantSize size, byte x, pointer.byte data, bool write
     data[0] = $9E
     data[1] = $9F
 
-    height_from_floor = ((word(active_tank.y_high) >> 3) - 1) * 32
+    height_from_floor = plant_tile_height_from_floor(2, custom_bottom_y)
 
     add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, width, false)
 
@@ -26,13 +26,13 @@ inline void draw_babytears(PlantSize size, byte x, pointer.byte data, bool write
     data[0] = $9C
     data[1] = $9D
 
-    height_from_floor = (word(active_tank.y_high) >> 3) * 32
+    height_from_floor = plant_tile_height_from_floor(1, custom_bottom_y)
 
     add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, width, false)
   }
 
   if (write_attr) {
-    build_and_write_plant_attribute_table(x_offset, anubias, width)
+    build_and_write_plant_attribute_table(x_offset, anubias, width, custom_bottom_y)
   }
 }
 

@@ -120,22 +120,22 @@ void draw_plant_at_x(byte x) {
 }
 
 void draw_plant_i(byte i, byte x) {
-  draw_plant_of_type(plant_type[i], plant_size[i], x, true, plant_current_width[i])
+  draw_plant_of_type(plant_type[i], plant_size[i], x, true, plant_current_width[i], 0)
 }
 
-void draw_plant_of_type(PlantType type, PlantSize size, byte x, bool write_attr, byte width) {
+void draw_plant_of_type(PlantType type, PlantSize size, byte x, bool write_attr, byte width, byte custom_bottom_y) {
   array(byte) data [10]
 
   if (type == rotala) {
-    draw_rotala(size, x, data.pointer, write_attr)
+    draw_rotala(size, x, data.pointer, write_attr, custom_bottom_y)
   } else if (type == babytears) {
-    draw_babytears(size, x, data.pointer, write_attr, width)
+    draw_babytears(size, x, data.pointer, write_attr, width, custom_bottom_y)
   } else if (type == anubias) {
-    draw_anubias(size, x, data.pointer, write_attr)
+    draw_anubias(size, x, data.pointer, write_attr, custom_bottom_y)
   }
 }
 
-void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte width) {
+void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte width, byte custom_bottom_y) {
   array(byte) data [2]
   byte x
   byte output
@@ -194,7 +194,7 @@ void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte w
     build_attribute_table_entry(prev_palette_number, next_palette_number, prev_palette_number, next_palette_number, output)
 
     data[0] = output
-    write_plant_attribute_table(x_offset, data.pointer, 1)
+    write_plant_attribute_table(x_offset, data.pointer, 1, custom_bottom_y)
   } else {
     // Spans two entries
     if (x_offset < 3 + plant_min_x) {
@@ -224,12 +224,12 @@ void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte w
     build_attribute_table_entry(prev_palette_number, next_palette_number, prev_palette_number, next_palette_number, output)
 
     data[1] = output
-    write_plant_attribute_table(x_offset, data.pointer, 2)
+    write_plant_attribute_table(x_offset, data.pointer, 2, custom_bottom_y)
   }
 }
 
-macro void write_plant_attribute_table(byte x_offset, pointer.byte data, byte const length) {
-  add_buffered_write(ppu_attrtable0 + ((word(active_tank.y_high) >> 5) << 3) + (x_offset >> 2), false, data, length, false)
+macro void write_plant_attribute_table(byte x_offset, pointer.byte data, byte const length, byte custom_bottom_y) {
+  add_buffered_write(ppu_attrtable0 + plant_attr_y(custom_bottom_y) + (x_offset >> 2), false, data, length, false)
 }
 
 macro void build_attribute_table_entry(byte top_left, byte top_right, byte bottom_left, byte bottom_right, byte output) {
@@ -253,8 +253,21 @@ void plant_tick() {
   }
 }
 
-inline word plant_tile_height_from_floor(byte height) {
+inline word plant_tile_height_from_floor(byte height, byte custom_bottom_y) {
+  if (custom_bottom_y != 0) {
+    return word(custom_bottom_y - height + 1) * 32
+  }
+
   return ((word(active_tank.y_high) >> 3) - height + 1) * 32
+}
+
+inline word plant_attr_y(byte custom_bottom_y) {
+  if (custom_bottom_y != 0) {
+    // Y to attr row (div 4), then multiply by 8 for row index
+    return (custom_bottom_y >> 2) << 3
+  }
+
+  return (word(active_tank.y_high) >> 5) << 3
 }
 
 // rotala, anubias, babytears
