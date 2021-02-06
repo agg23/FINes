@@ -56,7 +56,6 @@ void screen_transfer_tick() {
 
   clear_buffer()
   draw_screen()
-  process_buffered_writes()
 
   ppu_wait_vblank()
 

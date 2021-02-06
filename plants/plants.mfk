@@ -33,7 +33,7 @@ array(byte) plant_x [MAX_PLANT_COUNT]
 array(PlantSize) plant_size [MAX_PLANT_COUNT]
 array(PlantPalette) plant_current_palettes [MAX_PLANT_COLUMNS >> 1]
 array(byte) plant_at_x [MAX_PLANT_COLUMNS]
-array(byte) plant_current_width [MAX_PLANT_COLUMNS]
+array(byte) plant_current_width [MAX_PLANT_COUNT]
 
 byte plant_min_x
 byte plant_max_x_bound
