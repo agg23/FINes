@@ -45,3 +45,10 @@ inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte cente
     ppu_write_data(text[i])
   }
 }
+
+macro void build_attribute_table_entry(byte top_left, byte top_right, byte bottom_left, byte bottom_right, byte output) {
+  output = bottom_right
+  output = (output << 2) | bottom_left
+  output = (output << 2) | top_right
+  output = (output << 2) | top_left
+}

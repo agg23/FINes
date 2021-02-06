@@ -35,5 +35,5 @@ void render_inspect_fish_item(byte i, byte y) {
 
   type = fish_type[i]
 
-  render_fish_type(type, 34, y * 8 + 2, 0, true)
+  render_fish_type(type, 36, y * 8 + 10, 0, true)
 }

@@ -1,3 +1,4 @@
+import ui/shared
 import entity/health
 
 import tank/state
@@ -230,13 +231,6 @@ void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte w
 
 macro void write_plant_attribute_table(byte x_offset, pointer.byte data, byte const length, byte custom_bottom_y) {
   add_buffered_write(ppu_attrtable0 + plant_attr_y(custom_bottom_y) + (x_offset >> 2), false, data, length, false)
-}
-
-macro void build_attribute_table_entry(byte top_left, byte top_right, byte bottom_left, byte bottom_right, byte output) {
-  output = bottom_right
-  output = (output << 2) | bottom_left
-  output = (output << 2) | top_right
-  output = (output << 2) | top_left
 }
 
 void plant_tick() {

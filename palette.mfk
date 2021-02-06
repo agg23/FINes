@@ -1,6 +1,7 @@
 const byte color_black = $0F
 const byte color_blue = $1C
 const byte color_dark_blue = $0C
+const byte color_dark_grey = $0
 const byte color_dark_green = $09
 const byte color_green = $19
 const byte color_light_green = $2A
@@ -12,7 +13,7 @@ const byte color_orange = $26
 const byte color_pink = $15
 const byte color_sand = $37
 const byte color_red = $05
-const byte color_white = $20
+const byte color_white = $30
 
 const byte background_backdrop = color_light_blue
 
@@ -49,4 +50,14 @@ const array shop_palette = [
   color_blue, color_red, color_pink, color_light_orange,
   // Tank (placed at end so plant palettes can stay in the same place)
   color_blue, color_medium_blue, color_light_grey, color_dark_blue
+]
+
+const array inspect_palette = [
+  // Disabled row
+  color_black, color_dark_grey, color_light_grey, color_white,
+  // Selected row
+  color_black, color_white, color_red, color_white,
+  // Unused
+  color_black, color_white, color_red, color_white,
+  color_black, color_white, color_red, color_white
 ]

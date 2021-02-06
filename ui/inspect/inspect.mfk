@@ -10,6 +10,7 @@ enum InspectScreen {
 
 byte current_inspect_row
 byte current_inspect_page
+byte current_inspect_page_length
 InspectScreen inspect_screen
 
 array(byte) inspect_packed_item_indexes [MAX_FISH_COUNT]
@@ -35,15 +36,70 @@ void set_inspect_screen(InspectScreen new_inspect_screen) {
   current_inspect_page = 0
   current_inspect_row = 0
 
-  return [inspect_screen] {
-    inspect_fish @ init_inspect_fish
-    // plants @ init_plants_shop
+  if (inspect_screen == inspect_fish) {
+    init_inspect_fish()
   }
+
+  current_inspect_page_length = inspect_row_count()
 }
 
 inline bool inspect_tick() {
+  byte temp
   render_inspect()
+
+  if (input_can_be_consumed) {
+    if (input_b != 0) {
+      close_inspect()
+      deactivate_commandbar_selection()
+      return true
+    // } else if (input_select != 0) {
+    //   if (shop_screen == fish) {
+    //     set_shop_screen(plants)
+    //   } else if (shop_screen == plants) {
+    //     set_shop_screen(fish)
+    //   }
+
+    //   // Request screen redraw
+    //   set_screen_forcibly(shop)
+
+    //   return true
+    } else if (input_a != 0) {
+      
+
+      return true
+    } else if (input_dy > 0 && current_inspect_row < current_inspect_page_length - 1) {
+      // Bottom
+      temp = current_inspect_row
+      current_inspect_row += 1
+
+      // Disable prev
+      draw_inspect_item_attr(temp, false)
+      // Enable next
+      draw_inspect_item_attr(current_inspect_row, true)
+
+      return true
+    } else if (input_dy < 0 && current_inspect_row > 0) {
+      // Top
+      temp = current_inspect_row
+      current_inspect_row -= 1
+
+      // Disable next
+      draw_inspect_item_attr(temp, false)
+      // Enable prev
+      draw_inspect_item_attr(current_inspect_row, true)
+
+      return true
+    }
+  }
 
   return false
 }
 
+inline byte inspect_row_count() {
+  if ((current_inspect_page + 1) * 5 < inspect_packed_length) {
+    // Entire page fits
+    return 5
+  } else {
+    return inspect_packed_length - (current_inspect_page * 5)
+  }
+}
