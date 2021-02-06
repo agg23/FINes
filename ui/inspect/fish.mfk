@@ -32,8 +32,16 @@ void draw_inspect_fish_item(byte i, byte y) {
 
 void render_inspect_fish_item(byte i, byte y) {
   FishType type
+  byte mask
 
   type = fish_type[i]
 
-  render_fish_type(type, 36, y * 8 + 10, 0, true)
+  if (i == current_inspect_row) {
+    mask = 0
+  } else {
+    // Mask over actual fish palette to switch to the disabled palette
+    mask = %11
+  }
+
+  render_fish_type(type, 36, y * 8 + 10, mask, true)
 }

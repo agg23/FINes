@@ -153,7 +153,7 @@ void render_inspect_item(byte i, byte y) {
 }
 
 void load_inspect_palette() {
-  add_buffered_write(ppu_palette_ram, false, inspect_palette.pointer, $10, true)
+  add_buffered_write(ppu_palette_ram, false, inspect_palette.pointer, $20, true)
 }
 
 const array(byte) health_text = [
