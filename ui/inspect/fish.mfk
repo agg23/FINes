@@ -1,0 +1,39 @@
+import ui/inspect/inspect
+import ui/inspect/render
+
+void init_inspect_fish() {
+  build_inspect_packed_fish_array()
+}
+
+void build_inspect_packed_fish_array() {
+  byte i
+  byte packed_i
+
+  packed_i = 0
+
+  for i,0,until,MAX_FISH_COUNT {
+    if (fish_alive[i]) {
+      inspect_packed_item_indexes[packed_i] = i
+      packed_i += 1
+    }
+  }
+
+  inspect_packed_length = packed_i
+}
+
+void draw_inspect_fish_item(byte i, byte y) {
+  FishType type
+
+  type = fish_type[i]
+
+  draw_fish_name(type, 7, y, 0)
+  draw_text(17, y, health_text.pointer, health_text.length, 0)
+}
+
+void render_inspect_fish_item(byte i, byte y) {
+  FishType type
+
+  type = fish_type[i]
+
+  render_fish_type(type, 34, y * 8 + 2, 0, true)
+}

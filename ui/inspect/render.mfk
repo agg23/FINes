@@ -1,0 +1,108 @@
+import ui/shared
+
+import ui/inspect/inspect
+
+void draw_inspect() {
+  byte i
+  byte j
+  byte row_count
+
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0)
+
+  // Clear NT
+  for i,0,until,30 {
+    for j,0,until,32 {
+      ppu_write_data(0)
+    }
+  }
+
+  row_count = inspect_row_count()
+
+  for i,0,until,row_count {
+    draw_inspect_row(i)
+  }
+
+  set_bank_1()
+
+  enable_sprite0 = false
+}
+
+inline byte inspect_row_count() {
+  if ((current_inspect_page + 1) * 5 < inspect_packed_length) {
+    // Entire page fits
+    return 5
+  } else {
+    return inspect_packed_length - (current_inspect_page * 5)
+  }
+}
+
+void draw_inspect_row(byte i) {
+  byte j
+  word address
+
+  address = ppu_nametable0 + word(i) * word(32 * 5) + 3 * 32 + 2
+  ppu_set_addr(address)
+
+  ppu_write_data($90)
+  for j,0,until,26 {
+    ppu_write_data($80)
+  }
+  ppu_write_data($82)
+
+  address += 32 - 1
+  ppu_set_addr(address)
+  ppu_write_data($92)
+  ppu_write_data($91)
+
+  ppu_set_addr(address + 28)
+  ppu_write_data($83)
+  ppu_write_data($84)
+
+  address += 32
+  ppu_set_addr(address)
+  ppu_write_data($93)
+  ppu_write_data($94)
+
+  ppu_set_addr(address + 28)
+  ppu_write_data($86)
+  ppu_write_data($85)
+
+  address += 32 + 1
+  ppu_set_addr(address)
+
+  ppu_write_data($95)
+  for j,0,until,26 {
+    ppu_write_data($81)
+  }
+  ppu_write_data($87)
+
+  draw_inspect_item(current_inspect_page * 5 + i, i * 5 + 4)
+}
+
+void draw_inspect_item(byte i, byte y) {
+  if (inspect_screen == inspect_fish) {
+    draw_inspect_fish_item(i, y)
+  }
+}
+
+void render_inspect() {
+  byte i
+  byte row_count
+
+  row_count = inspect_row_count()
+
+  for i,0,until,row_count {
+    render_inspect_item(current_inspect_page * 5 + i, i * 5 + 4)
+  }
+}
+
+void render_inspect_item(byte i, byte y) {
+  if (inspect_screen == inspect_fish) {
+    render_inspect_fish_item(i, y)
+  }
+}
+
+const array(byte) health_text = [
+  "Health" ascii
+]

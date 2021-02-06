@@ -1,0 +1,49 @@
+import ui/inspect/render
+import ui/inspect/fish
+
+enum InspectScreen {
+  inspect_fish,
+  inspect_fish_details,
+  inspect_plants,
+  inspect_plants_details
+}
+
+byte current_inspect_row
+byte current_inspect_page
+InspectScreen inspect_screen
+
+array(byte) inspect_packed_item_indexes [MAX_FISH_COUNT]
+byte inspect_packed_length
+
+void init_inspect() {
+  current_inspect_row = 0
+  current_inspect_page = 0
+  inspect_packed_length = 0
+  
+  set_inspect_screen(inspect_fish)
+
+  set_screen(inspect)
+}
+
+void close_inspect() {
+  set_screen(aquarium)
+}
+
+void set_inspect_screen(InspectScreen new_inspect_screen) {
+  inspect_screen = new_inspect_screen
+
+  current_inspect_page = 0
+  current_inspect_row = 0
+
+  return [inspect_screen] {
+    inspect_fish @ init_inspect_fish
+    // plants @ init_plants_shop
+  }
+}
+
+inline bool inspect_tick() {
+  render_inspect()
+
+  return false
+}
+

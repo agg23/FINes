@@ -4,6 +4,7 @@ import fish/fish
 import ui/shared
 import ui/shop/shop
 import ui/planteditor
+import ui/inspect/inspect
 
 import entity/inspect
 import entity/money
@@ -14,15 +15,11 @@ byte selected_command_item = 0
 bool selection_is_active
 
 void activate_feed() {
-  // start_plant_editing()
-}
-
-void end_feed() {
-  // stop_plant_editing()
+  init_inspect()
+  deactivate_commandbar_selection()
 }
 
 void activate_fish_inspect() {
-  // start_inspect()
   init_shop()
 
   deactivate_commandbar_selection()
