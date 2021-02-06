@@ -23,6 +23,7 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[12])
     ppu_write_data(shop_tank[12])
     ppu_write_data(shop_tank[16])
+    ppu_write_data($17)
 
     for j,0,until,SHOP_COLUMN_COUNT {
       draw_shop_plant(i, j)
@@ -39,6 +40,7 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[15])
     ppu_write_data(shop_tank[15])
     ppu_write_data(shop_tank[19])
+    ppu_write_data($17)
   }
 
   ppu_ctrl = standard_ppu_ctrl
@@ -83,6 +85,7 @@ void draw_shop_plant(byte row, byte column) {
     ppu_write_data(shop_tank[13 + temp])
     ppu_write_data(shop_tank[13 + temp])
     ppu_write_data(shop_tank[17 + temp])
+    ppu_write_data($17)
 
     address += 1
   }
