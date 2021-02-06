@@ -54,9 +54,9 @@ const array shop_palette = [
 
 const array inspect_palette = [
   // Disabled row
-  color_black, color_dark_grey, color_light_grey, color_white,
+  color_black, color_black, color_dark_grey, color_dark_grey,
   // Selected row
-  color_black, color_white, color_red, color_white,
+  color_black, color_black, color_white, color_white,
   // Unused
   color_black, color_white, color_red, color_white,
   color_black, color_white, color_red, color_white,
@@ -69,4 +69,14 @@ const array inspect_palette = [
   color_black, color_orange, color_light_grey, color_black,
   // Disabled fish
   color_black, color_dark_grey, color_light_grey, color_black
+]
+
+const array inspect_details_palette = [
+  // Border/buttons
+  color_blue, color_black, color_white, color_red,
+  // Plant palettes
+  color_blue, color_green, color_light_green, color_sand,
+  color_blue, color_red, color_pink, color_light_orange,
+  // Text
+  color_blue, color_red, color_unused, color_unused
 ]

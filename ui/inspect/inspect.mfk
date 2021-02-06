@@ -1,6 +1,8 @@
 import ui/inspect/render
 import ui/inspect/fish
 
+import ui/inspect/details/fish
+
 enum InspectScreen {
   inspect_fish,
   inspect_fish_details,
@@ -33,17 +35,24 @@ void close_inspect() {
 void set_inspect_screen(InspectScreen new_inspect_screen) {
   inspect_screen = new_inspect_screen
 
-  current_inspect_page = 0
-  current_inspect_row = 0
-
   if (inspect_screen == inspect_fish) {
     init_inspect_fish()
+  } else if (inspect_screen == inspect_fish_details) {
+    init_inspect_fish_details()
   }
 
   current_inspect_page_length = inspect_row_count()
 }
 
 inline bool inspect_tick() {
+  return [inspect_screen] {
+    inspect_fish @ inspect_fish_tick
+    inspect_fish_details @ inspect_fish_details_tick
+    default @ bool_noop
+  }
+}
+
+inline bool inspect_fish_tick() {
   byte temp
   render_inspect()
 
@@ -64,7 +73,12 @@ inline bool inspect_tick() {
 
     //   return true
     } else if (input_a != 0) {
-      
+      if (inspect_screen == inspect_fish) {
+        set_inspect_screen(inspect_fish_details)
+      }
+
+      // Request screen redraw
+      set_screen_forcibly(inspect)
 
       return true
     } else if (input_dy > 0 && current_inspect_row < current_inspect_page_length - 1) {

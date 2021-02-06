@@ -1,0 +1,68 @@
+import ui/inspect/inspect
+
+import ui/inspect/fish
+
+byte inspect_fish_details_index
+
+void init_inspect_fish_details() {
+  inspect_fish_details_index = current_inspect_page * 5 + current_inspect_row
+}
+
+inline bool inspect_fish_details_tick() {
+  byte temp
+  render_inspect_fish_item(inspect_fish_details_index, 3)
+
+  if (input_can_be_consumed) {
+    if (input_b != 0) {
+      set_inspect_screen(inspect_fish)
+
+      // Request screen redraw
+      set_screen_forcibly(inspect)
+      return true
+    }
+  }
+
+  return false
+}
+
+void draw_inspect_fish_details_content() {
+  array(byte) data [11]
+  FishType type
+  byte i
+  byte length
+
+  type = fish_type[inspect_fish_details_index]
+
+  draw_fish_name(type, 7, 4, 0)
+
+  length = sex_text.length
+  for i,0,until,sex_text.length {
+    data[i] = sex_text[i]
+  }
+
+  if (fish_sex[inspect_fish_details_index]) {
+    for i,0,until,male_text.length {
+      data[sex_text.length + i] = male_text[i]
+    }
+    length += male_text.length
+  } else {
+    for i,0,until,female_text.length {
+      data[sex_text.length + i] = female_text[i]
+    }
+    length += female_text.length
+  }
+
+  draw_text(17, 4, data.pointer, length, 0)
+}
+
+const array(byte) sex_text = [
+  "Sex: " ascii
+]
+
+const array(byte) male_text = [
+  "Male" ascii
+]
+
+const array(byte) female_text = [
+  "Female" ascii
+]
