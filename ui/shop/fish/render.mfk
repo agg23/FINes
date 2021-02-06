@@ -1,3 +1,5 @@
+import math
+
 void draw_shop_fish_screen() {
   byte i
   byte j
@@ -7,16 +9,18 @@ void draw_shop_fish_screen() {
 
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
-      draw_shop_tank(shop_fish_tanks[i * 3 + j], 6 + j * 8, 5 + i * 12)
+      draw_shop_fish_tank(shop_fish_tanks[i * 3 + j], 6 + j * 8, 5 + i * 12)
     }
   }
+
+  draw_shop_fish_tank_attr()
 
   draw_text(14, 2, fish_screen_text.pointer, fish_screen_text.length, 0)
 
   draw_shop_shelving()
 }
 
-inline void draw_shop_tank(FishType type, byte x, byte y) {
+inline void draw_shop_fish_tank(FishType type, byte x, byte y) {
   word address
   byte i
   byte j
@@ -43,6 +47,29 @@ inline void draw_shop_tank(FishType type, byte x, byte y) {
   draw_fish_any_price(type, x + sexed_price_text.length, y + 9)
 }
 
+inline void draw_shop_fish_tank_attr() {
+  byte i
+  byte j
+
+  for i,0,until,2 {
+    ppu_set_addr(ppu_attrtable0 + 8 + 1 + i * 3 * 8)
+    for j,0,until,3 {
+      // Black top, black bottom left (0), tank bottom right (3)
+      ppu_write_data(%11000000)
+      // Black top, lack bottom right (0), tank bottom left (3)
+      ppu_write_data(%00110000)
+    }
+
+    ppu_set_addr(ppu_attrtable0 + 8 + 1 + 8 + i * 3 * 8)
+    for j,0,until,3 {
+      // Black bottom, black top left (0), tank top right (3)
+      ppu_write_data(%00001100)
+      // Black bottom, lack top right (0), tank top left (3)
+      ppu_write_data(%00000011)
+    }
+  }
+}
+
 inline void render_shop_fish() {
   byte i
   byte j
@@ -65,11 +92,17 @@ inline void draw_shop_shelving() {
   draw_shop_shelf(2, 10, true)
   draw_shop_shelf(2, 22, false)
 
-  draw_shelf_column(2, 11, 11, true)
-  draw_shelf_column(29, 11, 11, false)
+  draw_shop_shelving_columns(10)
+}
 
-  draw_shelf_column(2, 23, 7, true)
-  draw_shelf_column(29, 23, 7, false)
+inline void draw_shop_shelving_columns(byte base_y) {
+  draw_shelf_column(2, base_y + 1, 11, true)
+  draw_shelf_column(29, base_y + 1, 11, false)
+
+  draw_shelf_column(2, base_y + 13, 30 - (base_y + 13), true)
+  draw_shelf_column(29, base_y + 13, 30 - (base_y + 13), false)
+
+  ppu_ctrl = standard_ppu_ctrl
 }
 
 void draw_shop_shelf(byte x, byte y, bool is_top) {

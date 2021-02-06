@@ -53,16 +53,30 @@ void draw_shop() {
   // Clear NT
   for i,0,until,30 {
     for j,0,until,32 {
-      ppu_write_data(0)
+      ppu_write_data($17)
     }
+  }
+
+  read_ppu_status()
+  ppu_set_addr(ppu_attrtable0)
+
+  for i,0,until,64 {
+    // Write all black palette
+    ppu_write_data(0)
   }
 
   set_bank_1()
 
   enable_sprite0 = false
 
+  load_shop_palette()
+
   return [shop_screen] {
     fish @ draw_shop_fish_screen
     plants @ draw_shop_plants_screen
   }
+}
+
+void load_shop_palette() {
+  add_buffered_write(ppu_palette_ram, false, shop_palette.pointer, $10, true)
 }
