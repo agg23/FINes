@@ -19,7 +19,11 @@ const byte color_white = $30
 
 const byte background_backdrop = color_light_blue
 
-const byte color_unused = background_backdrop
+const byte color_unused = background_backdrop 
+
+const array title_first_palette = [
+  background_backdrop, background_backdrop, color_light_red, color_black
+]
 
 const array aquarium_palette = [
   //background palette
