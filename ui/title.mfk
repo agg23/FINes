@@ -1,0 +1,93 @@
+import plants/plants
+import plants/allplants
+
+bool title_screen_tick() {
+  if (input_can_be_consumed) {
+    if (input_start != 0) {
+      // Reset plants
+      init_plants()
+
+      set_screen(aquarium)
+
+      return true
+    }
+  }
+
+  return false
+}
+
+void draw_title_screen() {
+  byte i
+  byte j
+
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0)
+  for i,0,until,30 {
+    for j,0,until,32 {
+      ppu_write_data(0)
+    }
+  }
+
+  ppu_set_addr(ppu_nametable0 + 7 * 32 + 11)
+  for i,0,until,8 {
+    ppu_write_data($A0 + i)
+  }
+  ppu_write_data($C0)
+  ppu_write_data($C2)
+
+  ppu_set_addr(ppu_nametable0 + 8 * 32 + 11)
+  for i,0,until,8 {
+    ppu_write_data($B0 + i)
+  }
+  ppu_write_data($C1)
+  ppu_write_data($C3)
+
+  ppu_set_addr(ppu_nametable0 + 9 * 32 + 19)
+  ppu_write_data($C4)
+  ppu_write_data($C5)
+
+  // Manually draw plants outside of normal plant bounds to complete screen
+  draw_plant_of_type(babytears, large, -2, false, 2, 0)
+  draw_plant_of_type(babytears, large, 0, false, 1, 0)
+  draw_plant_of_type(babytears, small, 1, false, 1, 0)
+
+  add_plant(babytears, 2, large, 2)
+  add_plant(babytears, 4, small, 2)
+  add_plant(babytears, 6, small, 2)
+  add_plant(babytears, 8, large, 1)
+  add_plant(babytears, 9, small, 2)
+  add_plant(anubias, 11, large, 3)
+  add_plant(rotala, 14, large, 1)
+  add_plant(rotala, 15, small, 1)
+  add_plant(babytears, 16, small, 2)
+
+  add_plant(rotala, 19, large, 1)
+  add_plant(rotala, 20, medium, 1)
+  add_plant(rotala, 21, large, 1)
+  add_plant(rotala, 22, small, 1)
+
+  add_plant(babytears, 24, small, 2)
+  add_plant(babytears, 26, large, 2)
+
+  draw_plants()
+
+  // Fix attr entry for far left
+  ppu_set_addr(ppu_attrtable0 + 6 * 8)
+  ppu_write_data(%01010101)
+
+  draw_plant_of_type(babytears, small, 28, true, 2, 0)
+
+  // Draw bottom
+  ppu_set_addr(ppu_nametable0 + 28 * 32)
+  for i,0,until,64 {
+    ppu_write_data(1)
+  }
+
+  set_bank_0()
+
+  load_title_screen_palettes()
+}
+
+inline void load_title_screen_palettes() {
+  add_buffered_write(ppu_palette_ram, false, aquarium_palette.pointer, $20, true)
+}

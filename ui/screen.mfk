@@ -1,11 +1,13 @@
 import graphics_buffer
 
+import ui/title
 import ui/aquarium
 import ui/planteditor
 import ui/shop/shop
 import ui/inspect/inspect
 
 enum Screen {
+  title,
   aquarium,
   plant_editor,
   shop,
@@ -17,6 +19,7 @@ Screen currentScreen
 
 bool screen_tick() {
   return [currentScreen] {
+    title @ title_screen_tick
     aquarium @ aquarium_tick
     plant_editor @ plant_editor_tick
     shop @ shop_tick
@@ -26,6 +29,7 @@ bool screen_tick() {
 
 void draw_screen() {
   return [currentScreen] {
+    title @ draw_title_screen
     aquarium @ draw_aquarium
     plant_editor @ draw_plant_editor
     shop @ draw_shop

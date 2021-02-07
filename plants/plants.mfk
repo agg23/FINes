@@ -25,7 +25,7 @@ enum PlantPalette {
   palette_unset
 }
 
-const byte MAX_PLANT_COUNT = 10
+const byte MAX_PLANT_COUNT = 20
 const byte MAX_PLANT_COLUMNS = 30
 
 array(bool) plant_active [MAX_PLANT_COUNT]
@@ -44,6 +44,10 @@ void init_plants() {
   plant_min_x = active_tank.x_low >> 3
   plant_max_x_bound = (active_tank.x_high >> 3) - plant_min_x + 1
 
+  for i,0,until,MAX_PLANT_COUNT {
+    plant_active[i] = false
+  }
+
   for i,0,until,MAX_PLANT_COLUMNS {
     plant_at_x[i] = $FF
   }
@@ -51,18 +55,6 @@ void init_plants() {
   for i,0,until,15 {
     plant_current_palettes[i] = palette_unset
   }
-
-  add_plant(rotala, 6, large, $FF)
-
-  add_plant(babytears, 8, small, $FF)
-  add_plant(babytears, 10, medium, $FF)
-  add_plant(babytears, 12, small, $FF)
-
-
-  // TODO: Adding one more plant crashes the buffer renderer
-  // add_plant(babytears, 14, medium)
-  add_plant(anubias, 16, medium, $FF)
-  // add_plant(babytears, 20, medium)
 }
 
 void add_plant(PlantType type, byte x, PlantSize size, byte max_width) {
