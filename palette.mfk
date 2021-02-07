@@ -4,9 +4,10 @@ const byte color_dark_blue = $0C
 const byte color_dark_grey = $0
 const byte color_dark_green = $09
 const byte color_green = $19
+const byte color_light_blue = $21
 const byte color_light_green = $2A
 const byte color_light_grey = $10
-const byte color_light_blue = $31
+const byte color_light_red = $16
 const byte color_light_orange = $27
 const byte color_light_yellow = $38
 const byte color_medium_blue = $2C
@@ -23,7 +24,7 @@ const byte color_unused = background_backdrop
 const array aquarium_palette = [
   //background palette
   // $06 randomly inserted for secondary command bar color
-  background_backdrop, color_black, $06, color_light_grey,
+  background_backdrop, color_black, color_light_red, color_light_grey,
   // Plant palettes
   background_backdrop,color_green,color_light_green,color_sand,
   background_backdrop,color_red,color_pink,color_light_orange,
