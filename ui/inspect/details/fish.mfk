@@ -1,3 +1,7 @@
+import nes_lib
+
+import entity/money
+
 import ui/inspect/inspect
 
 import ui/inspect/fish
@@ -19,6 +23,21 @@ inline bool inspect_fish_details_tick() {
       // Request screen redraw
       set_screen_forcibly(inspect)
       return true
+    } else if (input_select != 0 && input_start != 0) {
+      // Sell fish
+      // TODO: Add pricing
+      refund(35)
+      delete_fish(inspect_fish_details_index)
+
+      if (inspect_packed_length == 1) {
+        // Removed last fish, return to aquarium
+        set_screen(aquarium)
+      } else {
+        set_inspect_screen(inspect_fish)
+
+        // Request screen redraw
+        set_screen_forcibly(inspect)
+      }
     }
   }
 

@@ -91,6 +91,10 @@ void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
   }
 }
 
+void delete_fish(byte i) {
+  fish_alive[i] = false
+}
+
 void fish_tick() {
   fish_move()
   fish_breed()
