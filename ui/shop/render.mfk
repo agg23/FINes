@@ -1,7 +1,9 @@
 import ui/shared
 import ui/shop/shop
 import ui/shop/fish/render
-import ui/shop/plants/render
+import ui/shop/plants/render  
+
+import entity/money
 
 import fish/allfish
 
@@ -64,6 +66,8 @@ void draw_shop() {
     // Write all black palette
     ppu_write_data(0)
   }
+
+  draw_money()
 
   set_bank_1()
 

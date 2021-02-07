@@ -23,7 +23,7 @@ const byte color_unused = background_backdrop
 const array aquarium_palette = [
   //background palette
   // $06 randomly inserted for secondary command bar color
-  background_backdrop,$06,color_black,color_light_grey,
+  background_backdrop, color_black, $06, color_light_grey,
   // Plant palettes
   background_backdrop,color_green,color_light_green,color_sand,
   background_backdrop,color_red,color_pink,color_light_orange,
