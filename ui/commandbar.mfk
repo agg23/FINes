@@ -9,79 +9,56 @@ import ui/inspect/inspect
 import entity/inspect
 import entity/money
 
-const byte commandbar_item_count = 3
+const byte commandbar_item_count = 4
 
 byte selected_command_item = 0
-bool selection_is_active
 
 void activate_feed() {
-  init_inspect()
-  deactivate_commandbar_selection()
+
 }
 
 void activate_fish_inspect() {
+  init_inspect()
+}
+
+void activate_shop() {
   init_shop()
-
-  deactivate_commandbar_selection()
 }
 
-void activate_spawn() {
-  if (purchase(10)) {
-    spawn_fish(tetra, false, $80, $20, false)
-  }
+void activate_spectator() {
 
-  deactivate_commandbar_selection()
 }
 
-bool noop(byte i) {
-  return false
-}
-
-const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_spawn.pointer]
-// const array(function.byte.to.bool) menuitem_ticks = [plant_editor_tick.pointer, noop.pointer, noop.pointer]
-// const array(function.byte.to.bool) menuitem_cleanup = [end_feed.pointer, noop.pointer, noop.pointer]
+const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_shop.pointer, activate_spectator.pointer]
 
 bool commandbar_tick() {
   if (not(input_can_be_consumed)) {
     return false
   }
 
-  if (selection_is_active) {
-    // TODO: Handle B back button
-
-    // if (call(menuitem_ticks[selected_command_item], input_timer)) {
-    //   return true
-    // }
-  } else {
-    if (input_timer == 0) {
-      if input_dx < 0 {
-        // Left
-        if selected_command_item > 0 {
-          selected_command_item -= 1
-        }
-        return true
-      } else if input_dx > 0 {
-        // Right
-        if selected_command_item < commandbar_item_count - 1 {
-          selected_command_item += 1
-        }
-        return true
+  if (input_timer == 0) {
+    if input_dx < 0 {
+      // Left
+      if selected_command_item > 0 {
+        selected_command_item -= 1
       }
-
-      if input_a != 0 {
-        selection_is_active = true
-        call(menuitem_actions[selected_command_item])
-
-        return true
+      return true
+    } else if input_dx > 0 {
+      // Right
+      if selected_command_item < commandbar_item_count - 1 {
+        selected_command_item += 1
       }
+      return true
+    }
+
+    if input_a != 0 {
+      call(menuitem_actions[selected_command_item])
+
+      return true
     }
   }
 
   return false
-}
-
-inline void deactivate_commandbar_selection() {
-  selection_is_active = false
 }
 
 void render_commandbar() {
@@ -89,10 +66,10 @@ void render_commandbar() {
   byte x_high
   byte y_low
   byte y_high
-  x_low = 8 - 3 + 24 * selected_command_item
-  y_low = 8 - 4
+  x_low = 16 - 3 + 24 * selected_command_item
+  y_low = 16 - 4
   x_high = x_low + 8 + 6
-  y_high = 24 - 6
+  y_high = y_low + 16 - 2
 
   render_cursor(x_low, x_high, y_low, y_high)
 }
@@ -100,7 +77,7 @@ void render_commandbar() {
 void draw_commandbar() {
   byte i
   read_ppu_status()
-  ppu_set_addr(ppu_nametable0 + $20)
+  ppu_set_addr(ppu_nametable0 + $40)
   for i,0,until,commandbar_background.length {
     ppu_write_data(commandbar_background[i])
   }
@@ -112,10 +89,10 @@ void draw_commandbar() {
 }
 
 const array(byte) commandbar_background = [
-  $4, $80, $81, $4, $82, $83, $4, $84,
-  $85, $4, $4, $4, $4, $4, $4, $4,
+  $4, $4, $80, $81, $4, $82, $83, $4,
+  $84, $85, $4, $86, $87, $4, $4, $4,
   $4, $4, $4, $4, $4, $4, $4, $4,
   $4, $4, $4, $4, $4, $4, $4, $4,
   //
-  $4, $90, $91, $4, $92, $93, $4, $94,
-  $95]
+  $4, $4, $90, $91, $4, $92, $93, $4,
+  $94, $95, $4, $96, $97]

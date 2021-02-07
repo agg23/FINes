@@ -105,7 +105,6 @@ inline bool shop_tank_selection_input_tick() {
   if (input_can_be_consumed) {
     if (input_b != 0) {
       close_shop()
-      deactivate_commandbar_selection()
       return true
     } else if (input_select != 0) {
       if (shop_screen == fish) {

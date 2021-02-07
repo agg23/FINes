@@ -36,5 +36,5 @@ void draw_ammonia() {
     data[i] = bcdResult[4 - i] + $30
   }
 
-  add_buffered_write(ppu_nametable0 + 32 * 2 + 24, false, data.pointer, 5, false)
+  add_buffered_write(ppu_nametable0 + 32 * 3 + 24, false, data.pointer, 5, false)
 }

@@ -65,19 +65,7 @@ inline bool inspect_fish_tick() {
   if (input_can_be_consumed) {
     if (input_b != 0) {
       close_inspect()
-      deactivate_commandbar_selection()
       return true
-    // } else if (input_select != 0) {
-    //   if (shop_screen == fish) {
-    //     set_shop_screen(plants)
-    //   } else if (shop_screen == plants) {
-    //     set_shop_screen(fish)
-    //   }
-
-    //   // Request screen redraw
-    //   set_screen_forcibly(shop)
-
-    //   return true
     } else if (input_a != 0) {
       if (inspect_screen == inspect_fish) {
         set_inspect_screen(inspect_fish_details)
