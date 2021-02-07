@@ -14,7 +14,7 @@ void init_inspect_fish_details() {
 
 inline bool inspect_fish_details_tick() {
   byte temp
-  render_inspect_fish_item(inspect_fish_details_index, 2)
+  render_inspect_fish_item(inspect_fish_details_index, current_inspect_row, 2)
 
   if (input_can_be_consumed) {
     if (input_b != 0) {

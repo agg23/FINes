@@ -30,13 +30,13 @@ void draw_inspect_fish_item(byte i, byte y) {
   draw_text(17, y, health_text.pointer, health_text.length, 0)
 }
 
-void render_inspect_fish_item(byte i, byte y) {
+void render_inspect_fish_item(byte i, byte row, byte y) {
   FishType type
   byte mask
 
   type = fish_type[i]
 
-  if (i == current_inspect_row) {
+  if (row == current_inspect_row) {
     mask = 0
   } else {
     // Mask over actual fish palette to switch to the disabled palette

@@ -24,6 +24,8 @@ void draw_inspect() {
     ppu_write_data(0)
   }
 
+  draw_inspect_title()
+
   for i,0,until,current_inspect_page_length {
     draw_inspect_row(i)
   }
@@ -83,6 +85,20 @@ void draw_inspect_row(byte i) {
   ppu_write_data($A5)
 
   draw_inspect_item(current_inspect_page * 5 + i, i * 5 + 5)
+}
+
+void draw_inspect_title() {
+  byte i
+  ppu_set_addr(ppu_nametable0 + 64 + 6)
+
+  for i,0,until,inspect_fish_title_text.length {
+    ppu_write_data(inspect_fish_title_text[i])
+  }
+
+  ppu_write_data(current_inspect_page + 1 + $30)
+  // Forward slash
+  ppu_write_data($2F)
+  ppu_write_data(current_inspect_page_count + $30)
 }
 
 void draw_inspect_item(byte i, byte y) {
@@ -239,13 +255,13 @@ void render_inspect() {
   byte i
 
   for i,0,until,current_inspect_page_length {
-    render_inspect_item(current_inspect_page * 5 + i, i * 5 + 4)
+    render_inspect_item(current_inspect_page * 5 + i, i, i * 5 + 4)
   }
 }
 
-void render_inspect_item(byte i, byte y) {
+void render_inspect_item(byte i, byte row, byte y) {
   if (inspect_screen == inspect_fish) {
-    render_inspect_fish_item(i, y)
+    render_inspect_fish_item(i, row, y)
   }
 }
 
@@ -259,4 +275,8 @@ void load_inspect_details_palette() {
 
 const array(byte) health_text = [
   "Health" ascii
+]
+
+const array(byte) inspect_fish_title_text = [
+  "Owned Fish: Page " ascii
 ]

@@ -13,6 +13,7 @@ enum InspectScreen {
 byte current_inspect_row
 byte current_inspect_page
 byte current_inspect_page_length
+byte current_inspect_page_count
 InspectScreen inspect_screen
 
 array(byte) inspect_packed_item_indexes [MAX_FISH_COUNT]
@@ -42,6 +43,11 @@ void set_inspect_screen(InspectScreen new_inspect_screen) {
   }
 
   current_inspect_page_length = inspect_row_count()
+  current_inspect_page_count = inspect_packed_length / 5
+  if ((inspect_packed_length %% 5) != 0) {
+    // If there is a remainder, ceil it
+    current_inspect_page_count += 1
+  }
 }
 
 inline bool inspect_tick() {
@@ -77,6 +83,26 @@ inline bool inspect_fish_tick() {
         set_inspect_screen(inspect_fish_details)
       }
 
+      // Request screen redraw
+      set_screen_forcibly(inspect)
+
+      return true
+    } else if (input_dx > 0 && current_inspect_page < current_inspect_page_count - 1) {
+      // Right
+      current_inspect_page += 1
+      current_inspect_row = 0
+
+      current_inspect_page_length = inspect_row_count()
+      // Request screen redraw
+      set_screen_forcibly(inspect)
+
+      return true
+    } else if (input_dx < 0 && current_inspect_page > 0) {
+      // Left
+      current_inspect_page -= 1
+      current_inspect_row = 0
+
+      current_inspect_page_length = inspect_row_count()
       // Request screen redraw
       set_screen_forcibly(inspect)
 
