@@ -53,6 +53,65 @@ void draw_inspect_fish_details_content() {
   }
 
   draw_text(17, 4, data.pointer, length, 0)
+
+  // HR
+  ppu_set_addr(ppu_nametable0 + 6 * 32 + 2)
+  for i,0,until,28 {
+    ppu_write_data($B0)
+  }
+
+  draw_back_button(4, 24)
+  draw_start_select_button(22, 25)
+}
+
+void draw_back_button(byte x, byte y) {
+  word address
+  address = ppu_nametable0 + word(y) * 32 + word(x)
+
+  ppu_set_addr(address)
+  ppu_write_data($C0)
+  ppu_write_data($C1)
+  
+  ppu_set_addr(address + 32)
+  ppu_write_data($C2)
+  ppu_write_data($C3)
+
+  draw_text(x - 1, y - 1, back_text.pointer, back_text.length, 0)
+}
+
+void draw_start_select_button(byte x, byte y) {
+  byte i
+  word price
+  array(byte) text_data [7]
+  ppu_set_addr(ppu_nametable0 + word(y) * 32 + word(x))
+
+  ppu_write_data($B1)
+  ppu_write_data($B2)
+  ppu_write_data($B3)
+  ppu_write_data($B4)
+  ppu_write_data($B5)
+  ppu_write_data($B6)
+  ppu_write_data($B7)
+
+  for i,0,until,sell_text.length {
+    text_data[i] = sell_text[i]
+  }
+
+  price = 35
+
+  bcdConvert(price)
+
+  if (bcdResult[1] != 0) {
+    // Two digit number
+    text_data[sell_text.length] = bcdResult[1] + $30
+  } else {
+    // Empty space
+    text_data[sell_text.length] = $20
+  }
+
+  text_data[sell_text.length + 1] = bcdResult[0] + $30
+
+  draw_text(x, y - 2, text_data.pointer, text_data.length, 0)
 }
 
 const array(byte) sex_text = [
@@ -65,4 +124,12 @@ const array(byte) male_text = [
 
 const array(byte) female_text = [
   "Female" ascii
+]
+
+const array(byte) back_text = [
+  "Back" ascii
+]
+
+const array(byte) sell_text = [
+  "Sell " ascii
 ]
