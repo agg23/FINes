@@ -8,6 +8,7 @@ const byte color_light_green = $2A
 const byte color_light_grey = $10
 const byte color_light_blue = $31
 const byte color_light_orange = $27
+const byte color_light_yellow = $38
 const byte color_medium_blue = $2C
 const byte color_orange = $26
 const byte color_pink = $15
@@ -49,7 +50,14 @@ const array shop_palette = [
   color_blue, color_green, color_light_green, color_sand,
   color_blue, color_red, color_pink, color_light_orange,
   // Tank (placed at end so plant palettes can stay in the same place)
-  color_blue, color_dark_blue, color_light_grey, color_medium_blue
+  color_blue, color_dark_blue, color_light_grey, color_medium_blue,
+
+  color_blue, color_pink, color_light_yellow, color_unused,
+  // Neon tetra
+  color_blue, color_dark_blue, color_pink, color_medium_blue,
+  // Rasbora, sprite 0
+  color_blue, color_orange, color_light_grey, color_black,
+  color_blue, color_unused, color_light_grey, color_unused 
 ]
 
 const array inspect_palette = [

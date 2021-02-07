@@ -11,9 +11,9 @@ inline void render_shop_tank_highlight() {
   byte y_low
   byte y_high
   x_low = 32 + current_shop_column * 8 * 8
-  y_low = 32 + current_shop_row * 12 * 8
+  y_low = 40 + current_shop_row * 12 * 8
   x_high = x_low + 7 * 8
-  y_high = y_low + 11 * 8 - 4
+  y_high = y_low + 10 * 8 - 4
 
   render_cursor(x_low, x_high, y_low, y_high)
 }
@@ -78,5 +78,5 @@ void draw_shop() {
 }
 
 void load_shop_palette() {
-  add_buffered_write(ppu_palette_ram, false, shop_palette.pointer, $10, true)
+  add_buffered_write(ppu_palette_ram, false, shop_palette.pointer, $20, true)
 }
