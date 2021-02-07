@@ -35,13 +35,17 @@ void main() {
   set_screen(title)
   draw_screen()
 
+  #if(music)
   famistudio_init(0, $A000)
+  #endif
 
   process_buffered_writes()
 
   enable_graphics()
 
+  #if(music)
   famistudio_music_play(0)
+  #endif
 
   while(true) {
     // Wait for NMI to complete rendering frame
@@ -108,7 +112,9 @@ void nmi_frame() {
 }
 
 void nmi_always_run() {
+  #if(music)
   famistudio_update()
+  #endif
 }
 
 void irq() {

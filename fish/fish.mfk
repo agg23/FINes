@@ -134,7 +134,9 @@ inline void tetra_fish_move(byte i) {
 
   // trend_center(i)
 
-  bound_position(i)
+  if (current_screen == aquarium) {
+    bound_position(i)
+  }
 
   if (fish_diff_velocity_x & $80 != 0) {
     if (fish_diff_velocity_x < -FISH_MAX_VELOCITY) {
@@ -176,7 +178,9 @@ inline void tetra_fish_move(byte i) {
   arithmetic_shift_right(y)
   y += fish_y[i]
 
-  cap_fish_location_to_active_tank(x, y)
+  if (current_screen == aquarium) {
+    cap_fish_location_to_active_tank(x, y)
+  }
 
   fish_x[i] = x
   fish_y[i] = y

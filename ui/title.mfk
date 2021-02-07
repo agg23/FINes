@@ -1,11 +1,17 @@
 import plants/plants
 import plants/allplants
 
+import fish/fish
+
 bool title_screen_tick() {
+  render_fish()
+  fish_move()
+
   if (input_can_be_consumed) {
     if (input_start != 0) {
-      // Reset plants
+      // Reset plants and fish
       init_plants()
+      init_fish()
 
       set_screen(aquarium)
 
@@ -86,6 +92,12 @@ void draw_title_screen() {
   set_bank_0()
 
   load_title_screen_palettes()
+
+  spawn_fish(tetra, true, $80, $26, false)
+  spawn_fish(tetra, true, $60, $43, false)
+  spawn_fish(tetra, true, $82, $31, false)
+  spawn_fish(rasbora, true, $40, $11, false)
+  spawn_fish(rasbora, true, $93, $81, false)
 }
 
 inline void load_title_screen_palettes() {

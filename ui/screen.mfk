@@ -15,10 +15,10 @@ enum Screen {
 }
 
 bool buffer_screen_draw = false
-Screen currentScreen
+Screen current_screen
 
 bool screen_tick() {
-  return [currentScreen] {
+  return [current_screen] {
     title @ title_screen_tick
     aquarium @ aquarium_tick
     plant_editor @ plant_editor_tick
@@ -28,7 +28,7 @@ bool screen_tick() {
 }
 
 void draw_screen() {
-  return [currentScreen] {
+  return [current_screen] {
     title @ draw_title_screen
     aquarium @ draw_aquarium
     plant_editor @ draw_plant_editor
@@ -38,16 +38,16 @@ void draw_screen() {
 }
 
 void set_screen_forcibly(Screen new_screen) {
-  currentScreen = new_screen
+  current_screen = new_screen
   buffer_screen_draw = true
 }
 
 void set_screen(Screen new_screen) {
-  if (new_screen == currentScreen) {
+  if (new_screen == current_screen) {
     return
   }
 
-  currentScreen = new_screen
+  current_screen = new_screen
   buffer_screen_draw = true
 }
 
