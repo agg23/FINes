@@ -29,6 +29,13 @@ macro void render_cursor(byte x_low, byte x_high, byte y_low, byte y_high) {
 }
 
 /**
+* Draws the provided text, using the `x` position as the ending location of the write
+*/
+inline void draw_text_right(byte x, byte y, pointer.byte text, byte length) {
+  draw_text(x - length, y, text, length, 0)
+}
+
+/**
 * @param center_length If provided (non-zero), center the text within this length, preferring the left side
 */
 inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte center_length) {

@@ -26,6 +26,12 @@ array(FishType) fish_type [MAX_FISH_COUNT]
 array(bool) fish_sex [MAX_FISH_COUNT]
 array(bool) fish_alive [MAX_FISH_COUNT]
 
+// Fish stats
+/**
+* True if bred, false if purchased
+*/
+array(bool) fish_source [MAX_FISH_COUNT]
+
 byte active_fish_count = 0
 
 byte male_small_fish_count
@@ -44,7 +50,7 @@ void init_fish() {
     fish_alive[i] = false
   }
 
-  spawn_fish(tetra, true, $80, $26)
+  spawn_fish(tetra, true, $80, $26, false)
   // spawn_fish(rasbora, true, $60, $84)
   // // spawn_fish(cherry_shrimp, true)
   // spawn_fish(tetra, false, $34, $B2)
@@ -54,7 +60,7 @@ void init_fish() {
   // spawn_fish(tetra, true, $81, $27)
 }
 
-void spawn_fish(FishType type, bool sex, byte x, byte y) {
+void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
   if (active_fish_count >= MAX_FISH_COUNT) {
     return
   }
@@ -70,6 +76,7 @@ void spawn_fish(FishType type, bool sex, byte x, byte y) {
       fish_type[i] = type
       fish_sex[i] = sex
       fish_alive[i] = true
+      fish_source[i] = bred
 
       if (sex) {
         male_small_fish_count += 1
@@ -412,7 +419,7 @@ inline void fish_breed() {
   if (temp < (male_small_fish_count + female_small_fish_count) / 2 && rand() < 1) {
     // Breed
     random_int_const(0, 1, temp)
-    spawn_fish(tetra, temp == 1, $80, $20)
+    spawn_fish(tetra, temp == 1, $80, $20, true)
   }
 }
 

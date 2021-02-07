@@ -65,13 +65,13 @@ void purchase_fish() {
     if (purchase(fish_any_price(type))) {
       // Purchase successful
       // TODO: Make better fish spawn position
-      spawn_fish(type, random_bool(), $80, $20)
+      spawn_fish(type, random_bool(), $80, $20, false)
     }
   } else {
     if (purchase(fish_sexed_price(type))) {
       // Purchase successful
       // TODO: Make better fish spawn position
-      spawn_fish(type, shop_price_state == male, $80, $20)
+      spawn_fish(type, shop_price_state == male, $80, $20, false)
     }
   }
 }

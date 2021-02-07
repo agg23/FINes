@@ -27,7 +27,7 @@ void activate_fish_inspect() {
 
 void activate_spawn() {
   if (purchase(10)) {
-    spawn_fish(tetra, false, $80, $20)
+    spawn_fish(tetra, false, $80, $20, false)
   }
 
   deactivate_commandbar_selection()

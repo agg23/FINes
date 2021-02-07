@@ -76,7 +76,7 @@ const array inspect_details_palette = [
   color_blue, color_black, color_white, color_red,
   // Plant palettes
   color_blue, color_green, color_light_green, color_sand,
-  color_blue, color_red, color_pink, color_light_orange,
   // Text
-  color_blue, color_red, color_unused, color_unused
+  color_blue, color_blue, color_white, color_red,
+  color_blue, color_unused, color_unused, color_unused
 ]

@@ -151,7 +151,7 @@ void draw_inspect_details() {
   read_ppu_status()
   ppu_set_addr(ppu_nametable0)
   // Draw black top
-  for i,0,until,3 {
+  for i,0,until,2 {
     for j,0,until,32 {
       ppu_write_data($17)
     }
@@ -180,7 +180,7 @@ void draw_inspect_details() {
   ppu_write_data($17)
 
   // Draw standard rows
-  for i,0,until,21 {
+  for i,0,until,22 {
     ppu_write_data($17)
     ppu_write_data($A6)
     for j,0,until,28 {
@@ -226,6 +226,7 @@ void draw_inspect_details() {
   }
 
   draw_inspect_fish_details_content()
+  draw_inspect_fish_details_attr()
 
   set_bank_1()
 
