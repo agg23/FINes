@@ -21,10 +21,10 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[0])
     ppu_write_data(shop_tank[4])
     ppu_write_data(shop_tank[8])
-    ppu_write_data(shop_tank[12])
-    ppu_write_data(shop_tank[12])
-    ppu_write_data(shop_tank[12])
-    ppu_write_data(shop_tank[16])
+    ppu_write_data(shop_tank[$10])
+    ppu_write_data(shop_tank[$10])
+    ppu_write_data(shop_tank[$10])
+    ppu_write_data(shop_tank[$10])
 
     for j,0,until,SHOP_COLUMN_COUNT {
       draw_shop_plant(i, j)
@@ -37,16 +37,16 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[3])
     ppu_write_data(shop_tank[7])
     ppu_write_data(shop_tank[11])
-    ppu_write_data(shop_tank[15])
-    ppu_write_data(shop_tank[15])
-    ppu_write_data(shop_tank[15])
-    ppu_write_data(shop_tank[19])
+    ppu_write_data(shop_tank[$11])
+    ppu_write_data(shop_tank[$11])
+    ppu_write_data(shop_tank[$11])
+    ppu_write_data(shop_tank[$11])
   }
 
   ppu_ctrl = standard_ppu_ctrl
 
-  draw_shop_plants_shelf(2, 12, true)
-  draw_shop_plants_shelf(2, 24, false)
+  draw_shop_plants_shelf(2, 12)
+  draw_shop_plants_shelf(2, 24)
   draw_shop_shelving_columns(12)
 
   draw_text(13, 2, plant_screen_text.pointer, plant_screen_text.length, 0)
@@ -85,9 +85,9 @@ void draw_shop_plant(byte row, byte column) {
     ppu_write_data(shop_tank[1 + temp])
     ppu_write_data(shop_tank[5 + temp])
     ppu_write_data(shop_tank[9 + temp])
-    ppu_write_data(shop_tank[13 + temp])
-    ppu_write_data(shop_tank[13 + temp])
-    ppu_write_data(shop_tank[13 + temp])
+    ppu_write_data(0)
+    ppu_write_data(0)
+    ppu_write_data(0)
     ppu_write_data(shop_tank[17 + temp])
 
     address += 1
@@ -109,27 +109,17 @@ void draw_shop_plant(byte row, byte column) {
   }
 }
 
-void draw_shop_plants_shelf(byte x, byte y, bool is_top) {
+void draw_shop_plants_shelf(byte x, byte y) {
   byte i
-
-  byte end_cap
-
-  if (is_top) {
-    end_cap = $F
-  } else {
-    end_cap = $11
-  }
 
   read_ppu_status()
   ppu_set_addr(ppu_nametable0 + word(y) * 32 + word(x))
 
-  ppu_write_data(end_cap)
-  ppu_write_data($13)
-  for i,0,until,24 {
-    ppu_write_data($14)
+  ppu_write_data($12)
+  for i,0,until,26 {
+    ppu_write_data($13)
   }
-  ppu_write_data($13)
-  ppu_write_data(end_cap + 1)
+  ppu_write_data($14)
 }
 
 void draw_shop_plant_tank_attr() {

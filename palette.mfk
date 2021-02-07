@@ -49,7 +49,7 @@ const array shop_palette = [
   color_blue, color_green, color_light_green, color_sand,
   color_blue, color_red, color_pink, color_light_orange,
   // Tank (placed at end so plant palettes can stay in the same place)
-  color_blue, color_medium_blue, color_light_grey, color_dark_blue
+  color_blue, color_dark_blue, color_light_grey, color_medium_blue
 ]
 
 const array inspect_palette = [
