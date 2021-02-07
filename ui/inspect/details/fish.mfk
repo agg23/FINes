@@ -33,6 +33,12 @@ inline bool inspect_fish_details_tick() {
         // Removed last fish, return to aquarium
         set_screen(aquarium)
       } else {
+        // TODO: Selling the first item twice? seems to break this
+        if (current_inspect_row >= current_inspect_page_length - 1 && current_inspect_page * 5 + current_inspect_page_length == inspect_packed_length) {
+          // Index is now out of range
+          current_inspect_row -= 1
+        }
+
         set_inspect_screen(inspect_fish)
 
         // Request screen redraw
