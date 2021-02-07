@@ -9,7 +9,7 @@ import ui/inspect/fish
 byte inspect_fish_details_index
 
 void init_inspect_fish_details() {
-  inspect_fish_details_index = current_inspect_page * 5 + current_inspect_row
+  inspect_fish_details_index = inspect_packed_item_indexes[current_inspect_page * 5 + current_inspect_row]
 }
 
 inline bool inspect_fish_details_tick() {
