@@ -144,7 +144,7 @@ FAMISTUDIO_CFG_NTSC_SUPPORT  = 1
 ; FamiStudio tempo mode, this must be undefined. You cannot mix and match tempo modes, the engine can only run in one
 ; mode or the other. 
 ; More information at: https://famistudio.org/doc/song/#tempo-modes
-FAMISTUDIO_USE_FAMITRACKER_TEMPO = 1
+; FAMISTUDIO_USE_FAMITRACKER_TEMPO = 1
 
 ; Must be enabled if the songs uses delayed notes or delayed cuts. This is obviously only available when using
 ; FamiTracker tempo mode as FamiStudio tempo mode does not need this.
@@ -174,7 +174,7 @@ FAMISTUDIO_USE_VOLUME_TRACK   = 1
 ; FAMISTUDIO_USE_ARPEGGIO       = 1
 
 ; Must be enabled if any song uses the "Duty Cycle" effect (equivalent of FamiTracker Vxx, also called "Timbre").  
-; FAMISTUDIO_USE_DUTYCYCLE_EFFECT = 1
+FAMISTUDIO_USE_DUTYCYCLE_EFFECT = 1
 
 .endif
 

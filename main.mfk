@@ -32,11 +32,11 @@ void main() {
 
   init_plants()
 
-  set_screen(aquarium)
+  set_screen(title)
   draw_screen()
 
   #if(music)
-  famistudio_init(0, $A000)
+  famistudio_init(0, $E000)
   #endif
 
   process_buffered_writes()
