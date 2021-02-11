@@ -8,8 +8,7 @@ inline void increase_ammonia(byte value) {
     ammonia_level += value
   }
 
-  // TODO: Display is disabled as it was causing corruption
-  // draw_ammonia()
+  draw_ammonia()
 }
 
 inline void decrease_ammonia(byte value) {
@@ -19,7 +18,7 @@ inline void decrease_ammonia(byte value) {
     ammonia_level -= value
   }
 
-  // draw_ammonia()
+  draw_ammonia()
 }
 
 void draw_ammonia() {
