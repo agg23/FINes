@@ -11,22 +11,27 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
   byte i
   byte remainder
   byte tile_count
+  byte base_tile
 
   if (value >= $C0) {
     // First three tiles filled
     remainder = value - $C0
     tile_count = 3
+    base_tile = $C8
   } else if (value >= $80) {
     // First two tiles filled
     remainder = value - $80
     tile_count = 2
+    base_tile = $C8
   } else if (value >= $40) {
     // First tile filled
     remainder = value - $40
     tile_count = 1
+    base_tile = $D8
   } else {
     remainder = value
     tile_count = 0
+    base_tile = $E8
   }
 
   for i,0,until,tile_count {
@@ -34,11 +39,11 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
 
     if (i == 0) {
       // First item is different. We don't want to overlap the left edge
-      oam_buffer[oam_index + 1] = $E9
+      oam_buffer[oam_index + 1] = base_tile + 1
       oam_buffer[oam_index + 2] = 0
       oam_buffer[oam_index + 3] = (tile_x + i) * 8 + 1
     } else {
-      oam_buffer[oam_index + 1] = $E8
+      oam_buffer[oam_index + 1] = base_tile
       
       // TODO: Improve palette selection
       oam_buffer[oam_index + 2] = 0
@@ -67,7 +72,7 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
   }
 
   oam_buffer[oam_index] = tile_y * 8 - 1
-  oam_buffer[oam_index + 1] = $EF - steps + first_offset
+  oam_buffer[oam_index + 1] = base_tile + 7 - steps + first_offset
   oam_buffer[oam_index + 2] = 0
   oam_buffer[oam_index + 3] = (tile_x + tile_count) * 8 + first_offset
 

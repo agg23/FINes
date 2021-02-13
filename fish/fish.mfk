@@ -134,7 +134,7 @@ inline void fish_breathe() {
   byte i
 
   for i,0,until,MAX_FISH_COUNT {
-    if (fish_active[i]) {
+    if (fish_alive[i]) {
       // Take breath
       increase_ammonia(1)
 
