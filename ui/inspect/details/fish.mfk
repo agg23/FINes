@@ -26,10 +26,15 @@ inline bool inspect_fish_details_tick() {
       set_screen_forcibly(inspect)
       return true
     } else if (input_select != 0 && input_start != 0) {
-      // Sell fish
-      // TODO: Add pricing
-      refund(35)
-      delete_fish(inspect_fish_details_index)
+      if (not(fish_alive[inspect_fish_details_index])) {
+        // Dispose of fish
+        delete_fish(inspect_fish_details_index)
+      } else {
+        // Sell fish
+        // TODO: Add pricing
+        refund(35)
+        delete_fish(inspect_fish_details_index)
+      }
 
       if (inspect_packed_length == 1) {
         // Removed last fish, return to aquarium
@@ -46,6 +51,8 @@ inline bool inspect_fish_details_tick() {
         // Request screen redraw
         set_screen_forcibly(inspect)
       }
+
+      return true
     }
   }
 
@@ -157,6 +164,13 @@ void draw_start_select_button(byte x, byte y) {
   ppu_write_data($B5)
   ppu_write_data($B6)
   ppu_write_data($B7)
+
+  if (not(fish_alive[inspect_fish_details_index])) {
+    // Dispose of body
+    draw_text(x, y - 3, dispose_text.pointer, dispose_text.length, 0)
+    draw_text(x, y - 2, of_body_text.pointer, of_body_text.length, 0)
+    return
+  }
 
   for i,0,until,sell_text.length {
     text_data[i] = sell_text[i]
@@ -274,6 +288,14 @@ const array(byte) back_text = [
 
 const array(byte) sell_text = [
   "Sell " ascii
+]
+
+const array(byte) dispose_text = [
+  "Dispose"
+]
+
+const array(byte) of_body_text = [
+  "of body"
 ]
 
 const array(byte) not_impl_text = [
