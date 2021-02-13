@@ -32,7 +32,7 @@ void main() {
 
   init_plants()
 
-  set_screen(title)
+  set_screen(aquarium)
   draw_screen()
 
   #if(music)
@@ -54,6 +54,10 @@ void main() {
     sprite_tick()
     input_and_screen_tick()
     clear_remaining_oam()
+
+    if (ammonia_needs_update) {
+      draw_ammonia()
+    }
 
     // wait_for_sprite0_clear()
 

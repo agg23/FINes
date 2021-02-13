@@ -270,7 +270,7 @@ void load_inspect_palette() {
 }
 
 void load_inspect_details_palette() {
-  add_buffered_write(ppu_palette_ram, false, inspect_details_palette.pointer, $10, true)
+  add_buffered_write(ppu_palette_ram, false, inspect_details_palette.pointer, $14, true)
 }
 
 const array(byte) health_text = [

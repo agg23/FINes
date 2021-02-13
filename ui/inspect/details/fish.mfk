@@ -2,6 +2,7 @@ import nes_lib
 
 import entity/money
 
+import ui/components/progress_indicator
 import ui/inspect/inspect
 
 import ui/inspect/fish
@@ -15,6 +16,7 @@ void init_inspect_fish_details() {
 inline bool inspect_fish_details_tick() {
   byte temp
   render_inspect_fish_item(inspect_fish_details_index, current_inspect_row, 2)
+  render_inspect_fish_progress()
 
   if (input_can_be_consumed) {
     if (input_b != 0) {
@@ -111,6 +113,13 @@ void draw_inspect_fish_data_rows() {
   // TODO
   draw_text(5, 13, status_text.pointer, status_text.length, 0)
   draw_text_right(27, 13, happy_text.pointer, happy_text.length)
+
+  draw_text(5, 15, health_text.pointer, health_text.length, 0)
+  draw_progress_indicator(27 - 4, 15)
+}
+
+void render_inspect_fish_progress() {
+  render_progress_indicator(27 - 4, 15, fish_health[inspect_fish_details_index])
 }
 
 void draw_back_button(byte x, byte y) {

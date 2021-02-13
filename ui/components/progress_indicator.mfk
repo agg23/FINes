@@ -1,0 +1,75 @@
+void draw_progress_indicator(byte x, byte y) {
+  ppu_set_addr(ppu_nametable0 + word(y) * 32 + x)
+
+  ppu_write_data($C4)
+  ppu_write_data($C5)
+  ppu_write_data($C5)
+  ppu_write_data($C6)
+}
+
+void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
+  byte i
+  byte remainder
+  byte tile_count
+
+  if (value >= $C0) {
+    // First three tiles filled
+    remainder = value - $C0
+    tile_count = 3
+  } else if (value >= $80) {
+    // First two tiles filled
+    remainder = value - $80
+    tile_count = 2
+  } else if (value >= $40) {
+    // First tile filled
+    remainder = value - $40
+    tile_count = 1
+  } else {
+    remainder = value
+    tile_count = 0
+  }
+
+  for i,0,until,tile_count {
+    oam_buffer[oam_index] = tile_y * 8 - 1
+
+    if (i == 0) {
+      // First item is different. We don't want to overlap the left edge
+      oam_buffer[oam_index + 1] = $E9
+      oam_buffer[oam_index + 2] = 0
+      oam_buffer[oam_index + 3] = (tile_x + i) * 8 + 1
+    } else {
+      oam_buffer[oam_index + 1] = $E8
+      
+      // TODO: Improve palette selection
+      oam_buffer[oam_index + 2] = 0
+      oam_buffer[oam_index + 3] = (tile_x + i) * 8
+    }
+
+
+    oam_index += 4
+  }
+
+  byte steps
+  byte first_offset
+
+  if (tile_count == 0) {
+    first_offset = 1
+  } else {
+    first_offset = 0
+  }
+
+  // Max 8
+  steps = remainder >> 3
+
+  if (steps == 0 && first_offset != 0) {
+    // First item is empty, don't draw anything
+    return
+  }
+
+  oam_buffer[oam_index] = tile_y * 8 - 1
+  oam_buffer[oam_index + 1] = $EF - steps + first_offset
+  oam_buffer[oam_index + 2] = 0
+  oam_buffer[oam_index + 3] = (tile_x + tile_count) * 8 + first_offset
+
+  oam_index += 4
+}

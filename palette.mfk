@@ -80,7 +80,7 @@ const array inspect_palette = [
   color_black, color_dark_blue, color_pink, color_medium_blue,
   // Rasbora, sprite 0
   color_black, color_orange, color_light_grey, color_black,
-  // Disabled fish
+  // Disabled fish (in the last palette so a mask can be ORed against 1 and 2 (the fish palettes) to instead switch to disabled palette)
   color_black, color_dark_grey, color_light_grey, color_black
 ]
 
@@ -91,5 +91,8 @@ const array inspect_details_palette = [
   color_blue, color_green, color_light_green, color_sand,
   // Text
   color_blue, color_blue, color_white, color_red,
-  color_blue, color_unused, color_unused, color_unused
+  color_blue, color_unused, color_unused, color_unused,
+
+  // Sprite palletes
+  color_blue, color_green, color_orange, color_red
 ]

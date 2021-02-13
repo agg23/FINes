@@ -139,11 +139,12 @@ inline void fish_breathe() {
       increase_ammonia(1)
 
       // Update health
-      if (ammonia_level > $50 && rand() < ammonia_level - $50) {
+      if (ammonia_level > $10 && rand() < ammonia_level - $10) {
         // Decrease health
         if (fish_health[i] < 5) {
           fish_alive[i] = false
           fish_velocity_y[i] = 0
+          fish_health[i] = 0
         } else {
           fish_health[i] -= 4
         }

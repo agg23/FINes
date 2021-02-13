@@ -1,5 +1,7 @@
 byte ammonia_level
 byte ph_level
+// TODO: Remove when visual ammonia indicator is removed
+bool ammonia_needs_update
 
 inline void increase_ammonia(byte value) {
   if ($ff - ammonia_level < value) {
@@ -8,7 +10,7 @@ inline void increase_ammonia(byte value) {
     ammonia_level += value
   }
 
-  draw_ammonia()
+  ammonia_needs_update = true
 }
 
 inline void decrease_ammonia(byte value) {
@@ -18,10 +20,12 @@ inline void decrease_ammonia(byte value) {
     ammonia_level -= value
   }
 
-  draw_ammonia()
+  ammonia_needs_update = true
 }
 
 void draw_ammonia() {
+  ammonia_needs_update = false
+
   word temp
   array(byte) data [5]
 
