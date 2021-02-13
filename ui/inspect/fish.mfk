@@ -43,5 +43,9 @@ void render_inspect_fish_item(byte i, byte row, byte y) {
     mask = %11
   }
 
+  if (not(fish_alive[i])) {
+    mask |= $80
+  }
+
   render_fish_type(type, 36, y * 8 + 10, mask, true)
 }

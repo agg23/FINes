@@ -115,11 +115,18 @@ void draw_inspect_fish_data_rows() {
   draw_text_right(27, 13, happy_text.pointer, happy_text.length)
 
   draw_text(5, 15, health_text.pointer, health_text.length, 0)
-  draw_progress_indicator(27 - 4, 15)
+
+  if (fish_alive[inspect_fish_details_index]) {
+    draw_progress_indicator(27 - 4, 15)
+  } else {
+    draw_text_right(27, 15, deceased_text.pointer, deceased_text.length)
+  }
 }
 
 void render_inspect_fish_progress() {
-  render_progress_indicator(27 - 4, 15, fish_health[inspect_fish_details_index])
+  if (fish_alive[inspect_fish_details_index]) {
+    render_progress_indicator(27 - 4, 15, fish_health[inspect_fish_details_index])
+  }
 }
 
 void draw_back_button(byte x, byte y) {
@@ -255,6 +262,10 @@ const array(byte) color_text = [
 
 const array(byte) vibrant_text = [
   "Vibrant" ascii
+]
+
+const array(byte) deceased_text = [
+  "Deceased" ascii
 ]
 
 const array(byte) back_text = [
