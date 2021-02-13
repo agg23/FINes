@@ -7,7 +7,7 @@ void draw_progress_indicator(byte x, byte y) {
   ppu_write_data($C6)
 }
 
-void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
+void render_progress_indicator(byte tile_x, byte tile_y, byte value, bool invert_color) {
   byte i
   byte remainder
   byte tile_count
@@ -34,6 +34,14 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
     base_tile = $E8
   }
 
+  if (invert_color) {
+    if (base_tile == $C8) {
+      base_tile = $E8
+    } else if (base_tile == $E8) {
+      base_tile = $C8
+    }
+  }
+
   for i,0,until,tile_count {
     oam_buffer[oam_index] = tile_y * 8 - 1
 
@@ -47,7 +55,13 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value) {
       
       // TODO: Improve palette selection
       oam_buffer[oam_index + 2] = 0
-      oam_buffer[oam_index + 3] = (tile_x + i) * 8
+
+      if (i == 2) {
+        // Last item is different, we don't want to overlap the right edge
+        oam_buffer[oam_index + 3] = (tile_x + i) * 8 - 2
+      } else {
+        oam_buffer[oam_index + 3] = (tile_x + i) * 8
+      }
     }
 
 

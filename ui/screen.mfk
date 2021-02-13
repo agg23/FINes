@@ -5,13 +5,15 @@ import ui/aquarium
 import ui/planteditor
 import ui/shop/shop
 import ui/inspect/inspect
+import ui/stats
 
 enum Screen {
   title,
   aquarium,
   plant_editor,
   shop,
-  inspect
+  inspect,
+  stats
 }
 
 bool buffer_screen_draw = false
@@ -24,6 +26,7 @@ bool screen_tick() {
     plant_editor @ plant_editor_tick
     shop @ shop_tick
     inspect @ inspect_tick
+    stats @ stats_tick
   }
 }
 
@@ -34,6 +37,7 @@ void draw_screen() {
     plant_editor @ draw_plant_editor
     shop @ draw_shop
     inspect @ draw_inspect
+    stats @ draw_stats
   }
 }
 

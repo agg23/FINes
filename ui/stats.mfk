@@ -1,0 +1,134 @@
+import entity/health
+
+import ui/shared
+import ui/screen
+import ui/components/details
+
+import ui/inspect/render
+
+byte stats_page
+
+void init_stats() {
+  stats_page = 0
+  set_screen(stats)
+}
+
+void close_stats() {
+  set_screen(aquarium)
+}
+
+bool stats_tick() {
+  render_stats()
+
+  if (input_b != 0) {
+    close_stats()
+
+    return true
+  } else if (input_dx > 0 && stats_page < 1) {
+    // Right
+    stats_page += 1
+
+    set_screen_forcibly(stats)
+    return true
+  } else if (input_dx < 0 && stats_page > 0) {
+    stats_page -= 1
+
+    set_screen_forcibly(stats)
+    return true
+  }
+
+  return false
+}
+
+void render_stats() {
+  if (stats_page == 0) {
+    render_progress_indicator(27 - 4, 7, ammonia_level, true)
+    render_progress_indicator(27 - 4, 9, oxygen_level, false)
+    render_progress_indicator(27 - 4, 11, co2_level, true)
+  }
+}
+
+void draw_stats() {
+  draw_details_panel(false)
+
+  draw_text(6, 3, aquarium_statistics.pointer, aquarium_statistics.length, 0)
+
+  draw_text(12, 5, page_text.pointer, page_text.length, 0)
+  ppu_write_data(stats_page + 1 + $30)
+  // Forward slash
+  ppu_write_data($2F)
+  ppu_write_data(2 + $30)
+
+  return [stats_page] {
+    0 @ draw_stats_page1
+    1 @ draw_stats_page2
+  }
+}
+
+void draw_stats_page1() {
+  // Health
+  draw_text(5, 7, ammonia_text.pointer, ammonia_text.length, 0)
+  draw_progress_indicator(27 - 4, 7)
+
+  draw_text(5, 9, oxygen_text.pointer, oxygen_text.length, 0)
+  draw_progress_indicator(27 - 4, 9)
+
+  draw_text(5, 11, co2_text.pointer, co2_text.length, 0)
+  draw_progress_indicator(27 - 4, 11)
+
+  // General
+  draw_text(5, 15, total_time_text.pointer, total_time_text.length, 0)
+
+  // draw_text(5, 17, total_income_text.pointer, total_income_text.length, 0)
+}
+
+void draw_stats_page2() {
+  // Financials
+  draw_text(5, 7, income_text.pointer, income_text.length, 0)
+
+  draw_text(5, 9, expenses_text.pointer, expenses_text.length, 0)
+
+  draw_text(5, 11, sales_text.pointer, sales_text.length, 0)
+
+  draw_text(5, 13, nice_tank_text.pointer, nice_tank_text.length, 0)
+}
+
+const array(byte) page_text = [
+  "Page " ascii
+]
+
+const array(byte) aquarium_statistics = [
+  "Aquarium statistics" ascii
+]
+
+const array(byte) ammonia_text = [
+  "Ammonia:" ascii
+]
+
+const array(byte) oxygen_text = [
+  "Oxygen:" ascii
+]
+
+const array(byte) co2_text = [
+  "CO2:" ascii
+]
+
+const array(byte) total_time_text = [
+  "Total time:"
+]
+
+const array(byte) income_text = [
+  "Income:"
+]
+
+const array(byte) expenses_text = [
+  "Expenses:"
+]
+
+const array(byte) sales_text = [
+  "Sales:"
+]
+
+const array(byte) nice_tank_text = [
+  "Care bonus:"
+]

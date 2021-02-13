@@ -1,5 +1,6 @@
 byte ammonia_level
-byte ph_level
+byte oxygen_level
+byte co2_level
 // TODO: Remove when visual ammonia indicator is removed
 bool ammonia_needs_update
 

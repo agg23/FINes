@@ -1,6 +1,7 @@
 import palette
 
 import ui/shared
+import ui/components/details
 
 import ui/inspect/inspect
 import ui/inspect/details/fish
@@ -160,93 +161,11 @@ void draw_inspect_item_attr(byte i, bool is_active) {
 }
 
 void draw_inspect_details() {
-  byte i
-  byte j
-
-  // Clear NT
-  read_ppu_status()
-  ppu_set_addr(ppu_nametable0)
-  // Draw black top
-  for i,0,until,2 {
-    for j,0,until,32 {
-      ppu_write_data($17)
-    }
-  }
-
-  // Draw first row
-  ppu_write_data($17)
-  ppu_write_data($17)
-  ppu_write_data($96)
-  for j,0,until,26 {
-    ppu_write_data($80)
-  }
-  ppu_write_data($97)
-  ppu_write_data($17)
-  ppu_write_data($17)
-
-  // Draw second row
-  ppu_write_data($17)
-  ppu_write_data($A0)
-  ppu_write_data($91)
-  for j,0,until,26 {
-    ppu_write_data(0)
-  }
-  ppu_write_data($83)
-  ppu_write_data($A1)
-  ppu_write_data($17)
-
-  // Draw standard rows
-  for i,0,until,22 {
-    ppu_write_data($17)
-    ppu_write_data($A6)
-    for j,0,until,28 {
-      ppu_write_data(0)
-    }
-    ppu_write_data($A7)
-    ppu_write_data($17)
-  }
-
-  // Draw second bottom row
-  ppu_write_data($17)
-  ppu_write_data($A2)
-  ppu_write_data($94)
-  for j,0,until,26 {
-    ppu_write_data(0)
-  }
-  ppu_write_data($86)
-  ppu_write_data($A3)
-  ppu_write_data($17)
-
-  // Draw bottom row
-  ppu_write_data($17)
-  ppu_write_data($17)
-  ppu_write_data($A4)
-  for j,0,until,26 {
-    ppu_write_data($81)
-  }
-  ppu_write_data($A5)
-  ppu_write_data($17)
-  ppu_write_data($17)
-
-  // Draw black bottom
-  for i,0,until,2 {
-    for j,0,until,32 {
-      ppu_write_data($17)
-    }
-  }
-
-  // Clear AT
-  ppu_set_addr(ppu_attrtable0)
-  for i,0,until,64 {
-    ppu_write_data(0)
-  }
+  draw_details_panel(true)
 
   draw_inspect_fish_details_content()
-  draw_inspect_fish_details_attr()
 
   set_bank_1()
-
-  load_inspect_details_palette()
 
   enable_sprite0 = false
 }
@@ -267,10 +186,6 @@ void render_inspect_item(byte i, byte row, byte y) {
 
 void load_inspect_palette() {
   add_buffered_write(ppu_palette_ram, false, inspect_palette.pointer, $20, true)
-}
-
-void load_inspect_details_palette() {
-  add_buffered_write(ppu_palette_ram, false, inspect_details_palette.pointer, $14, true)
 }
 
 const array(byte) health_text = [

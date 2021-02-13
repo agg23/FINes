@@ -5,11 +5,12 @@ import ui/shared
 import ui/shop/shop
 import ui/planteditor
 import ui/inspect/inspect
+import ui/stats
 
 import entity/inspect
 import entity/money
 
-const byte commandbar_item_count = 4
+const byte commandbar_item_count = 5
 
 byte selected_command_item = 0
 
@@ -21,6 +22,10 @@ void activate_fish_inspect() {
   init_inspect()
 }
 
+void activate_stats() {
+  init_stats()
+}
+
 void activate_shop() {
   init_shop()
 }
@@ -29,7 +34,7 @@ void activate_spectator() {
 
 }
 
-const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_shop.pointer, activate_spectator.pointer]
+const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_stats.pointer, activate_shop.pointer, activate_spectator.pointer]
 
 bool commandbar_tick() {
   if (not(input_can_be_consumed)) {
@@ -90,9 +95,9 @@ void draw_commandbar() {
 
 const array(byte) commandbar_background = [
   $4, $4, $80, $81, $4, $82, $83, $4,
-  $84, $85, $4, $86, $87, $4, $4, $4,
+  $84, $85, $4, $86, $87, $4, $88, $89,
   $4, $4, $4, $4, $4, $4, $4, $4,
   $4, $4, $4, $4, $4, $4, $4, $4,
   //
   $4, $4, $90, $91, $4, $92, $93, $4,
-  $94, $95, $4, $96, $97]
+  $94, $95, $4, $96, $97, $4, $98, $99]
