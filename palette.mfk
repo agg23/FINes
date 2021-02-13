@@ -34,8 +34,8 @@ const array aquarium_palette = [
   background_backdrop,color_red,color_pink,color_light_orange,
   background_backdrop,color_unused,color_unused,color_unused,
 
-  //sprite palette
-  background_backdrop,color_pink,color_unused,color_unused,
+  // Progress_indicator
+  background_backdrop, color_green, color_orange, color_red,
   // Neon tetra
   background_backdrop,color_dark_blue,color_pink,color_medium_blue,
   // Rasbora, sprite 0
@@ -94,5 +94,6 @@ const array inspect_details_palette = [
   color_blue, color_unused, color_unused, color_unused,
 
   // Sprite palletes
+  // Progress_indicator
   color_blue, color_green, color_orange, color_red
 ]

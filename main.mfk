@@ -55,10 +55,6 @@ void main() {
     input_and_screen_tick()
     clear_remaining_oam()
 
-    if (ammonia_needs_update) {
-      draw_ammonia()
-    }
-
     // wait_for_sprite0_clear()
 
     new_frame = true

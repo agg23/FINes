@@ -1,8 +1,9 @@
+import ui/components/progress_indicator
+
 byte ammonia_level
 byte oxygen_level
 byte co2_level
-// TODO: Remove when visual ammonia indicator is removed
-bool ammonia_needs_update
+byte overall_health
 
 inline void increase_ammonia(byte value) {
   if ($ff - ammonia_level < value) {
@@ -11,7 +12,7 @@ inline void increase_ammonia(byte value) {
     ammonia_level += value
   }
 
-  ammonia_needs_update = true
+  build_overall_health()
 }
 
 inline void decrease_ammonia(byte value) {
@@ -21,24 +22,45 @@ inline void decrease_ammonia(byte value) {
     ammonia_level -= value
   }
 
-  ammonia_needs_update = true
+  build_overall_health()
 }
 
-void draw_ammonia() {
-  ammonia_needs_update = false
+void draw_overall_health() {
+  draw_text(24, 3, short_health_text.pointer, short_health_text.length, 0)
+  draw_progress_indicator(26, 3)
+}
 
-  word temp
-  array(byte) data [5]
+void render_overall_health() {
+  render_progress_indicator(26, 3, overall_health, false)
+}
 
-  temp.hi = 0
-  temp.lo = ammonia_level
-  // TODO: This does not appear to work when enabling optimization
-  bcdConvert(temp)
+void build_overall_health() {
+  byte ammonia_diff
+  byte oxygen_diff
+  byte co2_diff
 
-  byte i
-  for i,0,until,5 {
-    data[i] = bcdResult[4 - i] + $30
+  if (ammonia_level <= $10) {
+    ammonia_diff = 0
+  } else {
+    // Proximity to "best" value
+    ammonia_diff = ammonia_level - $10
   }
 
-  add_buffered_write(ppu_nametable0 + 32 * 3 + 24, false, data.pointer, 5, false)
+  oxygen_diff = oxygen_level - $80
+
+  if (oxygen_diff & $80 != 0) {
+    oxygen_diff = $FF - oxygen_diff
+  }
+
+  if (co2_level <= $10) {
+    co2_diff = 0
+  } else {
+    co2_diff = co2_level - $10
+  }
+
+  overall_health = $FF - (ammonia_diff + (oxygen_diff >> 2) + co2_level)
 }
+
+const array(byte) short_health_text = [
+  "H:" ascii
+]

@@ -14,6 +14,7 @@ bool aquarium_tick() {
   fish_tick()
 
   render_commandbar()
+  render_overall_health()
   render_fish()
 
   if (frame == 0) {
@@ -32,7 +33,7 @@ void draw_aquarium() {
   draw_plants()
 
   draw_money()
-  draw_ammonia()
+  draw_overall_health()
 
   load_aquarium_palettes()
   set_bank_0()
