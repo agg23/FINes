@@ -3,12 +3,15 @@ import fish/fish
 
 import fish/tetra
 import fish/rasbora
+import fish/cory
 
 byte fish_any_price(FishType type) {
   if (type == tetra) {
     return TETRA_ANY_PRICE
   } else if (type == rasbora) {
     return RASBORA_ANY_PRICE
+  } else if (type == cory) {
+    return CORY_ANY_PRICE
   }
 
   return 0
@@ -19,6 +22,8 @@ byte fish_sexed_price(FishType type) {
     return TETRA_SEXED_PRICE
   } else if (type == rasbora) {
     return RASBORA_SEXED_PRICE
+  } else if (type == cory) {
+    return CORY_SEXED_PRICE
   }
 
   return 0
@@ -32,6 +37,8 @@ inline void draw_fish_name(FishType type, byte x, byte y, byte center_length) {
     draw_text(x, y, tetra_name_text.pointer, tetra_name_text.length, center_length)
   } else if (type == rasbora) {
     draw_text(x, y, rasbora_name_text.pointer, rasbora_name_text.length, center_length)
+  } else if (type == cory) {
+    draw_text(x, y, cory_name_text.pointer, cory_name_text.length, center_length)
   }
 }
 
@@ -40,6 +47,8 @@ inline void draw_fish_any_price(FishType type, byte x, byte y) {
     draw_text(x, y, tetra_any_price_text.pointer, tetra_any_price_text.length, 0)
   } else if (type == rasbora) {
     draw_text(x, y, rasbora_any_price_text.pointer, rasbora_any_price_text.length, 0)
+  } else if (type == cory) {
+    draw_text(x, y, cory_any_price_text.pointer, cory_any_price_text.length, 0)
   }
 }
 
@@ -48,5 +57,7 @@ inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_
     render_tetra(x, y, mask, pos_direction)
   } else if (type == rasbora) {
     render_rasbora(x, y, mask, pos_direction)
+  } else if (type == cory) {
+    render_cory(x, y, mask, pos_direction)
   }
 }

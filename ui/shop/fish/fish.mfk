@@ -77,6 +77,6 @@ void purchase_fish() {
 }
 
 const array(FishType) shop_fish_tanks = [
-  tetra, rasbora, tetra,
+  tetra, rasbora, cory,
   tetra, tetra, tetra
 ]

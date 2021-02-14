@@ -1,0 +1,23 @@
+import fish/shared
+
+// Make sure to update text arrays
+const byte CORY_ANY_PRICE = 10
+const byte CORY_SEXED_PRICE = 20
+
+macro void render_cory(byte x, byte y, byte mask, bool pos_direction) {
+  render_three_tile_fish(x, y, mask, pos_direction, 2, cory_tiles[0], cory_tiles[1], cory_tiles[2])
+}
+
+const array(byte) cory_tiles = [$86, $87, $88]
+
+const array(byte) cory_name_text = [
+  "Cory" ascii
+]
+
+const array(byte) cory_any_price_text = [
+  "10" ascii
+]
+
+const array(byte) cory_sexed_price_text = [
+  "20" ascii
+]

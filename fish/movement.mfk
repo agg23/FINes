@@ -21,7 +21,7 @@ inline void fish_move() {
       continue
     }
 
-    if (fish_type[i] == tetra || fish_type[i] == rasbora) {
+    if (fish_type[i] == tetra || fish_type[i] == rasbora || fish_type[i] == cory) {
       tetra_fish_move(i)
     } else if (fish_type[i] == cherry_shrimp) {
       // cherry_shrimp_move(i)

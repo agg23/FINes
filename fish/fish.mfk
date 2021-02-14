@@ -12,7 +12,8 @@ import entity/health
 enum FishType {
   tetra,
   rasbora,
-  cherry_shrimp
+  cherry_shrimp,
+  cory
 }
 
 
