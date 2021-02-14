@@ -12,24 +12,24 @@ inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_a
 
   x_offset = x + plant_min_x
 
-  data[0] = $89
-  data[1] = $8C
-  data[2] = $8F
-  data[3] = $9A
+  data[0] = $A9
+  data[1] = $AC
+  data[2] = $AF
+  data[3] = $BA
 
   height_from_floor = plant_tile_height_from_floor(4, custom_bottom_y)
 
   add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, true, data, 4, false)
 
-  data[0] = $8A
-  data[1] = $8D
-  data[2] = $98
-  data[3] = $9B
+  data[0] = $AA
+  data[1] = $AD
+  data[2] = $B8
+  data[3] = $BB
   add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 1, true, data, 4, false)
 
-  data[0] = $8B
-  data[1] = $8E
-  data[2] = $99
+  data[0] = $AB
+  data[1] = $AE
+  data[2] = $B9
   data[3] = $0
   add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 2, true, data, 4, false)
 

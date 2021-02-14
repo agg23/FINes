@@ -21,7 +21,7 @@ inline void draw_rotala(PlantSize size, byte x, pointer.byte data, bool write_at
 
   byte j
   for j,0,until,count {
-    data[j] = $88
+    data[j] = $A8
   }
 
   add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count, custom_bottom_y) + x_offset, true, data, count, false)

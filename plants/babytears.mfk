@@ -12,19 +12,19 @@ inline void draw_babytears(PlantSize size, byte x, pointer.byte data, bool write
   x_offset = x + plant_min_x
 
   if (size == medium || size == large) {
-    data[0] = $9E
-    data[1] = $9F
+    data[0] = $BE
+    data[1] = $BF
 
     height_from_floor = plant_tile_height_from_floor(2, custom_bottom_y)
 
     add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, width, false)
 
-    data[0] = $A8
-    data[1] = $A9
+    data[0] = $C8
+    data[1] = $C9
     add_buffered_write(ppu_nametable0 + height_from_floor + 32 + x_offset, false, data, width, false)
   } else if (size == small) {
-    data[0] = $9C
-    data[1] = $9D
+    data[0] = $BC
+    data[1] = $BD
 
     height_from_floor = plant_tile_height_from_floor(1, custom_bottom_y)
 
