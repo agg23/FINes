@@ -1,5 +1,7 @@
 import ui/shop/render
 
+import fish/allfish
+
 void init_fish_shop() {
   byte i
   for i,0,until,SHOP_ITEM_COUNT {
@@ -78,5 +80,5 @@ void purchase_fish() {
 
 const array(FishType) shop_fish_tanks = [
   tetra, rasbora, cory,
-  tetra, tetra, tetra
+  betta, tetra, tetra
 ]

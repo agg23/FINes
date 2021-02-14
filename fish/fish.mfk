@@ -13,7 +13,8 @@ enum FishType {
   tetra,
   rasbora,
   cherry_shrimp,
-  cory
+  cory,
+  betta
 }
 
 

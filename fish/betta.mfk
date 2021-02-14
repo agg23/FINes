@@ -1,0 +1,22 @@
+import fish/shared
+
+// Make sure to update text arrays
+const byte BETTA_ANY_PRICE = 95
+
+byte betta_y_temp
+macro void render_betta(byte x, byte y, byte mask, bool pos_direction) {
+  betta_y_temp = y - 8
+  render_three_tile_fish(x, betta_y_temp, mask, pos_direction, 1, betta_tiles_top[0], betta_tiles_top[1], betta_tiles_top[2])
+  render_three_tile_fish(x, y, mask, pos_direction, 1, betta_tiles_bottom[0], betta_tiles_bottom[1], betta_tiles_bottom[2])
+}
+
+const array(byte) betta_tiles_top = [$89, $8A, $8B]
+const array(byte) betta_tiles_bottom = [$8C, $8D, $8E]
+
+const array(byte) betta_name_text = [
+  "Betta" ascii
+]
+
+const array(byte) betta_any_price_text = [
+  "95" ascii
+]
