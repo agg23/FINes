@@ -20,8 +20,14 @@ bool aquarium_tick() {
   if (frame == 0) {
     plant_tick()
     fish_breathe()
+    set_bank_0()
+  } else if (frame == $3F) {
+    set_bank_2()
   } else if (frame == $7F) {
     fish_breathe()
+    set_bank_0()
+  } else if (frame == $BF) {
+    set_bank_2()
   }
 
   return did_use_input

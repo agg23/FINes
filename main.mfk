@@ -13,8 +13,6 @@ import tank/tank
 
 import fish/fish
 
-import debug/render_stats
-
 byte in_nmi = 0
 byte nmi_fail = 0
 byte frame

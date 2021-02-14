@@ -162,4 +162,5 @@ inline void set_ppu_ctrl(bool right, bool bottom) {
   ppu_ctrl = temp_ctrl
 }
 
-segment(chrrom) const array graphics @ $0000 = file("tiles2.chr")
+segment(chrrom) const array bank0 @ $0000 = file("tiles2.chr")
+segment(chrrom) const array bank1 @ $4000 = file("bank2.chr")
