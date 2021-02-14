@@ -32,7 +32,11 @@ void main() {
 
   init_plants()
 
+  #if(skip_title)
   set_screen(aquarium)
+  #else
+  set_screen(title)
+  #endif
   draw_screen()
 
   #if(music)
