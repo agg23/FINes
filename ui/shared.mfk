@@ -53,6 +53,43 @@ inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte cente
   }
 }
 
+inline void draw_number_text(byte x, byte y, byte number, byte length, bool draw_leading_zeros) {
+  array(byte) data[5]
+
+  generate_number_text(number, data.pointer, length, draw_leading_zeros)
+
+  draw_text(x, y, data.pointer, length, 0)
+}
+
+inline void generate_number_text(byte number, pointer.byte output, byte length, bool draw_leading_zeros) {
+  byte i
+  byte last_nonzero_index
+  bcdConvert(number)
+
+  if (draw_leading_zeros) {
+    for i,0,until,length {
+      output[length - 1 - i] = bcdResult[i] + $30
+    }
+  } else {
+    last_nonzero_index = 0
+
+    for i,0,until,length {
+      if (bcdResult[i] > 0) {
+        last_nonzero_index = i
+      }
+    }
+
+    for i,0,until,length {
+      if (i == 0 || i < last_nonzero_index || bcdResult[i] != 0) {
+        // After last nonzero index, don't draw any more zeros
+        output[length - 1 - i] = bcdResult[i] + $30
+      } else {
+        output[length - 1 - i] = 0
+      }
+    }
+  }
+}
+
 macro void build_attribute_table_entry(byte top_left, byte top_right, byte bottom_left, byte bottom_right, byte output) {
   output = bottom_right
   output = (output << 2) | bottom_left
