@@ -60,6 +60,16 @@ inline bool inspect_tick() {
 
 inline bool inspect_fish_tick() {
   byte temp
+
+  if (inspect_packed_length == 0) {
+    if (input_can_be_consumed && (input_a != 0 || input_b != 0 || input_select != 0 || input_start != 0)) {
+      close_inspect()
+      return true
+    }
+    
+    return false
+  }
+
   render_inspect()
 
   if (input_can_be_consumed) {

@@ -92,14 +92,16 @@ void draw_inspect_title() {
   byte i
   ppu_set_addr(ppu_nametable0 + 64 + 6)
 
-  for i,0,until,inspect_fish_title_text.length {
-    ppu_write_data(inspect_fish_title_text[i])
-  }
+  if (inspect_packed_length > 0) {
+    draw_text(6, 2, inspect_fish_title_text.pointer, inspect_fish_title_text.length, 0)
 
-  ppu_write_data(current_inspect_page + 1 + $30)
-  // Forward slash
-  ppu_write_data($2F)
-  ppu_write_data(current_inspect_page_count + $30)
+    ppu_write_data(current_inspect_page + 1 + $30)
+    // Forward slash
+    ppu_write_data($2F)
+    ppu_write_data(current_inspect_page_count + $30)
+  } else {
+    draw_text(6 + 2, 2, no_owned_fish_text.pointer, no_owned_fish_text.length, 0)
+  }
 }
 
 void draw_inspect_item(byte i, byte y) {
@@ -194,4 +196,8 @@ const array(byte) health_text = [
 
 const array(byte) inspect_fish_title_text = [
   "Owned Fish: Page " ascii
+]
+
+const array(byte) no_owned_fish_text = [
+  "Owned Fish: None" ascii
 ]
