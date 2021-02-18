@@ -74,8 +74,8 @@ const array inspect_palette = [
   color_black, color_white, color_red, color_white,
   color_black, color_white, color_red, color_white,
 
-  // Unused
-  color_black, color_unused, color_light_grey, color_unused,
+  // Progress_indicator
+  color_black, color_green, color_orange, color_red,
   // Neon tetra
   color_black, color_dark_blue, color_pink, color_medium_blue,
   // Rasbora, sprite 0

@@ -183,16 +183,15 @@ void render_inspect() {
 void render_inspect_item(byte i, byte row, byte y) {
   if (inspect_screen == inspect_fish) {
     render_inspect_fish_item(i, row, y)
+    if (fish_alive[i]) {
+      render_progress_indicator(23, y + 1, fish_health[i], false)
+    }
   }
 }
 
 void load_inspect_palette() {
   add_buffered_write(ppu_palette_ram, false, inspect_palette.pointer, $20, true)
 }
-
-const array(byte) health_text = [
-  "Health" ascii
-]
 
 const array(byte) inspect_fish_title_text = [
   "Owned Fish: Page " ascii

@@ -27,7 +27,13 @@ void draw_inspect_fish_item(byte i, byte y) {
   type = fish_type[i]
 
   draw_fish_name(type, 7, y, 0)
-  draw_text(17, y, health_text.pointer, health_text.length, 0)
+  draw_text(21, y, short_health_text.pointer, short_health_text.length, 0)
+
+  if (fish_alive[i]) {
+    draw_progress_indicator(23, y)
+  } else {
+    draw_text(23, y, dead_text.pointer, dead_text.length, 0)
+  }
 }
 
 void render_inspect_fish_item(byte i, byte row, byte y) {
@@ -49,3 +55,7 @@ void render_inspect_fish_item(byte i, byte row, byte y) {
 
   render_fish_type(type, 36, y * 8 + 10, mask, true)
 }
+
+const array(byte) dead_text = [
+  "Dead" ascii
+]
