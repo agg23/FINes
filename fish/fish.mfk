@@ -110,6 +110,17 @@ void delete_fish(byte i) {
   fish_active[i] = false
 }
 
+bool has_alive_fish() {
+  byte i
+  for i,0,until,MAX_FISH_COUNT {
+    if (fish_active[i] && fish_alive[i]) {
+      return true
+    }
+  }
+
+  return false
+}
+
 void fish_tick() {
   fish_move()
   // fish_breed()

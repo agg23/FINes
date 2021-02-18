@@ -105,12 +105,16 @@ void draw_stats_page1() {
 void draw_stats_page2() {
   // Financials
   draw_text(5, 7, income_text.pointer, income_text.length, 0)
+  draw_number_word_text(27 - 5, 7, income_amount, 5, false)
 
   draw_text(5, 9, expenses_text.pointer, expenses_text.length, 0)
+  draw_number_word_text(27 - 5, 9, expenses_amount, 5, false)
 
   draw_text(5, 11, sales_text.pointer, sales_text.length, 0)
+  draw_number_word_text(27 - 5, 11, sales_amount, 5, false)
 
   draw_text(5, 13, nice_tank_text.pointer, nice_tank_text.length, 0)
+  draw_number_word_text(27 - 5, 13, care_bonus_amount, 5, false)
 }
 
 const array(byte) page_text = [

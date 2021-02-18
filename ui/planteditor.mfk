@@ -44,7 +44,7 @@ inline bool plant_editor_tick() {
 
   if (input_can_be_consumed) {  
     if (input_b != 0) {
-      refund(plant_price(plant_editor_type))
+      earn(plant_price(plant_editor_type), refund_money)
 
       stop_plant_editing()
       return true

@@ -32,7 +32,7 @@ inline bool inspect_fish_details_tick() {
       } else {
         // Sell fish
         // TODO: Add pricing
-        refund(35)
+        earn(35, fish_sale)
         delete_fish(inspect_fish_details_index)
       }
 

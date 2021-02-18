@@ -61,10 +61,27 @@ inline void draw_number_text(byte x, byte y, byte number, byte length, bool draw
   draw_text(x, y, data.pointer, length, 0)
 }
 
-inline void generate_number_text(byte number, pointer.byte output, byte length, bool draw_leading_zeros) {
+inline void draw_number_word_text(byte x, byte y, word number, byte length, bool draw_leading_zeros) {
+  array(byte) data[5]
+
+  generate_number_word_text(number, data.pointer, length, draw_leading_zeros)
+
+  draw_text(x, y, data.pointer, length, 0)
+}
+
+macro void generate_number_text(byte number, pointer.byte output, byte length, bool draw_leading_zeros) {
+  bcdConvert(number)
+  process_number_text(output, length, draw_leading_zeros)
+}
+
+macro void generate_number_word_text(word number, pointer.byte output, byte length, bool draw_leading_zeros) {
+  bcdConvert(number)
+  process_number_text(output, length, draw_leading_zeros)
+}
+
+void process_number_text(pointer.byte output, byte length, bool draw_leading_zeros) {
   byte i
   byte last_nonzero_index
-  bcdConvert(number)
 
   if (draw_leading_zeros) {
     for i,0,until,length {

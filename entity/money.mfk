@@ -1,5 +1,6 @@
 import to_decimal
 
+import fish/fish
 import entity/health
 
 enum MoneySource {
@@ -81,6 +82,12 @@ void money_tick() {
   byte bonus
   if (money_timer > 15) {
     money_timer = 0
+
+    if (not(has_alive_fish())) {
+      // No fish, no care bonus
+      return
+    }
+
     // Based on health, give money every N ticks
 
     if (overall_health > $40) {
