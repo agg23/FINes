@@ -1,10 +1,31 @@
 import to_decimal
 
+import entity/health
+
+enum MoneySource {
+  fish_sale,
+  care_bonus,
+  refund_money
+}
+
 word fish_bucks
+
+word income_amount
+word expenses_amount
+word sales_amount
+word care_bonus_amount
+
+byte money_timer
 
 void init_money() {
   // Start with $100
   fish_bucks = 100
+  income_amount = 0
+  expenses_amount = 0
+  sales_amount = 0
+  care_bonus_amount = 0
+
+  money_timer = 0
 }
 
 inline bool purchase(byte cost) {
@@ -13,6 +34,7 @@ inline bool purchase(byte cost) {
   }
 
   fish_bucks -= cost
+  expenses_amount += cost
 
   draw_money()
 
@@ -23,6 +45,21 @@ inline void refund(byte cost) {
   fish_bucks += cost
 
   draw_money()
+}
+
+void earn(byte amount, MoneySource source) {
+  if (source == fish_sale) {
+    income_amount += amount
+    sales_amount += amount
+    refund(amount)
+  } else if (source == care_bonus) {
+    income_amount += amount
+    care_bonus_amount += amount
+    refund(amount)
+  } else if (source == refund_money) {
+    expenses_amount -= amount
+    refund(amount)
+  }
 }
 
 void draw_money() {
@@ -38,4 +75,23 @@ void draw_money() {
   }
 
   add_buffered_write(ppu_nametable0 + 64 + 24, false, data.pointer, 6, false)
+}
+
+void money_tick() {
+  byte bonus
+  if (money_timer > 15) {
+    money_timer = 0
+    // Based on health, give money every N ticks
+
+    if (overall_health > $40) {
+      // Health over $40, calculate bonus
+      bonus = (overall_health - $40) >> 4
+    } else {
+      bonus = 0
+    }
+
+    earn(10 + bonus, care_bonus)
+  } else {
+    money_timer += 1
+  }
 }

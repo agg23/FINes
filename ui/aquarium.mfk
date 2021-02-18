@@ -25,6 +25,8 @@ bool aquarium_tick() {
     set_bank_2()
   } else if (frame == $7F) {
     fish_breathe()
+    // Once a frame, run money tick
+    money_tick()
     set_bank_0()
   } else if (frame == $BF) {
     set_bank_2()
