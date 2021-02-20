@@ -16,8 +16,6 @@ word expenses_amount
 word sales_amount
 word care_bonus_amount
 
-byte money_timer
-
 void init_money() {
   // Start with $100
   fish_bucks = 100
@@ -25,8 +23,6 @@ void init_money() {
   expenses_amount = 0
   sales_amount = 0
   care_bonus_amount = 0
-
-  money_timer = 0
 }
 
 inline bool purchase(byte cost) {
@@ -80,25 +76,20 @@ void draw_money() {
 
 void money_tick() {
   byte bonus
-  if (money_timer > 15) {
-    money_timer = 0
 
-    if (not(has_alive_fish())) {
-      // No fish, no care bonus
-      return
-    }
-
-    // Based on health, give money every N ticks
-
-    if (overall_health > $40) {
-      // Health over $40, calculate bonus
-      bonus = (overall_health - $40) >> 4
-    } else {
-      bonus = 0
-    }
-
-    earn(10 + bonus, care_bonus)
-  } else {
-    money_timer += 1
+  if (not(has_alive_fish())) {
+    // No fish, no care bonus
+    return
   }
+
+  // Based on health, give money every day
+
+  if (overall_health > $40) {
+    // Health over $40, calculate bonus
+    bonus = (overall_health - $40) >> 4
+  } else {
+    bonus = 0
+  }
+
+  earn(10 + bonus, care_bonus)
 }

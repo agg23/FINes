@@ -81,6 +81,14 @@ void draw_stats_page1() {
   // General
   draw_text(5, 15, total_time_text.pointer, total_time_text.length, 0)
 
+  array(byte) data [5]
+  bcdConvert(elapsed_day + 1)
+  temp = process_number_text(data.pointer, 5, false)
+
+  draw_text(27 - temp - day_text.length, 15, day_text.pointer, day_text.length, 0)
+  // Skip empty zeros
+  draw_text(27 - temp, 15, pointer.byte(word(data.pointer) + 5 - temp), temp, 0)
+
   temp = 0
   for i,0,until,MAX_FISH_COUNT {
     if (fish_active[i]) {
@@ -139,6 +147,10 @@ const array(byte) co2_text = [
 
 const array(byte) total_time_text = [
   "Total time:"
+]
+
+const array(byte) day_text = [
+  "Day " ascii
 ]
 
 const array(byte) total_fish_text = [

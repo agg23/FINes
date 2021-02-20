@@ -1,0 +1,37 @@
+import entity/money
+
+word elapsed_day
+
+byte day_timer
+
+void init_time() {
+  elapsed_day = 0
+  day_timer = 0
+}
+
+void time_tick() {
+  if (day_timer > 15) {
+    day_timer = 0
+    increment_day()
+    money_tick()
+  } else {
+    day_timer += 1
+  }
+}
+
+void increment_day() {
+  elapsed_day += 1
+  // draw_time()
+}
+
+// void draw_time() {
+//   array(byte) data [5]
+//   bcdConvert(elapsed_day + 1)
+
+//   byte i
+//   for i,0,until,5 {
+//     data[i] = bcdResult[4 - i] + $30
+//   }
+
+//   add_buffered_write(ppu_nametable0 + 64 + 17, false, data.pointer, 5, false)
+// }

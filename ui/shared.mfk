@@ -79,7 +79,10 @@ macro void generate_number_word_text(word number, pointer.byte output, byte leng
   process_number_text(output, length, draw_leading_zeros)
 }
 
-void process_number_text(pointer.byte output, byte length, bool draw_leading_zeros) {
+/**
+* @returns The number of non-blank digits
+*/
+byte process_number_text(pointer.byte output, byte length, bool draw_leading_zeros) {
   byte i
   byte last_nonzero_index
 
@@ -87,6 +90,8 @@ void process_number_text(pointer.byte output, byte length, bool draw_leading_zer
     for i,0,until,length {
       output[length - 1 - i] = bcdResult[i] + $30
     }
+
+    return 0
   } else {
     last_nonzero_index = 0
 
@@ -104,6 +109,8 @@ void process_number_text(pointer.byte output, byte length, bool draw_leading_zer
         output[length - 1 - i] = 0
       }
     }
+
+    return last_nonzero_index + 1
   }
 }
 

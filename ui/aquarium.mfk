@@ -6,6 +6,7 @@ import ui/commandbar
 import fish/fish
 import entity/money
 import entity/health
+import entity/time
 
 bool aquarium_tick() {
   bool did_use_input
@@ -25,8 +26,8 @@ bool aquarium_tick() {
     set_bank_2()
   } else if (frame == $7F) {
     fish_breathe()
-    // Once a frame, run money tick
-    money_tick()
+    // Once a frame, run day tick
+    time_tick()
     set_bank_0()
   } else if (frame == $BF) {
     set_bank_2()
@@ -40,6 +41,7 @@ void draw_aquarium() {
   draw_commandbar()
   draw_plants()
 
+  // draw_time()
   draw_money()
   draw_overall_health()
 
