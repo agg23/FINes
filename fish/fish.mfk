@@ -31,6 +31,7 @@ array(bool) fish_alive [MAX_FISH_COUNT]
 array(byte) fish_owned_age [MAX_FISH_COUNT]
 array(word) fish_owned_date [MAX_FISH_COUNT]
 array(word) fish_death_date [MAX_FISH_COUNT]
+array(byte) fish_hunger [MAX_FISH_COUNT]
 
 // Fish stats
 /**
@@ -102,6 +103,9 @@ void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
         random_int_const(25, 255, fish_owned_age[i])
       }
 
+      // Randomize starting hunger
+      random_int_const(10, 200, fish_hunger[i])
+
       if (sex) {
         male_small_fish_count += 1
       } else {
@@ -159,21 +163,38 @@ inline void fish_breathe() {
     if (fish_alive[i]) {
       // Take breath
       increase_ammonia(1)
+      fish_hunger[i] += 1
 
       // Update health
       if (ammonia_level > $10 && rand() < ammonia_level - $10) {
         // Decrease health
-        if (fish_health[i] < 5) {
-          fish_alive[i] = false
-          fish_velocity_y[i] = 0
-          fish_health[i] = 0
-          fish_death_date[i] = elapsed_day
-        } else {
-          fish_health[i] -= 4
-        }
+        decrease_fish_health(i, 4)
+      }
+
+      if (fish_hunger[i] > $FD) {
+        // Instantly die
+        kill_fish(i)
+      } else if (fish_hunger[i] > $C8) {
+        // Start taking damage from hunger
+        decrease_fish_health(i, 2)
       }
     }
   }
+}
+
+void decrease_fish_health(byte i, byte damage) {
+  if (fish_health[i] < damage + 1) {
+    kill_fish(i)
+  } else {
+    fish_health[i] -= damage
+  }
+}
+
+void kill_fish(byte i) {
+  fish_alive[i] = false
+  fish_velocity_y[i] = 0
+  fish_health[i] = 0
+  fish_death_date[i] = elapsed_day
 }
 
 inline void render_fish() {

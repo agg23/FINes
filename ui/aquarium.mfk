@@ -26,7 +26,7 @@ bool aquarium_tick() {
     set_bank_2()
   } else if (frame == $7F) {
     fish_breathe()
-    // Once a frame, run day tick
+    // Once a sec, run day tick
     time_tick()
     set_bank_0()
   } else if (frame == $BF) {
