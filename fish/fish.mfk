@@ -8,6 +8,7 @@ import fish/rasbora
 
 import tank/state
 import entity/health
+import entity/time
 
 enum FishType {
   tetra,
@@ -16,7 +17,6 @@ enum FishType {
   cory,
   betta
 }
-
 
 const byte MAX_FISH_COUNT = 20
 
@@ -28,6 +28,8 @@ array(FishType) fish_type [MAX_FISH_COUNT]
 array(bool) fish_sex [MAX_FISH_COUNT]
 array(bool) fish_active [MAX_FISH_COUNT]
 array(bool) fish_alive [MAX_FISH_COUNT]
+array(byte) fish_owned_age [MAX_FISH_COUNT]
+array(word) fish_owned_date [MAX_FISH_COUNT]
 
 // Fish stats
 /**
@@ -83,14 +85,20 @@ void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
       fish_active[i] = true
       fish_alive[i] = true
       fish_source[i] = bred
-      // Fish start out more 
+      fish_owned_date[i] = elapsed_day
 
       if (bred) {
         // Newly born fish are very healthy
         fish_health[i] = $F0
+
+        // Age is 0
+        fish_owned_age[i] = 0
       } else {
         // Fish start out more healthy than not when purchased, but still not great
         fish_health[i] = $B0
+
+        // Purchased fish has random age
+        random_int_const(25, 255, fish_owned_age[i])
       }
 
       if (sex) {
