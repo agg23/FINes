@@ -174,5 +174,5 @@ const array(byte) sales_text = [
 ]
 
 const array(byte) nice_tank_text = [
-  "Care bonus:"
+  "Daily bonus:"
 ]

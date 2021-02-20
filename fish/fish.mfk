@@ -30,6 +30,7 @@ array(bool) fish_active [MAX_FISH_COUNT]
 array(bool) fish_alive [MAX_FISH_COUNT]
 array(byte) fish_owned_age [MAX_FISH_COUNT]
 array(word) fish_owned_date [MAX_FISH_COUNT]
+array(word) fish_death_date [MAX_FISH_COUNT]
 
 // Fish stats
 /**
@@ -166,6 +167,7 @@ inline void fish_breathe() {
           fish_alive[i] = false
           fish_velocity_y[i] = 0
           fish_health[i] = 0
+          fish_death_date[i] = elapsed_day
         } else {
           fish_health[i] -= 4
         }

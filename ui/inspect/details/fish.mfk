@@ -99,7 +99,18 @@ void draw_inspect_fish_data_rows() {
   word wtemp
   draw_text(5, 7, age_text.pointer, age_text.length, 0)
 
-  wtemp = elapsed_day - fish_owned_date[inspect_fish_details_index] + fish_owned_age[inspect_fish_details_index]
+  if (fish_alive[inspect_fish_details_index]) {
+    wtemp = elapsed_day
+      // TODO(millfork): Separated into multiple operations as Millfork was incorrectly compiling them in a single expression
+    wtemp -= fish_owned_date[inspect_fish_details_index]
+    wtemp += fish_owned_age[inspect_fish_details_index]
+  } else {
+    wtemp = fish_death_date[inspect_fish_details_index]
+    wtemp -= fish_owned_date[inspect_fish_details_index]
+    wtemp += fish_owned_age[inspect_fish_details_index]
+  }
+
+
   if (wtemp == 1) {
     // Remove "s"
     temp = days_age_text.length - 1
@@ -112,7 +123,9 @@ void draw_inspect_fish_data_rows() {
 
   draw_text(5, 9, owned_for_text.pointer, owned_for_text.length, 0)
   
-  wtemp = elapsed_day - fish_owned_date[inspect_fish_details_index]
+  wtemp = elapsed_day
+  wtemp -= fish_owned_date[inspect_fish_details_index]
+
   if (wtemp == 1) {
     // Remove "s"
     temp = days_age_text.length - 1

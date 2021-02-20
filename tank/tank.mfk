@@ -2,6 +2,7 @@ import tank/state
 
 import entity/health
 import entity/money
+import entity/time
 
 import square
 
@@ -11,6 +12,7 @@ const array(Tank) tanks = [export_square_tank]
 
 void init_tank() {
   init_money()
+  init_time()
   ammonia_level = $20
   oxygen_level = $80
   co2_level = $10
