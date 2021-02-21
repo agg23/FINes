@@ -104,6 +104,7 @@ void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
 
 void delete_fish(byte i) {
   fish_active[i] = false
+  check_gameover()
 }
 
 bool has_alive_fish() {
@@ -158,6 +159,7 @@ inline void fish_feed() {
   byte i
   // Fish food has the minor price of $2
   if (purchase(2)) {
+    check_gameover()
     for i,0,until,MAX_FISH_COUNT {
       if (fish_active[i] && fish_alive[i]) {
         if (fish_hunger[i] > $40) {
@@ -225,6 +227,8 @@ void kill_fish(byte i) {
   fish_velocity_y[i] = 0
   fish_health[i] = 0
   fish_death_date[i] = elapsed_day
+
+  check_gameover()
 }
 
 inline void render_fish() {

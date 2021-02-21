@@ -18,6 +18,7 @@ void init_tank() {
   co2_level = $10
   selected_tank = 0
   active_tank = export_square_tank
+  build_overall_health()
 }
 
 void draw_tank() {

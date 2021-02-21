@@ -41,5 +41,5 @@ const array(byte) babytears_name_text = [
 ]
 
 const array(byte) babytears_price_text = [
-  "25" ascii
+  "15" ascii
 ]

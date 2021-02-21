@@ -36,7 +36,7 @@ void draw_gameover_screen() {
 
   draw_text(0, 14, better_luck_text.pointer, better_luck_text.length, 32)
 
-  random_int_const(0, 1, i)
+  random_int_const(0, 2, i)
 
   draw_text(0, 17, hint_texts[i], hint_text_lengths[i], 32)
 

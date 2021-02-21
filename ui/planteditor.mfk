@@ -52,6 +52,7 @@ inline bool plant_editor_tick() {
     if (input_a != 0) {
       add_plant(plant_editor_type, plant_editor_x, small, plant_editor_width)
       stop_plant_editing()
+      check_gameover()
       return true
     }
     if (input_dx < 0) {

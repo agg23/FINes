@@ -6,6 +6,8 @@ import fish/rasbora
 import fish/cory
 import fish/betta
 
+const byte CHEAPEST_FISH_PRICE = min(BETTA_ANY_PRICE, CORY_ANY_PRICE, RASBORA_ANY_PRICE, TETRA_ANY_PRICE)
+
 byte fish_any_price(FishType type) {
   if (type == tetra) {
     return TETRA_ANY_PRICE
@@ -71,4 +73,28 @@ inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_
   } else if (type == betta) {
     render_betta(x, y, mask, pos_direction)
   }
+}
+
+void check_gameover() {
+  if (should_gameover()) {
+    set_screen(gameover)
+  }
+}
+
+bool should_gameover() {
+  byte i
+
+  for i,0,until,MAX_FISH_COUNT {
+    if (fish_active[i] && fish_alive[i]) {
+      return false
+    }
+  }
+
+  // No fish
+  if (fish_bucks > CHEAPEST_FISH_PRICE) {
+    // At least one fish can be purchased
+    return false
+  }
+
+  return true
 }
