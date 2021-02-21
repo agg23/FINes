@@ -108,7 +108,7 @@ inline bool shop_tank_selection_input_tick() {
     if (input_b != 0) {
       close_shop()
       return true
-    } else if (input_select != 0) {
+    } else if (input_select != 0 || input_start != 0) {
       if (shop_screen == fish) {
         set_shop_screen(plants)
       } else if (shop_screen == plants) {
