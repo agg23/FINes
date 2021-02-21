@@ -40,23 +40,19 @@ void draw_title_screen() {
     ppu_write_data(1)
   }
 
-  ppu_set_addr(ppu_nametable0 + 7 * 32 + 11)
-  for i,0,until,8 {
+  ppu_set_addr(ppu_nametable0 + 7 * 32 + 12)
+  for i,0,until,9 {
     ppu_write_data($A0 + i)
   }
-  ppu_write_data($C0)
-  ppu_write_data($C2)
 
   ppu_set_addr(ppu_nametable0 + 8 * 32 + 11)
-  for i,0,until,8 {
-    ppu_write_data($B0 + i)
+  for i,0,until,10 {
+    ppu_write_data($A9 + i)
   }
-  ppu_write_data($C1)
-  ppu_write_data($C3)
 
   ppu_set_addr(ppu_nametable0 + 9 * 32 + 19)
-  ppu_write_data($C4)
-  ppu_write_data($C5)
+  ppu_write_data($B3)
+  ppu_write_data($B4)
 
   // Manually draw plants outside of normal plant bounds to complete screen
   draw_plant_of_type(babytears, large, -2, false, 2, 0)
@@ -119,5 +115,5 @@ const array(byte) contest_text = [
 ]
 
 const array(byte) title_build_text = [
-  "Build 2/13/21.0"
+  "Build 2/21/21.0"
 ]

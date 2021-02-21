@@ -27,6 +27,13 @@ const array title_first_palette = [
   background_backdrop, background_backdrop, color_light_red, color_black
 ]
 
+const array gameover_palette = [
+  color_black, color_black, color_light_red, color_white,
+  color_black, color_black, color_unused, color_light_grey,
+  color_black, color_unused, color_unused, color_unused,
+  color_black, color_unused, color_unused, color_unused
+]
+
 const array aquarium_palette = [
   //background palette
   // color_light_red randomly inserted for secondary command bar color

@@ -1,6 +1,7 @@
 import graphics_buffer
 
 import ui/title
+import ui/gameover
 import ui/aquarium
 import ui/planteditor
 import ui/shop/shop
@@ -13,7 +14,8 @@ enum Screen {
   plant_editor,
   shop,
   inspect,
-  stats
+  stats,
+  gameover
 }
 
 bool buffer_screen_draw = false
@@ -27,6 +29,7 @@ bool screen_tick() {
     shop @ shop_tick
     inspect @ inspect_tick
     stats @ stats_tick
+    gameover @ gameover_screen_tick
   }
 }
 
@@ -38,6 +41,7 @@ void draw_screen() {
     shop @ draw_shop
     inspect @ draw_inspect
     stats @ draw_stats
+    gameover @ draw_gameover_screen
   }
 }
 

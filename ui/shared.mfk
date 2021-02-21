@@ -39,6 +39,41 @@ inline void draw_text_right(byte x, byte y, pointer.byte text, byte length) {
 * @param center_length If provided (non-zero), center the text within this length, preferring the left side
 */
 inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte center_length) {
+  bool found
+  byte i
+  byte original_x
+
+  original_x = x
+  
+  if (center_length != 0) {
+    found = false
+    // Check for new line
+    for i,0,until,length {
+      if (text[i] == $60) {
+        x += (center_length - i) / 2
+        found = true
+        break
+      }
+    }
+
+    if (not(found)) {
+      x += (center_length - length) / 2
+    }
+  }
+
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
+
+  for i,0,until,length {
+    if (text[i] == $60) {
+      draw_text_line(original_x, y + 1, text, i + 1, length - i - 1, center_length)
+      return
+    }
+    ppu_write_data(text[i])
+  }
+}
+
+void draw_text_line(byte x, byte y, pointer.byte text, byte offset, byte length, byte center_length) {
   byte i
   
   if (center_length != 0) {
@@ -49,7 +84,7 @@ inline void draw_text(byte x, byte y, pointer.byte text, byte length, byte cente
   ppu_set_addr(ppu_nametable0 + 32 * word(y) + word(x))
 
   for i,0,until,length {
-    ppu_write_data(text[i])
+    ppu_write_data(text[i + offset])
   }
 }
 

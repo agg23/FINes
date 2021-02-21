@@ -1,0 +1,74 @@
+import custom_random
+import ui/shared
+
+bool gameover_screen_tick() {
+  if (input_can_be_consumed) {  
+    if (input_a != 0 || input_b != 0 || input_start != 0 || input_select != 0) {
+      set_screen(title)
+      return true
+    }
+  }
+
+  return false
+}
+
+void draw_gameover_screen() {
+  byte i
+  byte j
+
+  read_ppu_status()
+  ppu_set_addr(ppu_nametable0)
+  for i,0,until,30 {
+    for j,0,until,32 {
+      ppu_write_data(0)
+    }
+  }
+
+  ppu_set_addr(ppu_nametable0 + 7 * 32 + 14)
+  for i,0,until,4 {
+    ppu_write_data($8A + i)
+  }
+
+  ppu_set_addr(ppu_nametable0 + 8 * 32 + 14)
+  for i,0,until,4 {
+    ppu_write_data($9A + i)
+  }
+
+  draw_text(0, 14, better_luck_text.pointer, better_luck_text.length, 32)
+
+  random_int_const(0, 1, i)
+
+  draw_text(0, 17, hint_texts[i], hint_text_lengths[i], 32)
+
+  ppu_set_addr(ppu_attrtable0)
+  for i,0,until,32 {
+    ppu_write_data(0)
+  }
+  for i,0,until,32 {
+    ppu_write_data(%01010101)
+  }
+  
+  set_bank_0()
+
+  load_gameover_screen_palettes()
+}
+
+inline void load_gameover_screen_palettes() {
+  add_buffered_write(ppu_palette_ram, false, aquarium_palette.pointer, $20, true)
+  add_buffered_write(ppu_palette_ram, false, gameover_palette.pointer, $10, true)
+}
+
+const array(byte) better_luck_text = [
+  "Better luck next time" ascii
+]
+
+const array(byte) ammonia_hint_text = [
+  "High ammonia harms`fish the most" ascii
+]
+
+const array(byte) oxygen_hint_text = [
+  "Oxygen levels need to`be kept within a range" ascii
+]
+
+const array(pointer.byte) hint_texts = [ammonia_hint_text.pointer, oxygen_hint_text.pointer]
+const array(byte) hint_text_lengths = [ammonia_hint_text.length, oxygen_hint_text.length]
