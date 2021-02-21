@@ -1,0 +1,46 @@
+void render_dpad_direction(byte x, byte y, bool right, byte palette) {
+  // Top
+  oam_buffer[oam_index] = y
+  oam_buffer[oam_index + 1] = $70
+  oam_buffer[oam_index + 2] = palette
+  oam_buffer[oam_index + 3] = x + 8
+
+  // Left
+  oam_buffer[oam_index + 4] = y + 8
+  if (not(right)) {
+    oam_buffer[oam_index + 5] = $73
+    // Flip horizontally
+    oam_buffer[oam_index + 6] = $40 | palette
+  } else {
+    oam_buffer[oam_index + 5] = $71
+    oam_buffer[oam_index + 6] = palette
+  }
+  oam_buffer[oam_index + 7] = x
+
+  // Middle
+  oam_buffer[oam_index + 8] = y + 8
+  oam_buffer[oam_index + 9] = $72
+  oam_buffer[oam_index + 10] = palette
+  oam_buffer[oam_index + 11] = x + 8
+
+  // Right
+  oam_buffer[oam_index + 12] = y + 8
+  if (right) {
+    oam_buffer[oam_index + 13] = $73
+    oam_buffer[oam_index + 14] = palette
+  } else {
+    oam_buffer[oam_index + 13] = $71
+    // Flip horizontally
+    oam_buffer[oam_index + 14] = $40 | palette
+  }
+  oam_buffer[oam_index + 15] = x + 16
+
+  // Bottom
+  oam_buffer[oam_index + 16] = y + 16
+  oam_buffer[oam_index + 17] = $70
+  // Flip vertically
+  oam_buffer[oam_index + 18] = $80 | palette
+  oam_buffer[oam_index + 19] = x + 8
+
+  oam_index += 20
+}

@@ -1,7 +1,8 @@
 import ui/shared
 import ui/shop/shop
 import ui/shop/fish/render
-import ui/shop/plants/render  
+import ui/shop/plants/render
+import ui/components/start_select_direction
 
 import entity/money
 
@@ -44,6 +45,11 @@ inline void render_shop_price_highlight() {
   y_high = y_low + 1
 
   render_cursor(x_low, x_high, y_low, y_high)
+}
+
+void render_shop_nav_indicators() {
+  render_start_select_direction(16, 112, false, 3)
+  render_start_select_direction(216, 112, true, 3)
 }
 
 void draw_shop() {

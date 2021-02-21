@@ -89,6 +89,8 @@ inline void render_shop_sprites() {
     render_shop_fish()
   }
 
+  render_shop_nav_indicators()
+
   // TODO
 }
 

@@ -1,0 +1,47 @@
+void render_start_select_direction(byte x, byte y, bool right, byte palette) {
+  byte base_address
+
+  if (right) {
+    base_address = $7A
+  } else {
+    base_address = $74
+  }
+
+  // Top left
+  oam_buffer[oam_index] = y
+  oam_buffer[oam_index + 1] = base_address
+  oam_buffer[oam_index + 2] = palette
+  oam_buffer[oam_index + 3] = x
+
+  // Top middle
+  oam_buffer[oam_index + 4] = y
+  oam_buffer[oam_index + 5] = base_address + 1
+  oam_buffer[oam_index + 6] = palette
+  oam_buffer[oam_index + 7] = x + 8
+
+  // Top right
+  oam_buffer[oam_index + 8] = y
+  oam_buffer[oam_index + 9] = base_address + 2
+  oam_buffer[oam_index + 10] = palette
+  oam_buffer[oam_index + 11] = x + 16
+
+  // Bottom left
+  oam_buffer[oam_index + 12] = y + 8
+  oam_buffer[oam_index + 13] = base_address + 3
+  oam_buffer[oam_index + 14] = palette
+  oam_buffer[oam_index + 15] = x
+
+  // Bottom middle
+  oam_buffer[oam_index + 16] = y + 8
+  oam_buffer[oam_index + 17] = base_address + 4
+  oam_buffer[oam_index + 18] = palette
+  oam_buffer[oam_index + 19] = x + 8
+
+  // Bottom right
+  oam_buffer[oam_index + 20] = y + 8
+  oam_buffer[oam_index + 21] = base_address + 5
+  oam_buffer[oam_index + 22] = palette
+  oam_buffer[oam_index + 23] = x + 16
+
+  oam_index += 24
+}

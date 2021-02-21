@@ -64,7 +64,7 @@ const array shop_palette = [
   color_blue, color_dark_blue, color_pink, color_medium_blue,
   // Rasbora, sprite 0
   color_blue, color_orange, color_light_grey, color_black,
-  color_blue, color_unused, color_light_grey, color_unused 
+  color_blue, color_orange, color_white, color_black 
 ]
 
 const array inspect_palette = [
@@ -97,5 +97,11 @@ const array inspect_details_palette = [
 
   // Sprite palletes
   // Progress_indicator
-  color_blue, color_green, color_orange, color_red
+  color_blue, color_green, color_orange, color_red,
+  // Neon tetra
+  color_blue, color_dark_blue, color_pink, color_medium_blue,
+  // Rasbora, sprite 0
+  color_blue, color_orange, color_light_grey, color_black,
+  // dpad_direction
+  color_blue, color_black, color_white, color_unused
 ]

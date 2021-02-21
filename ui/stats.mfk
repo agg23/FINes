@@ -45,6 +45,10 @@ void render_stats() {
     render_progress_indicator(27 - 4, 7, ammonia_level, true)
     render_progress_indicator(27 - 4, 9, oxygen_level, false)
     render_progress_indicator(27 - 4, 11, co2_level, true)
+
+    render_dpad_direction(216, 102, true, 3)
+  } else {
+    render_dpad_direction(16, 102, false, 3)
   }
 }
 

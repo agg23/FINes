@@ -2,6 +2,7 @@ import palette
 
 import ui/shared
 import ui/components/details
+import ui/components/dpad_direction
 
 import ui/inspect/inspect
 import ui/inspect/details/fish
@@ -178,6 +179,8 @@ void render_inspect() {
   for i,0,until,current_inspect_page_length {
     render_inspect_item(current_inspect_page * 5 + i, i, i * 5 + 4)
   }
+
+  render_nav_indicators()
 }
 
 void render_inspect_item(byte i, byte row, byte y) {
@@ -186,6 +189,16 @@ void render_inspect_item(byte i, byte row, byte y) {
     if (fish_alive[i]) {
       render_progress_indicator(23, y + 1, fish_health[i], false)
     }
+  }
+}
+
+void render_nav_indicators() {
+  if (current_inspect_page > 0) {
+    render_dpad_direction(16, 102, false, 0)
+  }
+
+  if (current_inspect_page < current_inspect_page_count - 1) {
+    render_dpad_direction(216, 102, true, 0)
   }
 }
 

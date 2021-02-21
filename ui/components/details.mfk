@@ -171,5 +171,5 @@ void draw_start_select_button(byte x, byte y) {
 }
 
 void load_details_panel_palette() {
-  add_buffered_write(ppu_palette_ram, false, inspect_details_palette.pointer, $14, true)
+  add_buffered_write(ppu_palette_ram, false, inspect_details_palette.pointer, $20, true)
 }
