@@ -103,5 +103,5 @@ const array inspect_details_palette = [
   // Rasbora, sprite 0
   color_blue, color_orange, color_light_grey, color_black,
   // dpad_direction
-  color_blue, color_black, color_white, color_unused
+  color_blue, color_unused, color_white, color_black
 ]

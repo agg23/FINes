@@ -194,11 +194,11 @@ void render_inspect_item(byte i, byte row, byte y) {
 
 void render_nav_indicators() {
   if (current_inspect_page > 0) {
-    render_dpad_direction(16, 102, false, 0)
+    render_dpad_direction(16, 102, false, 3)
   }
 
   if (current_inspect_page < current_inspect_page_count - 1) {
-    render_dpad_direction(216, 102, true, 0)
+    render_dpad_direction(216, 102, true, 3)
   }
 }
 
