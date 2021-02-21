@@ -6,8 +6,8 @@ byte co2_level
 byte overall_health
 
 inline void increase_ammonia(byte value) {
-  if ($ff - ammonia_level < value) {
-    ammonia_level = 255
+  if ($FF - ammonia_level < value) {
+    ammonia_level = $FF
   } else {
     ammonia_level += value
   }
@@ -23,6 +23,51 @@ inline void decrease_ammonia(byte value) {
   }
 
   build_overall_health()
+}
+
+inline void increase_oxygen(byte value) {
+  if ($FF - oxygen_level < value) {
+    oxygen_level = $FF
+  } else {
+    oxygen_level += value
+  }
+
+  build_overall_health()
+}
+
+inline void decrease_oxygen(byte value) {
+  if (oxygen_level < value) {
+    oxygen_level = 0
+  } else {
+    oxygen_level -= value
+  }
+
+  build_overall_health()
+}
+
+inline void increase_co2(byte value) {
+  if ($FF - co2_level < value) {
+    co2_level = $FF
+  } else {
+    co2_level += value
+  }
+
+  build_overall_health()
+}
+
+inline bool decrease_co2(byte value) {
+  if (co2_level == 0) {
+    return false
+  }
+
+  if (co2_level < value) {
+    co2_level = 0
+  } else {
+    co2_level -= value
+  }
+
+  build_overall_health()
+  return true
 }
 
 void draw_overall_health() {

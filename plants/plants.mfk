@@ -234,7 +234,12 @@ void plant_tick() {
     }
 
     if (rand() < $60) {
+      // TODO: Base on plant size
       decrease_ammonia(1)
+      if (decrease_co2(2)) {
+        // Only increase O2 if there was CO2 to pull
+        increase_oxygen(2)
+      }
     }
   }
 }

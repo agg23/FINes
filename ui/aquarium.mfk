@@ -19,10 +19,10 @@ bool aquarium_tick() {
   render_fish()
 
   if (frame == 0) {
-    plant_tick()
     fish_breathe()
     set_bank_0()
   } else if (frame == $3F) {
+    plant_tick()
     set_bank_2()
   } else if (frame == $7F) {
     fish_breathe()
@@ -30,6 +30,7 @@ bool aquarium_tick() {
     time_tick()
     set_bank_0()
   } else if (frame == $BF) {
+    plant_tick()
     set_bank_2()
   }
 
