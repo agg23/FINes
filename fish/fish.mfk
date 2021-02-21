@@ -40,11 +40,6 @@ array(byte) fish_hunger [MAX_FISH_COUNT]
 array(bool) fish_source [MAX_FISH_COUNT]
 array(byte) fish_health [MAX_FISH_COUNT]
 
-byte active_fish_count = 0
-
-byte male_small_fish_count
-byte female_small_fish_count
-
 const byte FISH_MAX_VELOCITY = $30
 const byte FISH_MAX_DEAD_VELOCITY = $30
 const byte FISH_DECAY_VELOCITY_PER_TICK = $2
@@ -70,10 +65,6 @@ void init_fish() {
 }
 
 void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
-  if (active_fish_count >= MAX_FISH_COUNT) {
-    return
-  }
-
   byte i
   for i,0,until,MAX_FISH_COUNT {
     if (not(fish_active[i])) {
@@ -106,14 +97,6 @@ void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
       // Randomize starting hunger
       random_int_const(10, 200, fish_hunger[i])
 
-      if (sex) {
-        male_small_fish_count += 1
-      } else {
-        female_small_fish_count += 1
-      }
-
-      active_fish_count += 1
-
       return
     }
   }
@@ -136,22 +119,38 @@ bool has_alive_fish() {
 
 void fish_tick() {
   fish_move()
-  // fish_breed()
 }
 
 inline void fish_breed() {
+  fish_breed_type(tetra)
+  fish_breed_type(rasbora)
+  fish_breed_type(cherry_shrimp)
+  fish_breed_type(cory)
+}
+
+void fish_breed_type(FishType type) {
+  byte i
   byte temp
-  if (male_small_fish_count < 1 || female_small_fish_count < 1) {
-    // Breeding cannot occur
-    return
+  byte male_count
+  byte female_count
+
+  male_count = 0
+  female_count = 0
+
+  for i,0,until,MAX_FISH_COUNT {
+    if (fish_active[i] && fish_alive[i] && fish_type[i] == type) {
+      if (fish_sex[i]) {
+        male_count += 1
+      } else {
+        female_count += 1
+      }
+    }
   }
 
-  random_int_const(0, MAX_FISH_COUNT, temp)
-
-  if (temp < (male_small_fish_count + female_small_fish_count) / 2 && rand() < 1) {
+  if (male_count != 0 && female_count != 0 && rand() < male_count + female_count) {
     // Breed
     random_int_const(0, 1, temp)
-    spawn_fish(tetra, temp == 1, $80, $20, true)
+    spawn_fish(type, temp == 1, $80, $20, true)
   }
 }
 

@@ -28,6 +28,7 @@ bool aquarium_tick() {
     fish_breathe()
     // Once a sec, run day tick
     time_tick()
+    fish_breed()
     set_bank_0()
   } else if (frame == $BF) {
     plant_tick()
