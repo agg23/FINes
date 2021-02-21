@@ -105,10 +105,14 @@ inline bool inspect_fish_tick() {
       set_screen_forcibly(inspect)
 
       return true
-    } else if (input_dy > 0 && current_inspect_row < current_inspect_page_length - 1) {
+    } else if (input_dy > 0) {
       // Bottom
       temp = current_inspect_row
-      current_inspect_row += 1
+      if (current_inspect_row < current_inspect_page_length - 1) {
+        current_inspect_row += 1
+      } else {
+        current_inspect_row = 0
+      }
 
       // Disable prev
       draw_inspect_item_attr(temp, false)
@@ -116,10 +120,14 @@ inline bool inspect_fish_tick() {
       draw_inspect_item_attr(current_inspect_row, true)
 
       return true
-    } else if (input_dy < 0 && current_inspect_row > 0) {
+    } else if (input_dy < 0) {
       // Top
       temp = current_inspect_row
-      current_inspect_row -= 1
+      if (current_inspect_row > 0) {
+        current_inspect_row -= 1
+      } else {
+        current_inspect_row = current_inspect_page_length - 1
+      }
 
       // Disable next
       draw_inspect_item_attr(temp, false)
