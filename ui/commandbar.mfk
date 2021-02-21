@@ -15,7 +15,7 @@ const byte commandbar_item_count = 5
 byte selected_command_item = 0
 
 void activate_feed() {
-
+  fish_feed()
 }
 
 void activate_fish_inspect() {

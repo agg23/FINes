@@ -155,12 +155,33 @@ inline void fish_breed() {
   }
 }
 
+inline void fish_feed() {
+  byte i
+  // Fish food has the minor price of $2
+  if (purchase(2)) {
+    for i,0,until,MAX_FISH_COUNT {
+      if (fish_active[i] && fish_alive[i]) {
+        if (fish_hunger[i] > $40) {
+          fish_hunger[i] -= $40
+        } else {
+          fish_hunger[i] = 0
+        }
+      }
+    }
+
+    // Feeding also adds ammonia
+    increase_ammonia(25)
+  } else {
+    // TODO: Play denial sound effect
+  }
+}
+
 inline void fish_breathe() {
   // TODO: Base on fish size
   byte i
 
   for i,0,until,MAX_FISH_COUNT {
-    if (fish_alive[i]) {
+    if (fish_active[i] && fish_alive[i]) {
       // Take breath
       increase_ammonia(1)
       fish_hunger[i] += 1
@@ -169,6 +190,8 @@ inline void fish_breathe() {
       if (ammonia_level > $10 && rand() < ammonia_level - $10) {
         // Decrease health
         decrease_fish_health(i, 4)
+      } else if (ammonia_level < $10 && fish_hunger[i] < $20) {
+        increase_fish_health(i, 1)
       }
 
       if (fish_hunger[i] > $FD) {
@@ -179,6 +202,14 @@ inline void fish_breathe() {
         decrease_fish_health(i, 2)
       }
     }
+  }
+}
+
+void increase_fish_health(byte i, byte amount) {
+  if (fish_health[i] > $FF - amount) {
+    fish_health[i] = $FF
+  } else {
+    fish_health[i] += amount
   }
 }
 
