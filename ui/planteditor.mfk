@@ -211,6 +211,9 @@ inline void clear_plant_column() {
 void draw_plant_editor() {
   draw_aquarium()
 
+  draw_plant_of_type(plant_editor_type, large, plant_editor_x, true, plant_editor_width, 0)
+  active_plant_write_attr = false
+
   load_plant_palettes()
 
   set_bank_0()

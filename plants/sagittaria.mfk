@@ -1,0 +1,38 @@
+import graphics_buffer
+
+import plants/plants
+
+// Make sure to update text arrays
+const byte SAGITTARIA_PRICE = 15
+
+// TODO: Size is unused
+inline void draw_sagittaria(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
+  byte i
+  byte j
+  byte x_offset
+  word height_from_floor
+
+  x_offset = x + plant_min_x
+
+  height_from_floor = plant_tile_height_from_floor(6, custom_bottom_y)
+
+  for i,0,until,3 {
+    for j,0,until,6 {
+      data[j] = $E0 + i + j * 3
+    }
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, 6, false)
+  }
+
+  if (write_attr) {
+    build_and_write_plant_attribute_table(x_offset, sagittaria, 3, custom_bottom_y)
+  }
+}
+
+const array(byte) sagittaria_name_text = [
+  "S.taria" ascii
+]
+
+const array(byte) sagittaria_price_text = [
+  "15" ascii
+]

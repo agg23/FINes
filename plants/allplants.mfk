@@ -11,6 +11,8 @@ byte plant_price(PlantType type) {
     return BABYTEARS_PRICE
   } else if (type == rotala) {
     return ROTALA_PRICE
+  } else if (type == sagittaria) {
+    return SAGITTARIA_PRICE
   }
 
   return 0
@@ -26,6 +28,8 @@ inline void draw_plant_name(PlantType type, byte x, byte y, byte center_length) 
     draw_text(x, y, babytears_name_text.pointer, babytears_name_text.length, center_length)
   } else if (type == rotala) {
     draw_text(x, y, rotala_name_text.pointer, rotala_name_text.length, center_length)
+  } else if (type == sagittaria) {
+    draw_text(x, y, sagittaria_name_text.pointer, sagittaria_name_text.length, center_length)
   }
 }
 
@@ -36,5 +40,7 @@ inline void draw_plant_price(PlantType type, byte x, byte y) {
     draw_text(x, y, babytears_price_text.pointer, babytears_price_text.length, 0)
   } else if (type == rotala) {
     draw_text(x, y, rotala_price_text.pointer, rotala_price_text.length, 0)
+  } else if (type == sagittaria) {
+    draw_text(x, y, sagittaria_price_text.pointer, sagittaria_price_text.length, 0)
   }
 }
