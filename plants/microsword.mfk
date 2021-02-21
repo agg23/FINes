@@ -1,0 +1,56 @@
+import graphics_buffer
+
+import plants/plants
+
+// Make sure to update text arrays
+const byte MICROSWORD_PRICE = 15
+
+inline void draw_microsword(PlantSize size, byte x, pointer.byte data, bool write_attr, byte width, byte custom_bottom_y) {
+  byte i
+  byte x_offset
+  word height_from_floor
+
+  x_offset = x + plant_min_x
+
+  byte height_count
+
+  if (size == large) {
+    height_count = 3
+  } else if (size == medium) {
+    height_count = 2
+  } else {
+    height_count = 1
+  }
+
+  height_from_floor = plant_tile_height_from_floor(height_count, custom_bottom_y)
+
+  if (height_count == 1) {
+    data[0] = $BB
+    data[1] = $BC
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, width, false)
+  } else {
+    data[0] = $BD
+    data[1] = $BE
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, width, false)
+
+    for i,1,until,height_count {
+      data[0] = $BF
+      data[1] = $C0
+      add_buffered_write(ppu_nametable0 + height_from_floor + word(32 * i) + x_offset, false, data, width, false)
+    }
+  }
+
+  if (write_attr) {
+    build_and_write_plant_attribute_table(x_offset, anubias, width, custom_bottom_y)
+  }
+}
+
+const array(byte) microsword_name_text = [
+  "M. Sword" ascii
+]
+
+const array(byte) microsword_price_text = [
+  "15" ascii
+]

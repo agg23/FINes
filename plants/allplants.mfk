@@ -1,14 +1,14 @@
 import plants/plants
 
 import plants/anubias
-import plants/babytears
+import plants/microsword
 import plants/rotala
 
 byte plant_price(PlantType type) {
   if (type == anubias) {
     return ANUBIAS_PRICE
-  } else if (type == babytears) {
-    return BABYTEARS_PRICE
+  } else if (type == microsword) {
+    return MICROSWORD_PRICE
   } else if (type == rotala) {
     return ROTALA_PRICE
   } else if (type == sagittaria) {
@@ -24,8 +24,8 @@ byte plant_price(PlantType type) {
 inline void draw_plant_name(PlantType type, byte x, byte y, byte center_length) {
   if (type == anubias) {
     draw_text(x, y, anubias_name_text.pointer, anubias_name_text.length, center_length)
-  } else if (type == babytears) {
-    draw_text(x, y, babytears_name_text.pointer, babytears_name_text.length, center_length)
+  } else if (type == microsword) {
+    draw_text(x, y, microsword_name_text.pointer, microsword_name_text.length, center_length)
   } else if (type == rotala) {
     draw_text(x, y, rotala_name_text.pointer, rotala_name_text.length, center_length)
   } else if (type == sagittaria) {
@@ -36,8 +36,8 @@ inline void draw_plant_name(PlantType type, byte x, byte y, byte center_length) 
 inline void draw_plant_price(PlantType type, byte x, byte y) {
   if (type == anubias) {
     draw_text(x, y, anubias_price_text.pointer, anubias_price_text.length, 0)
-  } else if (type == babytears) {
-    draw_text(x, y, babytears_price_text.pointer, babytears_price_text.length, 0)
+  } else if (type == microsword) {
+    draw_text(x, y, microsword_price_text.pointer, microsword_price_text.length, 0)
   } else if (type == rotala) {
     draw_text(x, y, rotala_price_text.pointer, rotala_price_text.length, 0)
   } else if (type == sagittaria) {
