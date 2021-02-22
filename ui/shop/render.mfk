@@ -48,8 +48,8 @@ inline void render_shop_price_highlight() {
 }
 
 void render_shop_nav_indicators() {
-  render_start_select_direction(16, 112, false, 3)
-  render_start_select_direction(216, 112, true, 3)
+  render_start_select_direction(16, 122, false, 3)
+  render_start_select_direction(216, 122, true, 3)
 }
 
 void draw_shop() {

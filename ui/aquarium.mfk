@@ -17,6 +17,7 @@ bool aquarium_tick() {
   render_commandbar()
   render_overall_health()
   render_fish()
+  render_money(3)
 
   if (frame == 0) {
     fish_breathe()

@@ -4,6 +4,7 @@ const byte color_dark_blue = $0C
 const byte color_dark_brown = $06
 const byte color_dark_grey = $0
 const byte color_dark_green = $09
+const byte color_dark_yellow = $18
 const byte color_green = $19
 const byte color_light_blue = $21
 const byte color_light_green = $2A
@@ -49,7 +50,7 @@ const array aquarium_palette = [
   background_backdrop,color_dark_blue,color_pink,color_medium_blue,
   // Rasbora, sprite 0
   background_backdrop,color_orange,color_light_grey,color_black,
-  background_backdrop,color_unused,color_light_grey,color_unused 
+  background_backdrop, color_unused, color_light_yellow, color_dark_yellow 
 ]
 
 const array plant_palette = [
@@ -66,7 +67,7 @@ const array shop_palette = [
   // Tank (placed at end so plant palettes can stay in the same place)
   color_blue, color_dark_blue, color_light_grey, color_medium_blue,
 
-  color_blue, color_pink, color_light_yellow, color_unused,
+  color_blue, color_pink, color_light_yellow, color_dark_yellow,
   // Neon tetra
   color_blue, color_dark_blue, color_pink, color_medium_blue,
   // Rasbora, sprite 0
@@ -110,5 +111,5 @@ const array inspect_details_palette = [
   // Rasbora, sprite 0
   color_blue, color_orange, color_light_grey, color_black,
   // dpad_direction
-  color_blue, color_unused, color_white, color_black
+  color_blue, color_light_yellow, color_white, color_black
 ]

@@ -87,11 +87,12 @@ void noop() {
 inline void render_shop_sprites() {
   if (shop_screen == fish) {
     render_shop_fish()
+  } else {
+    render_shop_plant()
   }
 
+  render_money(0)
   render_shop_nav_indicators()
-
-  // TODO
 }
 
 inline bool shop_tank_selection_tick() {

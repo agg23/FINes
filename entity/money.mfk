@@ -60,18 +60,28 @@ void earn(byte amount, MoneySource source) {
 }
 
 void draw_money() {
-  array(byte) data [6]
-  // Dollar sign
-  data[0] = $24
-  // TODO: This does not appear to work when enabling optimization
+  array(byte) data [5]
   bcdConvert(fish_bucks)
 
   byte i
   for i,0,until,5 {
-    data[i + 1] = bcdResult[4 - i] + $30
+    data[i] = bcdResult[4 - i] + $30
   }
 
-  add_buffered_write(ppu_nametable0 + 64 + 24, false, data.pointer, 6, false)
+  add_buffered_write(ppu_nametable0 + 64 + 25, false, data.pointer, 5, false)
+}
+
+void render_money(byte palette) {
+  render_money_symbol(24 * 8 + 1, 2 * 8 - 1, palette)
+}
+
+void render_money_symbol(byte x, byte y, byte palette) {
+  oam_buffer[oam_index] = y
+  oam_buffer[oam_index + 1] = $4A
+  oam_buffer[oam_index + 2] = palette
+  oam_buffer[oam_index + 3] = x
+
+  oam_index += 4
 }
 
 void money_tick() {

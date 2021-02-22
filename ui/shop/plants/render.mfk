@@ -103,7 +103,7 @@ void draw_shop_plant(byte row, byte column) {
   draw_plant_name(type, x - 1, y + 8, 8)
 
   if (is_shop_item_enabled(row, column)) {
-    draw_plant_price(type, x, y + 9)
+    draw_plant_price(type, x + 2, y + 9)
   } else {
     draw_text(x - 1, y + 9, plant_no_room_text.pointer, plant_no_room_text.length, 0)
   }
@@ -137,6 +137,17 @@ void draw_shop_plant_tank_attr() {
     for j,0,until,6 {
       // Tank top (3), tank bottom (3)
       ppu_write_data(%11111111)
+    }
+  }
+}
+
+void render_shop_plant() {
+  byte i
+  byte j
+
+  for i,0,until,SHOP_ROW_COUNT {
+    for j,0,until,SHOP_COLUMN_COUNT {
+      render_money_symbol(50 + j * 64, 111 + i * 12 * 8, 0)
     }
   }
 }

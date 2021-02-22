@@ -84,19 +84,9 @@ inline void render_shop_fish() {
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
       render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 58 + i * 12 * 8, 0, true)
-    }
-  }
-
-  render_shop_fish_lights()
-}
-
-inline void render_shop_fish_lights() {
-  byte i
-  byte j
-
-  for i,0,until,SHOP_ROW_COUNT {
-    for j,0,until,SHOP_COLUMN_COUNT {
       render_tank_light(7 * 8 + 3 + j * 8 * 8 , 6 * 8 + i * 12 * 8)
+      render_shop_fish_money(66 + j * 64, 103 + i * 12 * 8)
+      render_shop_fish_money(66 + j * 64, 111 + i * 12 * 8)
     }
   }
 }
@@ -117,6 +107,10 @@ inline void render_tank_light(byte x, byte y) {
   oam_buffer[oam_index + 3] = x + 2
 
   oam_index += 4
+}
+
+inline void render_shop_fish_money(byte x, byte y) {
+  render_money_symbol(x, y, 0)
 }
 
 inline void draw_shop_shelving() {
