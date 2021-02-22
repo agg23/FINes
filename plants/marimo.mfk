@@ -14,13 +14,13 @@ inline void draw_marimo(PlantSize size, byte x, pointer.byte data, bool write_at
 
   height_from_floor = plant_tile_height_from_floor(2, custom_bottom_y)
 
-  data[0] = $E3
-  data[1] = $E4
+  data[0] = $F9
+  data[1] = $FA
 
   add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2, false)
 
-  data[0] = $E5
-  data[1] = $E6
+  data[0] = $FB
+  data[1] = $FC
 
   add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 32, false, data, 2, false)
 

@@ -5,32 +5,68 @@ import plants/plants
 // Make sure to update text arrays
 const byte AMAZONSWORD_PRICE = 15
 
-// TODO: Size is unused
 inline void draw_amazonsword(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
   byte i
   byte j
   byte x_offset
   word height_from_floor
+  byte height
 
   x_offset = x + plant_min_x
 
-  height_from_floor = plant_tile_height_from_floor(6, custom_bottom_y)
+  if (size == large) {
+    height = 6
+  } else if (height == medium) {
+    height = 4
+  } else {
+    height = 4
+  }
 
-  for i,0,until,3 {
-    for j,0,until,6 {
-      // First row is custom
-      if (j == 0) {
-        if (i == 0) {
-          data[0] = $D3
+  height_from_floor = plant_tile_height_from_floor(height, custom_bottom_y)
+
+  if (size == large) {
+    for i,0,until,3 {
+      for j,0,until,6 {
+        // First row is custom
+        if (j == 0) {
+          if (i == 0) {
+            data[0] = $D7
+          } else {
+            data[j] = 0
+          }
         } else {
-          data[j] = 0
+          // D8 - 3 since first row is custom
+          data[j] = $D5 + i + j * 3
         }
-      } else {
-        data[j] = $D1 + i + j * 3
       }
-    }
 
-    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, 6, false)
+      add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, height, false)
+    }
+  } else if (size == medium) {
+    for i,0,until,3 {
+      for j,0,until,4 {
+        data[j] = $CD + i + j * 3
+      }
+
+      add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, height, false)
+    }
+  } else {
+    for i,0,until,3 {
+      for j,0,until,4 {
+        if (j == 0) {
+          if (i == 0) {
+            data[0] = $C3
+          } else {
+            data[j] = 0
+          }
+        } else {
+          // C4 - 3 since first row is custom
+          data[j] = $C1 + i + j * 3
+        }
+      }
+
+      add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, height, false)
+    }
   }
 
   if (write_attr) {

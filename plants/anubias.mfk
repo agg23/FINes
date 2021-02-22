@@ -5,23 +5,61 @@ import plants/plants
 // Make sure to update text arrays
 const byte ANUBIAS_PRICE = 15
 
-// TODO: Size is unused
 inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
   byte i
   byte j
   byte x_offset
   word height_from_floor
+  byte height
 
   x_offset = x + plant_min_x
 
-  height_from_floor = plant_tile_height_from_floor(6, custom_bottom_y)
+  if (size == large) {
+    height = 6
+  } else if (height == medium) {
+    height = 4
+  } else {
+    height = 3
+  }
 
-  for i,0,until,3 {
-    for j,0,until,6 {
-      data[j] = $C1 + i + j * 3
+  height_from_floor = plant_tile_height_from_floor(height, custom_bottom_y)
+
+  if (size == large) {
+    for i,0,until,3 {
+      for j,0,until,6 {
+        data[j] = $B1 + i + j * 3
+      }
+
+      add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, height, false)
     }
+  } else if (size == medium) {
+    for i,0,until,3 {
+      for j,0,until,4 {
+        if (i == 2 && j == 3) {
+          // Last tile is empty
+          data[j] = 0
+        } else {
+          data[j] = $A6 + i + j * 3
+        }
+      }
 
-    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, 6, false)
+      add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, height, false)
+    }
+  } else {
+    data[0] = $A0
+    data[1] = $A1
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 1, false, data, 2, false)
+
+    data[0] = $A2
+    data[1] = $A3
+    data[2] = $A4
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 32, false, data, 3, false)
+
+    data[0] = $A5
+
+    add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 64 + 1, false, data, 1, false)
   }
 
   if (write_attr) {

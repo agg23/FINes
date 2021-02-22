@@ -20,13 +20,13 @@ inline void draw_rotala(PlantSize size, byte x, pointer.byte data, bool write_at
   }
 
   byte j
-  data[0] = $B8
+  data[0] = $FD
   if (count > 1) {
     for j,1,until,count - 1 {
-      data[j] = $B9
+      data[j] = $FE
     }
 
-    data[count - 1] = $BA
+    data[count - 1] = $FF
   }
 
   add_buffered_write(ppu_nametable0 + plant_tile_height_from_floor(count, custom_bottom_y) + x_offset, true, data, count, false)
