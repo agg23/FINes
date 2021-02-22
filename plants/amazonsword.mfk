@@ -3,10 +3,10 @@ import graphics_buffer
 import plants/plants
 
 // Make sure to update text arrays
-const byte ANUBIAS_PRICE = 15
+const byte AMAZONSWORD_PRICE = 15
 
 // TODO: Size is unused
-inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
+inline void draw_amazonsword(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
   byte i
   byte j
   byte x_offset
@@ -18,7 +18,16 @@ inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_a
 
   for i,0,until,3 {
     for j,0,until,6 {
-      data[j] = $C1 + i + j * 3
+      // First row is custom
+      if (j == 0) {
+        if (i == 0) {
+          data[0] = $D3
+        } else {
+          data[j] = 0
+        }
+      } else {
+        data[j] = $D1 + i + j * 3
+      }
     }
 
     add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, 6, false)
@@ -29,10 +38,10 @@ inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_a
   }
 }
 
-const array(byte) anubias_name_text = [
-  "Anubias" ascii
+const array(byte) amazonsword_name_text = [
+  "A. Sword" ascii
 ]
 
-const array(byte) anubias_price_text = [
+const array(byte) amazonsword_price_text = [
   "15" ascii
 ]

@@ -1,0 +1,38 @@
+import graphics_buffer
+
+import plants/plants
+
+// Make sure to update text arrays
+const byte MARIMO_PRICE = 15
+
+// Size is unused purposefully
+inline void draw_marimo(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
+  byte x_offset
+  word height_from_floor
+
+  x_offset = x + plant_min_x
+
+  height_from_floor = plant_tile_height_from_floor(2, custom_bottom_y)
+
+  data[0] = $E3
+  data[1] = $E4
+
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, false, data, 2, false)
+
+  data[0] = $E5
+  data[1] = $E6
+
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 32, false, data, 2, false)
+
+  if (write_attr) {
+    build_and_write_plant_attribute_table(x_offset, marimo, 2, custom_bottom_y)
+  }
+}
+
+const array(byte) marimo_name_text = [
+  "Marimo" ascii
+]
+
+const array(byte) marimo_price_text = [
+  "15" ascii
+]

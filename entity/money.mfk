@@ -72,7 +72,7 @@ void draw_money() {
 }
 
 void render_money(byte palette) {
-  render_money_symbol(24 * 8 + 1, 2 * 8 - 1, palette)
+  render_money_symbol(24 * 8 + 2, 2 * 8 - 1, palette)
 }
 
 void render_money_symbol(byte x, byte y, byte palette) {

@@ -7,12 +7,15 @@ import plants/anubias
 import plants/microsword
 import plants/rotala
 import plants/sagittaria
+import plants/amazonsword
 
 enum PlantType {
   rotala
   anubias
   microsword
   sagittaria
+  amazonsword
+  marimo
 }
 
 enum PlantSize {
@@ -129,6 +132,10 @@ void draw_plant_of_type(PlantType type, PlantSize size, byte x, bool write_attr,
     draw_anubias(size, x, data.pointer, write_attr, custom_bottom_y)
   } else if (type == sagittaria) {
     draw_sagittaria(size, x, data.pointer, write_attr, custom_bottom_y)
+  } else if (type == amazonsword) {
+    draw_amazonsword(size, x, data.pointer, write_attr, custom_bottom_y)
+  } else if (type == marimo) {
+    draw_marimo(size, x, data.pointer, write_attr, custom_bottom_y)
   }
 }
 
@@ -263,9 +270,9 @@ inline word plant_attr_y(byte custom_bottom_y) {
   return (word(active_tank.y_high) >> 5) << 3
 }
 
-// rotala, anubias, microsword, sagittaria
-const array(byte) plant_expected_width[PlantType] = [1, 3, 2, 3]
-const array(byte) plant_min_width[PlantType] = [1, 3, 1, 3]
-const array(byte) plant_max_editor_height[PlantType] = [5, 4, 3, 6]
-const array(PlantPalette) plant_type_palette[PlantType] = [palette_red, palette_green, palette_green, palette_green]
+// rotala, anubias, microsword, sagittaria, amazonsword, marimo
+const array(byte) plant_expected_width[PlantType] = [1, 3, 2, 3, 3, 2]
+const array(byte) plant_min_width[PlantType] = [1, 3, 1, 3, 3, 2]
+const array(byte) plant_max_editor_height[PlantType] = [5, 6, 3, 6, 6, 2]
+const array(PlantPalette) plant_type_palette[PlantType] = [palette_red, palette_green, palette_green, palette_green, palette_green, palette_green]
 const array(byte) palette_number_for_palette[PlantPalette] = [2, 1, 0]

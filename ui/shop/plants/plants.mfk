@@ -28,5 +28,5 @@ void purchase_plant() {
 
 const array(PlantType) shop_plant_tanks = [
   rotala, anubias, microsword,
-  sagittaria, anubias, microsword
+  sagittaria, amazonsword, marimo
 ]

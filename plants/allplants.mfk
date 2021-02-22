@@ -3,6 +3,9 @@ import plants/plants
 import plants/anubias
 import plants/microsword
 import plants/rotala
+import plants/sagittaria
+import plants/amazonsword
+import plants/marimo
 
 byte plant_price(PlantType type) {
   if (type == anubias) {
@@ -13,6 +16,10 @@ byte plant_price(PlantType type) {
     return ROTALA_PRICE
   } else if (type == sagittaria) {
     return SAGITTARIA_PRICE
+  } else if (type == amazonsword) {
+    return AMAZONSWORD_PRICE
+  } else if (type == marimo) {
+    return MARIMO_PRICE
   }
 
   return 0
@@ -30,6 +37,10 @@ inline void draw_plant_name(PlantType type, byte x, byte y, byte center_length) 
     draw_text(x, y, rotala_name_text.pointer, rotala_name_text.length, center_length)
   } else if (type == sagittaria) {
     draw_text(x, y, sagittaria_name_text.pointer, sagittaria_name_text.length, center_length)
+  } else if (type == amazonsword) {
+    draw_text(x, y, amazonsword_name_text.pointer, amazonsword_name_text.length, center_length)
+  } else if (type == marimo) {
+    draw_text(x, y, marimo_name_text.pointer, marimo_name_text.length, center_length)
   }
 }
 
@@ -42,5 +53,9 @@ inline void draw_plant_price(PlantType type, byte x, byte y) {
     draw_text(x, y, rotala_price_text.pointer, rotala_price_text.length, 0)
   } else if (type == sagittaria) {
     draw_text(x, y, sagittaria_price_text.pointer, sagittaria_price_text.length, 0)
+  } else if (type == amazonsword) {
+    draw_text(x, y, amazonsword_price_text.pointer, amazonsword_price_text.length, 0)
+  } else if (type == marimo) {
+    draw_text(x, y, marimo_price_text.pointer, marimo_price_text.length, 0)
   }
 }
