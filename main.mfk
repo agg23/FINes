@@ -38,7 +38,8 @@ void main() {
   draw_screen()
 
   #if(music)
-  famistudio_init(0, $E000)
+  famistudio_init(0, $D000)
+  famistudio_sfx_init($E000)
   #endif
 
   process_buffered_writes()

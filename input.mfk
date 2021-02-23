@@ -16,6 +16,7 @@ inline void input_and_screen_tick() {
   input_consumed = screen_tick()
 
   if (input_can_be_consumed && input_consumed) {
+    play_button_chirp()
     input_timer = input_timer_reset
   } else if (input_timer > 0) {
     input_timer -= 1

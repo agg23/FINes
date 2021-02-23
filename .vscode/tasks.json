@@ -10,7 +10,7 @@
       // -D debug=1
       // -D music=1
       // -D skip_title=1
-      "command": "java -jar ../millfork/target/scala-2.12/millfork.jar main.mfk -i lib -o build/rom.nes -g -s -fsource-in-asm -fillegals -O1",
+      "command": "java -jar ../millfork/target/scala-2.12/millfork.jar main.mfk -i lib -o build/rom.nes -g -s -fsource-in-asm -fillegals -O1 -D music=1",
       "group": {
         "kind": "build",
         "isDefault": true
