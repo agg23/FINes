@@ -157,17 +157,11 @@ void draw_back_button(byte x, byte y) {
 
 void draw_start_select_button(byte x, byte y) {
   byte i
-  word price
-  array(byte) text_data [7]
   ppu_set_addr(ppu_nametable0 + word(y) * 32 + word(x))
 
-  ppu_write_data($84)
-  ppu_write_data($85)
-  ppu_write_data($86)
-  ppu_write_data($87)
-  ppu_write_data($88)
-  ppu_write_data($89)
-  ppu_write_data($8A)
+  for i,0,until,7 {
+    ppu_write_data($84 + i)
+  }
 }
 
 void load_details_panel_palette() {

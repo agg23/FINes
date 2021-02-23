@@ -2,6 +2,7 @@ import input
 import fish/fish
 
 import ui/shared
+import ui/aquarium
 import ui/shop/shop
 import ui/planteditor
 import ui/inspect/inspect
@@ -31,7 +32,7 @@ void activate_shop() {
 }
 
 void activate_spectator() {
-
+  start_spectate()
 }
 
 const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_stats.pointer, activate_shop.pointer, activate_spectator.pointer]

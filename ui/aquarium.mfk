@@ -2,43 +2,61 @@ import graphics
 import bank
 
 import ui/commandbar
+import ui/shared
 
 import fish/fish
 import entity/money
 import entity/health
 import entity/time
 
+bool spectate_mode
+byte spectate_timer
+
+void init_aquarium() {
+  spectate_mode = false
+  spectate_timer = 0
+}
+
 bool aquarium_tick() {
   bool did_use_input
-  render_sprite0()
-  did_use_input = commandbar_tick()
+  
+  if (not(spectate_mode)) {
+    did_use_input = commandbar_tick()
+
+    render_commandbar()
+    render_overall_health()
+    render_money(3)
+
+    if (frame == 0) {
+      fish_breathe()
+    } else if (frame == $3F) {
+      plant_tick()
+    } else if (frame == $7F) {
+      fish_breathe()
+      // Once a sec, run day tick
+      time_tick()
+      fish_breed()
+    } else if (frame == $BF) {
+      plant_tick()
+    }
+  } else {
+    did_use_input = aquarium_spectate_tick()
+  }
+
   fish_tick()
 
-  render_commandbar()
-  render_overall_health()
   render_fish()
-  render_money(3)
 
   if (frame == 0) {
-    fish_breathe()
     set_bank_0()
   } else if (frame == $2B) {
     set_bank_2()
-  } else if (frame == $3F) {
-    plant_tick()
   } else if (frame == $56) {
     set_bank_3()
-  } else if (frame == $7F) {
-    fish_breathe()
-    // Once a sec, run day tick
-    time_tick()
-    fish_breed()
   } else if (frame == $81) {
     set_bank_0()
   } else if (frame == $AC) {
     set_bank_2()
-  } else if (frame == $BF) {
-    plant_tick()
   } else if (frame == $D7) {
     set_bank_3()
   }
@@ -46,14 +64,90 @@ bool aquarium_tick() {
   return did_use_input
 }
 
+bool aquarium_spectate_tick() {
+  if (spectate_timer > 61) {
+    spectate_timer = 0
+    draw_clear_spectate_text()
+  } else if (spectate_timer > 0) {
+    spectate_timer += 1
+  }
+
+  if (not(input_can_be_consumed)) {
+    return false
+  }
+
+  if (input_start != 0 && input_select != 0) {
+    stop_spectate()
+    
+    return true
+  } else if (input_start != 0 || input_select != 0 || input_a != 0 || input_b != 0 || input_dx != 0 || input_dy != 0) {
+    // Draw spec test
+    spectate_timer = 1
+    draw_spectate_text()
+  }
+
+  return false
+}
+
+void start_spectate() {
+  spectate_mode = true
+  spectate_timer = 1
+
+  set_screen_forcibly(aquarium)
+}
+
+void stop_spectate() {
+  spectate_mode = false
+
+  set_screen_forcibly(aquarium)
+}
+
+void draw_spectate_text() {
+  array(byte) data [19]
+  byte i
+  
+  for i,0,until,data.length {
+    data[i] = spectate_mode_text[i] - $10
+  }
+
+  add_buffered_write(ppu_nametable0 + 64 + 6, false, data.pointer, data.length, false)
+
+  for i,0,until,7 {
+    data[i] = $16 + i
+  }
+
+  data[7] = $10
+
+  for i,0,until,exit_spectate_text.length {
+    data[8 + i] = exit_spectate_text[i] - $10
+  }
+
+  add_buffered_write(ppu_nametable0 + 96 + 8, false, data.pointer, 8 + exit_spectate_text.length, false)
+}
+
+void draw_clear_spectate_text() {
+  array(byte) data [19]
+  byte i
+  
+  for i,0,until,data.length {
+    data[i] = $10
+  }
+
+  add_buffered_write(ppu_nametable0 + 64 + 6, false, data.pointer, data.length, false)
+  add_buffered_write(ppu_nametable0 + 96 + 6, false, data.pointer, data.length, false)
+}
+
 void draw_aquarium() {
   draw_tank()
-  draw_commandbar()
   draw_plants()
 
-  // draw_time()
-  draw_money()
-  draw_overall_health()
+  if (not(spectate_mode)) {
+    draw_commandbar()
+    draw_money()
+    draw_overall_health()
+  } else {
+    draw_spectate_text()
+  }
 
   load_aquarium_palettes()
   set_bank_0()
@@ -64,3 +158,11 @@ void draw_aquarium() {
 inline void load_aquarium_palettes() {
   add_buffered_write(ppu_palette_ram, false, aquarium_palette.pointer, $20, true)
 }
+
+const array(byte) spectate_mode_text = [
+  "Spectating aquarium" ascii
+]
+
+const array(byte) exit_spectate_text = [
+  "to exit" ascii
+]

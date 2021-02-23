@@ -7,6 +7,7 @@ import input
 import sound/sound
 
 import ui/screen
+import ui/aquarium
 import ui/commandbar
 import ui/planteditor
 import tank/tank
@@ -26,6 +27,7 @@ void main() {
 
   init_random()
   init_tank()
+  init_aquarium()
   init_fish()
 
   init_plants()
