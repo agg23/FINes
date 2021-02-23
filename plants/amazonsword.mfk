@@ -45,7 +45,15 @@ inline void draw_amazonsword(PlantSize size, byte x, pointer.byte data, bool wri
   } else if (size == medium) {
     for i,0,until,3 {
       for j,0,until,4 {
-        data[j] = $CD + i + j * 3
+        if (j != 3) {
+          data[j] = $CD + i + j * 3
+        } else {
+          if (i == 1) {
+            data[j] = $D6
+          } else {
+            data[j] = 0
+          }
+        }
       }
 
       add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, height, false)

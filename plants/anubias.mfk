@@ -16,7 +16,7 @@ inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_a
 
   if (size == large) {
     height = 6
-  } else if (height == medium) {
+  } else if (size == medium) {
     height = 4
   } else {
     height = 3

@@ -277,6 +277,7 @@ inline word plant_attr_y(byte custom_bottom_y) {
 }
 
 // rotala, anubias, microsword, sagittaria, amazonsword, marimo
+const array(PlantSize) plant_shop_size[PlantType] = [medium, medium, large, medium, medium, large]
 const array(byte) plant_expected_width[PlantType] = [1, 3, 2, 3, 3, 2]
 const array(byte) plant_min_width[PlantType] = [1, 3, 1, 3, 3, 2]
 const array(byte) plant_max_editor_height[PlantType] = [5, 6, 3, 6, 6, 2]
