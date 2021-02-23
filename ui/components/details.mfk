@@ -8,69 +8,69 @@ void draw_details_panel(bool draw_start_select) {
   // Draw black top
   for i,0,until,2 {
     for j,0,until,32 {
-      ppu_write_data($17)
+      ppu_write_data($10)
     }
   }
 
   // Draw first row
-  ppu_write_data($17)
-  ppu_write_data($17)
-  ppu_write_data($96)
+  ppu_write_data($10)
+  ppu_write_data($10)
+  ppu_write_data($79)
   for j,0,until,26 {
-    ppu_write_data($80)
+    ppu_write_data($6B)
   }
-  ppu_write_data($97)
-  ppu_write_data($17)
-  ppu_write_data($17)
+  ppu_write_data($7A)
+  ppu_write_data($10)
+  ppu_write_data($10)
 
   // Draw second row
-  ppu_write_data($17)
-  ppu_write_data($A0)
-  ppu_write_data($91)
+  ppu_write_data($10)
+  ppu_write_data($7B)
+  ppu_write_data($70)
   for j,0,until,26 {
     ppu_write_data(0)
   }
-  ppu_write_data($83)
-  ppu_write_data($A1)
-  ppu_write_data($17)
+  ppu_write_data($71)
+  ppu_write_data($7C)
+  ppu_write_data($10)
 
   // Draw standard rows
   for i,0,until,22 {
-    ppu_write_data($17)
-    ppu_write_data($A6)
+    ppu_write_data($10)
+    ppu_write_data($81)
     for j,0,until,28 {
       ppu_write_data(0)
     }
-    ppu_write_data($A7)
-    ppu_write_data($17)
+    ppu_write_data($82)
+    ppu_write_data($10)
   }
 
   // Draw second bottom row
-  ppu_write_data($17)
-  ppu_write_data($A2)
-  ppu_write_data($94)
+  ppu_write_data($10)
+  ppu_write_data($7D)
+  ppu_write_data($74)
   for j,0,until,26 {
     ppu_write_data(0)
   }
-  ppu_write_data($86)
-  ppu_write_data($A3)
-  ppu_write_data($17)
+  ppu_write_data($75)
+  ppu_write_data($7E)
+  ppu_write_data($10)
 
   // Draw bottom row
-  ppu_write_data($17)
-  ppu_write_data($17)
-  ppu_write_data($A4)
+  ppu_write_data($10)
+  ppu_write_data($10)
+  ppu_write_data($7F)
   for j,0,until,26 {
-    ppu_write_data($81)
+    ppu_write_data($6C)
   }
-  ppu_write_data($A5)
-  ppu_write_data($17)
-  ppu_write_data($17)
+  ppu_write_data($80)
+  ppu_write_data($10)
+  ppu_write_data($10)
 
   // Draw black bottom
   for i,0,until,2 {
     for j,0,until,32 {
-      ppu_write_data($17)
+      ppu_write_data($10)
     }
   }
 
@@ -83,7 +83,7 @@ void draw_details_panel(bool draw_start_select) {
   // HR line
   ppu_set_addr(ppu_nametable0 + 6 * 32 + 2)
   for i,0,until,28 {
-    ppu_write_data($B0)
+    ppu_write_data($83)
   }
 
   draw_back_button(4, 24)
@@ -145,12 +145,12 @@ void draw_back_button(byte x, byte y) {
   address = ppu_nametable0 + word(y) * 32 + word(x)
 
   ppu_set_addr(address)
-  ppu_write_data($C0)
-  ppu_write_data($C1)
+  ppu_write_data($8B)
+  ppu_write_data($8C)
   
   ppu_set_addr(address + 32)
-  ppu_write_data($C2)
-  ppu_write_data($C3)
+  ppu_write_data($8D)
+  ppu_write_data($8E)
 
   draw_text(x - 1, y - 1, back_text.pointer, back_text.length, 0)
 }
@@ -161,13 +161,13 @@ void draw_start_select_button(byte x, byte y) {
   array(byte) text_data [7]
   ppu_set_addr(ppu_nametable0 + word(y) * 32 + word(x))
 
-  ppu_write_data($B1)
-  ppu_write_data($B2)
-  ppu_write_data($B3)
-  ppu_write_data($B4)
-  ppu_write_data($B5)
-  ppu_write_data($B6)
-  ppu_write_data($B7)
+  ppu_write_data($84)
+  ppu_write_data($85)
+  ppu_write_data($86)
+  ppu_write_data($87)
+  ppu_write_data($88)
+  ppu_write_data($89)
+  ppu_write_data($8A)
 }
 
 void load_details_panel_palette() {

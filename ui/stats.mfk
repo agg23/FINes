@@ -68,10 +68,10 @@ void draw_stats() {
   draw_text(6, 3, aquarium_statistics.pointer, aquarium_statistics.length, 0)
 
   draw_text(12, 5, page_text.pointer, page_text.length, 0)
-  ppu_write_data(stats_page + 1 + $30)
+  ppu_write_data(stats_page + 1 + $20)
   // Forward slash
-  ppu_write_data($2F)
-  ppu_write_data(2 + $30)
+  ppu_write_data($1F)
+  ppu_write_data(2 + $20)
 
   return [stats_page] {
     0 @ draw_stats_page1

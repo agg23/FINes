@@ -136,13 +136,13 @@ void draw_shop_shelf(byte x, byte y) {
   read_ppu_status()
   ppu_set_addr(ppu_nametable0 + word(y) * 32 + word(x))
 
-  ppu_write_data($12)
+  ppu_write_data($13)
 
   for i,0,until,26 {
-    ppu_write_data($13)
+    ppu_write_data($14)
   }
 
-  ppu_write_data($14)
+  ppu_write_data($15)
 }
 
 void draw_shelf_column(byte x, byte y, byte height, bool is_left) {
@@ -150,9 +150,9 @@ void draw_shelf_column(byte x, byte y, byte height, bool is_left) {
   byte tile
 
   if (is_left) {
-    tile = $15
-  } else {
     tile = $16
+  } else {
+    tile = $17
   }
 
   ppu_ctrl = vertical_ppu_ctrl
@@ -170,27 +170,7 @@ const array(byte) shop_tank = [
   4, 5, 6, 7,
   8, 9, $A, $B,
   $C, $D, $E, $F,
-  $10, 0, 0, $11
-]
-
-const array(byte) shop_shelf = [
-  $12, $13, $13, $13,
-  $14, $14, $14, $14,
-  $13, $13, $13, $13,
-  $14, $14, $14, $14,
-  $13, $13, $13, $13,
-  $14, $14, $14, $14,
-  $13, $13, $13, $10
-]
-
-const array(byte) shop_normal_shelf = [
-  $11, $13, $13, $13,
-  $14, $14, $14, $14,
-  $13, $13, $13, $13,
-  $14, $14, $14, $14,
-  $13, $13, $13, $13,
-  $14, $14, $14, $14,
-  $13, $13, $13, $12
+  $11, 0, 0, $12
 ]
 
 const array(byte) fish_screen_text = [

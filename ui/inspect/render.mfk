@@ -53,38 +53,38 @@ void draw_inspect_row(byte i) {
   address = ppu_nametable0 + word(i) * word(32 * 5) + 4 * 32 + 2
   ppu_set_addr(address)
 
-  ppu_write_data($96)
+  ppu_write_data($6D)
   for j,0,until,26 {
-    ppu_write_data($80)
+    ppu_write_data($6B)
   }
-  ppu_write_data($97)
+  ppu_write_data($6E)
 
   address += 32 - 1
   ppu_set_addr(address)
-  ppu_write_data($A0)
-  ppu_write_data($91)
+  ppu_write_data($6F)
+  ppu_write_data($70)
 
   ppu_set_addr(address + 28)
-  ppu_write_data($83)
-  ppu_write_data($A1)
+  ppu_write_data($71)
+  ppu_write_data($72)
 
   address += 32
   ppu_set_addr(address)
-  ppu_write_data($A2)
-  ppu_write_data($94)
+  ppu_write_data($73)
+  ppu_write_data($74)
 
   ppu_set_addr(address + 28)
-  ppu_write_data($86)
-  ppu_write_data($A3)
+  ppu_write_data($75)
+  ppu_write_data($76)
 
   address += 32 + 1
   ppu_set_addr(address)
 
-  ppu_write_data($A4)
+  ppu_write_data($77)
   for j,0,until,26 {
-    ppu_write_data($81)
+    ppu_write_data($6C)
   }
-  ppu_write_data($A5)
+  ppu_write_data($78)
 
   draw_inspect_item(current_inspect_page * 5 + i, i * 5 + 5)
 }
@@ -96,10 +96,10 @@ void draw_inspect_title() {
   if (inspect_packed_length > 0) {
     draw_text(6, 2, inspect_fish_title_text.pointer, inspect_fish_title_text.length, 0)
 
-    ppu_write_data(current_inspect_page + 1 + $30)
+    ppu_write_data(current_inspect_page + 1 + $20)
     // Forward slash
-    ppu_write_data($2F)
-    ppu_write_data(current_inspect_page_count + $30)
+    ppu_write_data($1F)
+    ppu_write_data(current_inspect_page_count + $20)
   } else {
     draw_text(6 + 2, 2, no_owned_fish_text.pointer, no_owned_fish_text.length, 0)
   }

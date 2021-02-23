@@ -1,10 +1,10 @@
 void draw_progress_indicator(byte x, byte y) {
   ppu_set_addr(ppu_nametable0 + word(y) * 32 + x)
 
-  ppu_write_data($18)
-  ppu_write_data($19)
-  ppu_write_data($19)
-  ppu_write_data($1A)
+  ppu_write_data($2B)
+  ppu_write_data($2C)
+  ppu_write_data($2C)
+  ppu_write_data($2D)
 }
 
 void render_progress_indicator(byte tile_x, byte tile_y, byte value, bool invert_color) {

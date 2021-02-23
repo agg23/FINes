@@ -7,58 +7,58 @@ void draw_square_tank() {
   read_ppu_status()
   ppu_set_addr(ppu_nametable0)
   for i,0,until,128 {
-    ppu_write_data($15)
+    ppu_write_data($10)
   }
 
   // First row
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
   ppu_write_data($2)
   for j,0,until,26 {
     ppu_write_data($3)
   }
   ppu_write_data($4)
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
 
   // Second row
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
   ppu_write_data($5)
   for j,0,until,26 {
     ppu_write_data($6)
   }
   ppu_write_data($7)
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
 
   // Third row (water line)
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
   ppu_write_data($8)
   for j,0,until,13 {
-    ppu_write_data($13)
     ppu_write_data($14)
+    ppu_write_data($15)
   }
   ppu_write_data($9)
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
 
   for i,0,until,20 {
-    ppu_write_data($15)
-    ppu_write_data($15)
+    ppu_write_data($10)
+    ppu_write_data($10)
     ppu_write_data($A)
     for j,0,until,26 {
       ppu_write_data(0)
     }
     ppu_write_data($B)
-    ppu_write_data($15)
-    ppu_write_data($15)
+    ppu_write_data($10)
+    ppu_write_data($10)
   }
 
   // Second last row
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
+  ppu_write_data($10)
   ppu_write_data($C)
   ppu_write_data($D)
   for j,0,until,24 {
@@ -66,24 +66,24 @@ void draw_square_tank() {
   }
   ppu_write_data($E)
   ppu_write_data($F)
-  ppu_write_data($15)
-  ppu_write_data($15)
-
-  // Last row
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($10)
   ppu_write_data($10)
 
+  // Last row
+  ppu_write_data($10)
+  ppu_write_data($10)
+  ppu_write_data($11)
+
   for j,0,until,26 {
-    ppu_write_data($11)
+    ppu_write_data($12)
   }
 
-  ppu_write_data($12)
-  ppu_write_data($15)
-  ppu_write_data($15)
+  ppu_write_data($13)
+  ppu_write_data($10)
+  ppu_write_data($10)
 
   for i,0,until,32 {
-    ppu_write_data($15)
+    ppu_write_data($10)
   }
 
   // Attributes

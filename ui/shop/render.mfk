@@ -61,7 +61,7 @@ void draw_shop() {
   // Clear NT
   for i,0,until,30 {
     for j,0,until,32 {
-      ppu_write_data($17)
+      ppu_write_data($10)
     }
   }
 

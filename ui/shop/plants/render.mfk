@@ -45,8 +45,8 @@ void draw_shop_plants_screen() {
 
   ppu_ctrl = standard_ppu_ctrl
 
-  draw_shop_plants_shelf(2, 12)
-  draw_shop_plants_shelf(2, 24)
+  draw_shop_shelf(2, 12)
+  draw_shop_shelf(2, 24)
   draw_shop_shelving_columns(12)
 
   draw_text(13, 2, plant_screen_text.pointer, plant_screen_text.length, 0)
@@ -107,19 +107,6 @@ void draw_shop_plant(byte row, byte column) {
   } else {
     draw_text(x - 1, y + 9, plant_no_room_text.pointer, plant_no_room_text.length, 0)
   }
-}
-
-void draw_shop_plants_shelf(byte x, byte y) {
-  byte i
-
-  read_ppu_status()
-  ppu_set_addr(ppu_nametable0 + word(y) * 32 + word(x))
-
-  ppu_write_data($12)
-  for i,0,until,26 {
-    ppu_write_data($13)
-  }
-  ppu_write_data($14)
 }
 
 void draw_shop_plant_tank_attr() {
