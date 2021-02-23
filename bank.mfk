@@ -24,3 +24,12 @@ asm void set_bank_2() {
   !sta .set_bank_2_operand + 1
   rts
 }
+
+asm void set_bank_3() {
+  .set_bank_3_operand:
+  !lda #3
+  // Write to location of #2 byte
+  // This prevents bus conflict issues by ensuring bit 1 is set
+  !sta .set_bank_3_operand + 1
+  rts
+}

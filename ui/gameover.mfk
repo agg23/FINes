@@ -26,12 +26,12 @@ void draw_gameover_screen() {
 
   ppu_set_addr(ppu_nametable0 + 7 * 32 + 14)
   for i,0,until,4 {
-    ppu_write_data($8A + i)
+    ppu_write_data($90 + i)
   }
 
   ppu_set_addr(ppu_nametable0 + 8 * 32 + 14)
   for i,0,until,4 {
-    ppu_write_data($9A + i)
+    ppu_write_data($94 + i)
   }
 
   draw_text(0, 14, better_luck_text.pointer, better_luck_text.length, 32)
@@ -48,7 +48,7 @@ void draw_gameover_screen() {
     ppu_write_data(%01010101)
   }
   
-  set_bank_0()
+  set_bank_1()
 
   load_gameover_screen_palettes()
 }
