@@ -149,31 +149,27 @@ void draw_inspect_fish_data_rows() {
     draw_text_right(27, 13, store_source_text.pointer, store_source_text.length)
   }
 
-  // TODO
-  draw_text(5, 15, status_text.pointer, status_text.length, 0)
-  draw_text_right(27, 15, happy_text.pointer, happy_text.length)
+  draw_text(5, 15, health_text.pointer, health_text.length, 0)
 
-  draw_text(5, 17, health_text.pointer, health_text.length, 0)
+  if (fish_alive[inspect_fish_details_index]) {
+    draw_progress_indicator(27 - 4, 15)
+  } else {
+    draw_text_right(27, 15, deceased_text.pointer, deceased_text.length)
+  }
+
+  draw_text(5, 17, hunger_text.pointer, hunger_text.length, 0)
 
   if (fish_alive[inspect_fish_details_index]) {
     draw_progress_indicator(27 - 4, 17)
   } else {
     draw_text_right(27, 17, deceased_text.pointer, deceased_text.length)
   }
-
-  draw_text(5, 19, hunger_text.pointer, hunger_text.length, 0)
-
-  if (fish_alive[inspect_fish_details_index]) {
-    draw_progress_indicator(27 - 4, 19)
-  } else {
-    draw_text_right(27, 19, deceased_text.pointer, deceased_text.length)
-  }
 }
 
 void render_inspect_fish_progress() {
   if (fish_alive[inspect_fish_details_index]) {
-    render_progress_indicator(27 - 4, 17, fish_health[inspect_fish_details_index], false)
-    render_progress_indicator(27 - 4, 19, fish_hunger[inspect_fish_details_index], true)
+    render_progress_indicator(27 - 4, 15, fish_health[inspect_fish_details_index], false)
+    render_progress_indicator(27 - 4, 17, fish_hunger[inspect_fish_details_index], true)
   }
 }
 
@@ -249,14 +245,6 @@ const array(byte) store_source_text = [
 
 const array(byte) breed_source_text = [
   "Bred" ascii
-]
-
-const array(byte) status_text = [
-  "Status:" ascii
-]
-
-const array(byte) happy_text = [
-  "Happy" ascii
 ]
 
 const array(byte) health_text = [
