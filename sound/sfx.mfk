@@ -1,5 +1,9 @@
 import sound/sound
 
 void play_button_chirp() {
+  famistudio_sfx_play(3, FAMISTUDIO_SFX_CH0)
+}
+
+void play_plant_growth() {
   famistudio_sfx_play(2, FAMISTUDIO_SFX_CH0)
 }
