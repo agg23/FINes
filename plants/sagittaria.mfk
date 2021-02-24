@@ -12,6 +12,11 @@ inline void draw_sagittaria(PlantSize size, byte x, pointer.byte data, bool writ
   byte x_offset
   word height_from_floor
 
+  if (size == medium) {
+    draw_sagittaria_medium(x, data, write_attr, custom_bottom_y)
+    return
+  }
+
   x_offset = x + plant_min_x
 
   height_from_floor = plant_tile_height_from_floor(6, custom_bottom_y)
@@ -23,6 +28,38 @@ inline void draw_sagittaria(PlantSize size, byte x, pointer.byte data, bool writ
 
     add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + i, true, data, 6, false)
   }
+
+  if (write_attr) {
+    build_and_write_plant_attribute_table(x_offset, sagittaria, 3, custom_bottom_y)
+  }
+}
+
+inline void draw_sagittaria_medium(byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
+  // Medium sagittaria is handled uniquely, as it's only for the shop
+  byte x_offset
+  word height_from_floor
+
+  x_offset = x + plant_min_x
+
+  height_from_floor = plant_tile_height_from_floor(4, custom_bottom_y)
+
+  data[0] = $18
+  data[1] = $1B
+  data[2] = $98
+  data[3] = $9B
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset, true, data, 4, false)
+
+  data[0] = $19
+  data[1] = $1C
+  data[2] = $99
+  data[3] = $9C
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 1, true, data, 4, false)
+
+  data[0] = $1A
+  data[1] = $1D
+  data[2] = $9A
+  data[3] = $9D
+  add_buffered_write(ppu_nametable0 + height_from_floor + x_offset + 2, true, data, 4, false)
 
   if (write_attr) {
     build_and_write_plant_attribute_table(x_offset, sagittaria, 3, custom_bottom_y)
