@@ -20,3 +20,5 @@ const array(byte) betta_name_text = [
 const array(byte) betta_any_price_text = [
   "95" ascii
 ]
+
+const byte BETTA_BASE_SALE_PRICE = BETTA_ANY_PRICE / 2

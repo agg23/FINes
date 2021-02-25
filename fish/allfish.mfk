@@ -36,6 +36,60 @@ byte fish_sexed_price(FishType type) {
   return 0
 }
 
+byte fish_base_sale_price(FishType type) {
+  if (type == tetra) {
+    return TETRA_BASE_SALE_PRICE
+  } else if (type == rasbora) {
+    return RASBORA_BASE_SALE_PRICE
+  } else if (type == cory) {
+    return CORY_BASE_SALE_PRICE
+  } else if (type == betta) {
+    return BETTA_BASE_SALE_PRICE
+  }
+
+  return 0
+}
+
+byte fish_quality_price(FishQuality quality, byte base_price) {
+  if (quality == poor) {
+    return base_price >> 4
+  } else if (quality == fair) {
+    return base_price >> 3
+  } else if (quality == average) {
+    return base_price >> 2
+  } else if (quality == good) {
+    return base_price >> 1
+  }
+
+  return base_price
+}
+
+byte fish_health_price(byte health) {
+  if (health > $C0) {
+    return 5
+  } else if (health > $80) {
+    return 2
+  } else if (health > $40) {
+    return -2
+  }
+  
+  return -4
+}
+
+byte fish_sale_price(byte i) {
+  byte price
+  byte temp
+  price = fish_base_sale_price(fish_type[i])
+  temp = fish_health_price(fish_health[i])
+
+  if ((price + temp) & $80 != 0) {
+    // Price would go neg. Set price to 1
+    return 1
+  }
+
+  return price + fish_quality_price(fish_quality[i], price) + temp
+}
+
 /**
 * @param center_length If provided (non-zero), center the text within this length, preferring the left side
 */

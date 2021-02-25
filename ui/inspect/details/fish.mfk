@@ -31,9 +31,7 @@ inline bool inspect_fish_details_tick() {
         // Dispose of fish
         delete_fish(inspect_fish_details_index)
       } else {
-        // Sell fish
-        // TODO: Add pricing
-        earn(35, fish_sale)
+        earn(fish_sale_price(inspect_fish_details_index), fish_sale)
         delete_fish(inspect_fish_details_index)
       }
 
@@ -143,9 +141,8 @@ void draw_inspect_fish_data_rows() {
   draw_number_word_text(27 - 5 - temp, 9, wtemp, 5, false)
   draw_text_right(27, 9, days_age_text.pointer, temp)
 
-  // TODO
   draw_text(5, 11, color_text.pointer, color_text.length, 0)
-  draw_text_right(27, 11, vibrant_text.pointer, vibrant_text.length)
+  draw_inspect_fish_quality()
 
   draw_text(5, 13, source_text.pointer, source_text.length, 0)
 
@@ -169,6 +166,20 @@ void draw_inspect_fish_data_rows() {
     draw_progress_indicator(27 - 4, 17)
   } else {
     draw_text_right(27, 17, deceased_text.pointer, deceased_text.length)
+  }
+}
+
+void draw_inspect_fish_quality() {
+  if (fish_quality[inspect_fish_details_index] == poor) {
+    draw_text_right(27, 11, poor_text.pointer, poor_text.length)
+  } else if (fish_quality[inspect_fish_details_index] == fair) {
+    draw_text_right(27, 11, fair_text.pointer, fair_text.length)
+  } else if (fish_quality[inspect_fish_details_index] == average) {
+    draw_text_right(27, 11, average_text.pointer, average_text.length)
+  } else if (fish_quality[inspect_fish_details_index] == good) {
+    draw_text_right(27, 11, good_text.pointer, good_text.length)
+  } else if (fish_quality[inspect_fish_details_index] == excellent) {
+    draw_text_right(27, 11, vibrant_text.pointer, vibrant_text.length)
   }
 }
 
@@ -203,7 +214,7 @@ void draw_inspect_fish_start_select_button(byte x, byte y) {
     text_data[i] = sell_text[i]
   }
 
-  price = 35
+  price = fish_sale_price(inspect_fish_details_index)
 
   bcdConvert(price)
 
@@ -263,6 +274,22 @@ const array(byte) hunger_text = [
 
 const array(byte) color_text = [
   "Coloring:" ascii
+]
+
+const array(byte) poor_text = [
+  "Dull" ascii
+]
+
+const array(byte) fair_text = [
+  "Fair" ascii
+]
+
+const array(byte) average_text = [
+  "Average" ascii
+]
+
+const array(byte) good_text = [
+  "Colorful" ascii
 ]
 
 const array(byte) vibrant_text = [

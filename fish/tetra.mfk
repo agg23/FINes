@@ -22,3 +22,5 @@ const array(byte) tetra_any_price_text = [
 const array(byte) tetra_sexed_price_text = [
   "20" ascii
 ]
+
+const byte TETRA_BASE_SALE_PRICE = TETRA_ANY_PRICE / 2

@@ -18,6 +18,14 @@ enum FishType {
   betta
 }
 
+enum FishQuality {
+  poor,
+  fair,
+  average,
+  good,
+  excellent
+}
+
 const byte MAX_FISH_COUNT = 20
 
 array(byte) fish_x [MAX_FISH_COUNT]
@@ -39,6 +47,7 @@ array(byte) fish_hunger [MAX_FISH_COUNT]
 */
 array(bool) fish_source [MAX_FISH_COUNT]
 array(byte) fish_health [MAX_FISH_COUNT]
+array(FishQuality) fish_quality [MAX_FISH_COUNT]
 
 const byte FISH_MAX_VELOCITY = $30
 const byte FISH_MAX_DEAD_VELOCITY = $30
@@ -66,6 +75,7 @@ void init_fish() {
 
 void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
   byte i
+  byte temp
   for i,0,until,MAX_FISH_COUNT {
     if (not(fish_active[i])) {
       // Spawn fish
@@ -86,12 +96,20 @@ void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
 
         // Age is 0
         fish_owned_age[i] = 0
+
+        // Quality spans the full range, except poor
+        random_int_const(1, 5, temp)
+        fish_quality[i] = FishQuality(temp)
       } else {
         // Fish start out more healthy than not when purchased, but still not great
         fish_health[i] = $B0
 
         // Purchased fish has random age
         random_int_const(25, 255, fish_owned_age[i])
+
+        // Quality cannot be vibrant, and can be poor
+        random_int_const(0, 4, temp)
+        fish_quality[i] = FishQuality(temp)
       }
 
       // Randomize starting hunger
