@@ -95,7 +95,9 @@ inline void render_shop_fish() {
 
       if (shop_item_enabled[i * 3 + j]) {
         render_shop_fish_money(66 + j * 64, 103 + i * 12 * 8)
-        render_shop_fish_money(66 + j * 64, 111 + i * 12 * 8)
+        if (shop_fish_tanks[i * 3 + j] != betta) {
+          render_shop_fish_money(66 + j * 64, 111 + i * 12 * 8)
+        }
       }
     }
   }
