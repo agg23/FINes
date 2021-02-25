@@ -47,10 +47,18 @@ void init_shop() {
   shop_state = tank
   shop_price_state = any
 
+  #if(music)
+  famistudio_music_play(1)
+  #endif
+
   set_screen(shop)
 }
 
 void close_shop() {
+  #if(music)
+  famistudio_music_play(0)
+  #endif
+
   set_screen(aquarium)
 }
 

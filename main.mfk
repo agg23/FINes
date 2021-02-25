@@ -49,7 +49,7 @@ void main() {
   enable_graphics()
 
   #if(music)
-  // famistudio_music_play(0)
+  famistudio_music_play(0)
   #endif
 
   while(true) {
