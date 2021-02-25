@@ -47,6 +47,12 @@ bool aquarium_tick() {
 
   render_fish()
 
+  aquarium_animation_tick()
+
+  return did_use_input
+}
+
+void aquarium_animation_tick() {
   if (frame == 0) {
     set_bank_0()
   } else if (frame == $2B) {
@@ -60,8 +66,6 @@ bool aquarium_tick() {
   } else if (frame == $D7) {
     set_bank_3()
   }
-
-  return did_use_input
 }
 
 bool aquarium_spectate_tick() {
