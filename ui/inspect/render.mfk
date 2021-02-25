@@ -105,9 +105,9 @@ void draw_inspect_title() {
   }
 }
 
-void draw_inspect_item(byte i, byte y) {
+void draw_inspect_item(byte packed_i, byte y) {
   if (inspect_screen == inspect_fish) {
-    draw_inspect_fish_item(i, y)
+    draw_inspect_fish_item(inspect_packed_item_indexes[packed_i], y)
   }
 }
 
@@ -183,7 +183,11 @@ void render_inspect() {
   render_nav_indicators()
 }
 
-void render_inspect_item(byte i, byte row, byte y) {
+void render_inspect_item(byte packed_i, byte row, byte y) {
+  byte i
+
+  i = inspect_packed_item_indexes[packed_i]
+
   if (inspect_screen == inspect_fish) {
     render_inspect_fish_item(i, row, y)
     if (fish_alive[i]) {
