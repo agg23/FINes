@@ -14,9 +14,9 @@ Following the competition, the game will be expanded to support saving, more fis
 - [x] Fish stat and health inspection
 - [x] Fish selling
 - [x] Fish breeding (rough, see known issues)
-- [ ] Fish feeding
-- [ ] Spectator mode (runs fish movement and animation, but disables the health, growth, and breeding mechanics)
+- [x] Fish feeding
+- [x] Spectator mode (runs fish movement and animation, but disables the health, growth, and breeding mechanics)
 - [ ] Plant removal/selling
 - [ ] Boons and cosmetics
-- [ ] Health mechanics
+- [x] Health mechanics
 - [ ] Music and sound effects

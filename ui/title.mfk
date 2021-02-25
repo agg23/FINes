@@ -120,5 +120,5 @@ const array(byte) contest_text = [
 ]
 
 const array(byte) title_build_text = [
-  "Build 2/22/21.0"
+  "Build 2/24/21.0"
 ]
