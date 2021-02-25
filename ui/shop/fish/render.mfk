@@ -44,7 +44,7 @@ inline void draw_shop_fish_tank(FishType type, byte x, byte y) {
 
   // Sexed
   draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
-  draw_fish_any_price(type, x + sexed_price_text.length, y + 9)
+  draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
 }
 
 inline void draw_shop_fish_tank_attr() {

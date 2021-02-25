@@ -117,6 +117,16 @@ inline void draw_fish_any_price(FishType type, byte x, byte y) {
   }
 }
 
+inline void draw_fish_sexed_price(FishType type, byte x, byte y) {
+  if (type == tetra) {
+    draw_text(x, y, tetra_sexed_price_text.pointer, tetra_sexed_price_text.length, 0)
+  } else if (type == rasbora) {
+    draw_text(x, y, rasbora_sexed_price_text.pointer, rasbora_sexed_price_text.length, 0)
+  } else if (type == cory) {
+    draw_text(x, y, cory_sexed_price_text.pointer, cory_sexed_price_text.length, 0)
+  }
+}
+
 inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_direction) {
   if (type == tetra) {
     render_tetra(x, y, mask, pos_direction)

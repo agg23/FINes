@@ -19,7 +19,7 @@ const array(byte) cory_any_price_text = [
 ]
 
 const array(byte) cory_sexed_price_text = [
-  "20" ascii
+  "26" ascii
 ]
 
 const byte CORY_BASE_SALE_PRICE = CORY_ANY_PRICE / 2

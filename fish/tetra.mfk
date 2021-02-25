@@ -3,7 +3,7 @@ import fish/shared
 // Make sure to update text arrays
 const byte TETRA_ANY_PRICE = 10
 
-const byte TETRA_SEXED_PRICE = 20
+const byte TETRA_SEXED_PRICE = 22
 
 macro void render_tetra(byte x, byte y, byte mask, bool pos_direction) {
   render_two_tile_fish(x, y, mask, pos_direction, 1, tetra_tiles[0], tetra_tiles[1])
@@ -20,7 +20,7 @@ const array(byte) tetra_any_price_text = [
 ]
 
 const array(byte) tetra_sexed_price_text = [
-  "20" ascii
+  "22" ascii
 ]
 
 const byte TETRA_BASE_SALE_PRICE = TETRA_ANY_PRICE / 2
