@@ -19,6 +19,7 @@ enum Screen {
 }
 
 bool buffer_screen_draw = false
+bool buffer_screen_blank = false
 Screen current_screen
 
 bool screen_tick() {
@@ -47,7 +48,7 @@ void draw_screen() {
 
 void set_screen_forcibly(Screen new_screen) {
   current_screen = new_screen
-  buffer_screen_draw = true
+  buffer_screen_blank = true
 }
 
 void set_screen(Screen new_screen) {
@@ -56,18 +57,24 @@ void set_screen(Screen new_screen) {
   }
 
   current_screen = new_screen
-  buffer_screen_draw = true
+  buffer_screen_blank = true
 }
 
 void screen_transfer_tick() {
   // Wait for NMI to disable rendering and NMIs
-  // Draw new screen
   drawing_enabled = false
-  buffer_screen_draw = false
+  buffer_screen_blank = false
   read_ppu_status()
   ppu_ctrl = standard_ppu_ctrl
   ppu_mask = 0
 
+  buffer_screen_draw = true
+}
+
+void screen_draw_tick() {
+  // NMI has cleared screen, now write it
+  // Draw new screen
+  buffer_screen_draw = false
   ppu_wait_vblank()
 
   clear_buffer()

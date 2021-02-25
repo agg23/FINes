@@ -54,12 +54,15 @@ void main() {
 
   while(true) {
     // Wait for NMI to complete rendering frame
-    while (new_frame) {}
+    while (new_frame && not(buffer_screen_draw)) {}
 
-    sprite_tick()
-    input_and_screen_tick()
-    clear_remaining_oam()
-
+    if (buffer_screen_draw) {
+      screen_draw_tick()
+    } else {
+      sprite_tick()
+      input_and_screen_tick()
+      clear_remaining_oam()
+    }
     // wait_for_sprite0_clear()
 
     new_frame = true
@@ -68,17 +71,6 @@ void main() {
 }
 
 void nmi() {
-  if (buffer_screen_draw) {
-    screen_transfer_tick()
-    nmi_always_run()
-    return
-  }
-
-  if (not(drawing_enabled)) {
-    nmi_always_run()
-    return
-  }
-
   if in_nmi != 0 {
     // Overran NMI
     nmi_fail = 1
@@ -89,6 +81,24 @@ void nmi() {
 
   in_nmi = 1
 
+  nmi_work()
+
+  in_nmi = 0
+}
+
+inline void nmi_work() {
+  if (buffer_screen_blank) {
+    screen_transfer_tick()
+    nmi_always_run()
+    new_frame = false
+    return
+  }
+
+  if (not(drawing_enabled)) {
+    nmi_always_run()
+    return
+  }
+
   if (new_frame) {
     nmi_frame()
 
@@ -96,8 +106,6 @@ void nmi() {
   }
 
   nmi_always_run()
-
-  in_nmi = 0
 }
 
 void nmi_frame() {
