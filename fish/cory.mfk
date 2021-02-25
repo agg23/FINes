@@ -2,7 +2,7 @@ import fish/shared
 
 // Make sure to update text arrays
 const byte CORY_ANY_PRICE = 10
-const byte CORY_SEXED_PRICE = 20
+const byte CORY_SEXED_PRICE = 32
 
 macro void render_cory(byte x, byte y, byte mask, bool pos_direction) {
   render_three_tile_fish(x, y, mask, pos_direction, 2, cory_tiles[0], cory_tiles[1], cory_tiles[2])
@@ -19,7 +19,7 @@ const array(byte) cory_any_price_text = [
 ]
 
 const array(byte) cory_sexed_price_text = [
-  "26" ascii
+  "32" ascii
 ]
 
 const byte CORY_BASE_SALE_PRICE = CORY_ANY_PRICE / 2

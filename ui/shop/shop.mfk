@@ -134,8 +134,13 @@ inline bool shop_tank_selection_input_tick() {
       }
 
       if (shop_screen == fish) {
-        shop_state = price
-        shop_price_state = any
+        // Special handling since bettas are only male
+        if (shop_fish_tanks[current_shop_row * SHOP_COLUMN_COUNT + current_shop_column] == betta) {
+          purchase_fish()
+        } else {
+          shop_state = price
+          shop_price_state = any
+        }
       } else if (shop_screen == plants) {
         purchase_plant()
       }

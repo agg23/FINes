@@ -42,9 +42,12 @@ inline void draw_shop_fish_tank(FishType type, byte x, byte y) {
   draw_text(x - 1, y + 8, any_price_text.pointer, any_price_text.length, 0)
   draw_fish_any_price(type, x + any_price_text.length, y + 8)
 
-  // Sexed
-  draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
-  draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
+  // Bettas can only be purchased as male
+  if (type != betta) {
+    // Sexed
+    draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
+    draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
+  }
 }
 
 inline void draw_shop_fish_tank_attr() {
