@@ -57,6 +57,8 @@ inline bool inspect_fish_details_tick() {
         set_screen_forcibly(inspect)
       }
 
+      check_gameover()
+
       return true
     }
   }
