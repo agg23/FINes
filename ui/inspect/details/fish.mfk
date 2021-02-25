@@ -43,8 +43,14 @@ inline bool inspect_fish_details_tick() {
       } else {
         // TODO: Selling the first item twice? seems to break this
         if (current_inspect_row >= current_inspect_page_length - 1 && current_inspect_page * 5 + current_inspect_page_length == inspect_packed_length) {
-          // Index is now out of range
-          current_inspect_row -= 1
+          if (current_inspect_page_length < 2 && current_inspect_page > 0) {
+            // Page is now out of range
+            current_inspect_page -= 1
+            current_inspect_row = 4
+          } else {
+            // Index is now out of range
+            current_inspect_row -= 1
+          }
         }
 
         set_inspect_screen(inspect_fish)
