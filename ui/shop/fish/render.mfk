@@ -9,7 +9,7 @@ void draw_shop_fish_screen() {
 
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
-      draw_shop_fish_tank(shop_fish_tanks[i * 3 + j], 6 + j * 8, 5 + i * 12)
+      draw_shop_fish_tank(i * 3 + j, shop_fish_tanks[i * 3 + j], 6 + j * 8, 5 + i * 12)
     }
   }
 
@@ -20,7 +20,7 @@ void draw_shop_fish_screen() {
   draw_shop_shelving()
 }
 
-inline void draw_shop_fish_tank(FishType type, byte x, byte y) {
+inline void draw_shop_fish_tank(byte fish_i, FishType type, byte x, byte y) {
   word address
   byte i
   byte j
@@ -38,15 +38,19 @@ inline void draw_shop_fish_tank(FishType type, byte x, byte y) {
 
   draw_fish_name(type, x - 2, y + 6, 8)
 
-  // Any
-  draw_text(x - 1, y + 8, any_price_text.pointer, any_price_text.length, 0)
-  draw_fish_any_price(type, x + any_price_text.length, y + 8)
+  if (shop_item_enabled[fish_i]) {
+    // Any
+    draw_text(x - 1, y + 8, any_price_text.pointer, any_price_text.length, 0)
+    draw_fish_any_price(type, x + any_price_text.length, y + 8)
 
-  // Bettas can only be purchased as male
-  if (type != betta) {
-    // Sexed
-    draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
-    draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
+    // Bettas can only be purchased as male
+    if (type != betta) {
+      // Sexed
+      draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
+      draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
+    }
+  } else {
+    draw_text(x - 2, y + 8, plant_no_room_text.pointer, plant_no_room_text.length, 0)
   }
 }
 
@@ -88,8 +92,11 @@ inline void render_shop_fish() {
     for j,0,until,SHOP_COLUMN_COUNT {
       render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 58 + i * 12 * 8, 0, true)
       render_tank_light(7 * 8 + 3 + j * 8 * 8 , 6 * 8 + i * 12 * 8)
-      render_shop_fish_money(66 + j * 64, 103 + i * 12 * 8)
-      render_shop_fish_money(66 + j * 64, 111 + i * 12 * 8)
+
+      if (shop_item_enabled[i * 3 + j]) {
+        render_shop_fish_money(66 + j * 64, 103 + i * 12 * 8)
+        render_shop_fish_money(66 + j * 64, 111 + i * 12 * 8)
+      }
     }
   }
 }

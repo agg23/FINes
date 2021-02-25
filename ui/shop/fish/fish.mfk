@@ -3,10 +3,38 @@ import ui/shop/render
 import fish/allfish
 
 void init_fish_shop() {
+  calculate_fish_shop_enabled()
+}
+
+void calculate_fish_shop_enabled() {
   byte i
+  bool enable_fish
+
+  enable_fish = is_space_for_fish()
+
   for i,0,until,SHOP_ITEM_COUNT {
-    shop_item_enabled[i] = true
+    shop_item_enabled[i] = enable_fish
   }
+
+  if (not(enable_fish)){
+    if (shop_state != tank) {
+      shop_state = tank
+    }
+
+    set_screen_forcibly(shop)
+  }
+}
+
+bool is_space_for_fish() {
+  byte i
+
+  for i,0,until,MAX_FISH_COUNT {
+    if (not(fish_active[i])) {
+      return true
+    }
+  }
+
+  return false
 }
 
 inline bool shop_fish_price_selection_tick() {
@@ -68,12 +96,14 @@ void purchase_fish() {
       // Purchase successful
       // TODO: Make better fish spawn position
       spawn_fish(type, random_bool(), $80, $20, false)
+      calculate_fish_shop_enabled()
     }
   } else {
     if (purchase(fish_sexed_price(type))) {
       // Purchase successful
       // TODO: Make better fish spawn position
       spawn_fish(type, shop_price_state == male, $80, $20, false)
+      calculate_fish_shop_enabled()
     }
   }
 }
