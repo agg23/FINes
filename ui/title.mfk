@@ -60,6 +60,7 @@ void draw_title_screen() {
   ppu_write_data($98)
 
   // Manually draw plants outside of normal plant bounds to complete screen
+  draw_plant_of_type(microsword, large, -4, false, 2, 0)
   draw_plant_of_type(microsword, large, -2, false, 2, 0)
   draw_plant_of_type(microsword, large, 0, false, 1, 0)
   draw_plant_of_type(microsword, small, 1, false, 1, 0)
@@ -88,16 +89,21 @@ void draw_title_screen() {
   ppu_set_addr(ppu_attrtable0 + 6 * 8)
   ppu_write_data(%01010101)
 
-  draw_plant_of_type(microsword, small, 28, true, 2, 0)
+  // Bottom attr
+  ppu_set_addr(ppu_attrtable0 + 7 * 8)
+  for i,0,until,8 {
+    ppu_write_data($FF)
+  }
 
   // Draw bottom
   ppu_set_addr(ppu_nametable0 + 28 * 32)
   for i,0,until,64 {
-    ppu_write_data(1)
+    ppu_write_data($1D)
   }
 
   draw_text(4, 10, contest_text.pointer, contest_text.length, 0)
   draw_text(9, 11, title_build_text.pointer, title_build_text.length, 0)
+  draw_text(9, 28, music_attribution_text.pointer, music_attribution_text.length, 0)
 
   set_bank_0()
 
@@ -113,6 +119,7 @@ void draw_title_screen() {
 inline void load_title_screen_palettes() {
   add_buffered_write(ppu_palette_ram, false, aquarium_palette.pointer, $20, true)
   add_buffered_write(ppu_palette_ram, false, title_first_palette.pointer, 4, true)
+  add_buffered_write(ppu_palette_ram + 12, false, title_last_palette.pointer, 4, true)
 }
 
 const array(byte) contest_text = [
@@ -120,5 +127,9 @@ const array(byte) contest_text = [
 ]
 
 const array(byte) title_build_text = [
-  "Build 2/24/21.0"
+  "Build 2/27/21.0"
+]
+
+const array(byte) music_attribution_text = [
+  "Music by Erithe"
 ]
