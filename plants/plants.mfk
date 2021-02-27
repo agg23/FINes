@@ -160,35 +160,25 @@ void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte w
       next_palette_number = palette_number_for_palette[plant_palette_for_type]
 
       // Odd 16x16, use previous palette
-      if (x_offset < 3 + plant_min_x) {
-        // Prev is wall
-        prev_palette_number = 0
-      } else {
-        temp_palette = plant_current_palettes[(x >> 1) - 1]
+      temp_palette = plant_current_palettes[(x >> 1) - 1]
 
-        if (temp_palette == palette_unset) {
-          // No palette set behind
-          prev_palette_number = next_palette_number
-        } else {
-          prev_palette_number = palette_number_for_palette[temp_palette]
-        }
+      if (temp_palette == palette_unset) {
+        // No palette set behind
+        prev_palette_number = next_palette_number
+      } else {
+        prev_palette_number = palette_number_for_palette[temp_palette]
       }
     } else {
       prev_palette_number = palette_number_for_palette[plant_palette_for_type]
 
       // Even 16x16, use next palette
-      if (x_offset + width > plant_max_x_bound + plant_min_x - 1) {
-        // Next is wall
-        next_palette_number = 0
-      } else {
-        temp_palette = plant_current_palettes[(x >> 1) + 1]
+      temp_palette = plant_current_palettes[(x >> 1) + 1]
 
-        if (temp_palette == palette_unset) {
-          // No palette set in front
-          next_palette_number = prev_palette_number
-        } else {
-          next_palette_number = palette_number_for_palette[temp_palette]
-        }
+      if (temp_palette == palette_unset) {
+        // No palette set in front
+        next_palette_number = prev_palette_number
+      } else {
+        next_palette_number = palette_number_for_palette[temp_palette]
       }
     }
 
@@ -201,26 +191,17 @@ void build_and_write_plant_attribute_table(byte x_offset, PlantType type, byte w
     write_plant_attribute_table(x_offset, data.pointer, 1, custom_bottom_y)
   } else {
     // Spans two entries
-    if (x_offset < 3 + plant_min_x) {
-      // Prev is wall
-      prev_palette_number = 0
-    } else {
-      temp_palette = plant_current_palettes[(x >> 1) - 1]
-      prev_palette_number = palette_number_for_palette[temp_palette]
-    }
+    temp_palette = plant_current_palettes[(x >> 1) - 1]
+    prev_palette_number = palette_number_for_palette[temp_palette]
+
     next_palette_number = palette_number_for_palette[plant_palette_for_type]
 
     // Write prev attr table entry
     build_attribute_table_entry(prev_palette_number, next_palette_number, prev_palette_number, next_palette_number, output)
     data[0] = output
 
-    if (x_offset + width > plant_max_x_bound + plant_min_x - 3) {
-      // Next is wall
-      next_palette_number = 0
-    } else {
-      temp_palette = plant_current_palettes[(x >> 1) + 1]
-      next_palette_number = palette_number_for_palette[temp_palette]
-    }
+    temp_palette = plant_current_palettes[(x >> 1) + 1]
+    next_palette_number = palette_number_for_palette[temp_palette]
 
     prev_palette_number = palette_number_for_palette[plant_palette_for_type]
 
