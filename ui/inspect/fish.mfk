@@ -34,6 +34,12 @@ void draw_inspect_fish_item(byte i, byte y) {
   } else {
     draw_text(23, y, dead_text.pointer, dead_text.length, 0)
   }
+
+  if (fish_sex[i]) {
+    draw_text(21, y + 1, male_text.pointer, male_text.length, 0)
+  } else {
+    draw_text(21, y + 1, female_text.pointer, female_text.length, 0)
+  }
 }
 
 void render_inspect_fish_item(byte i, byte row, byte y) {
