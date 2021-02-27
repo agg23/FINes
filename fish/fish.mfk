@@ -52,7 +52,8 @@ array(FishQuality) fish_quality [MAX_FISH_COUNT]
 const byte FISH_MAX_VELOCITY = $30
 const byte FISH_MAX_DEAD_VELOCITY = $30
 const byte FISH_DECAY_VELOCITY_PER_TICK = $2
-const byte FISH_STRATA_VELOCITY_PER_TICK = $8
+const byte FISH_STRATA_VELOCITY_PER_TICK = $2
+const byte FISH_RAND_VELOCITY = $10
 
 byte fish_diff_velocity_x
 byte fish_diff_velocity_y
@@ -64,7 +65,7 @@ void init_fish() {
   }
 
   spawn_fish(tetra, true, $80, $26, false)
-  // spawn_fish(rasbora, true, $60, $84)
+  spawn_fish(rasbora, true, $60, $84, true)
   // // spawn_fish(cherry_shrimp, true)
   // spawn_fish(tetra, false, $34, $B2)
   // spawn_fish(tetra, true, $80, $26)

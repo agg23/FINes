@@ -110,7 +110,9 @@ inline void tetra_fish_move(byte i) {
 
   // boid_average_velocity_step(i)
 
-  // trend_center(i)
+  trend_center(i)
+
+  boid_apply_random(i)
 
   if (current_screen == aquarium) {
     bound_position(i)
@@ -207,6 +209,27 @@ inline void boid_center_mass_step(byte i) {
   arithmetic_shift_right(temp)
   arithmetic_shift_right(temp)
   fish_diff_velocity_y += temp
+}
+
+inline void boid_apply_random(byte i) {
+  byte temp
+  if (rand() < $10) {
+    random_int_const(0, 2, temp)
+    if (rand() < $30) {
+      // Move vertically
+      if (temp == 0) {
+        fish_diff_velocity_y += FISH_RAND_VELOCITY
+      } else {
+        fish_diff_velocity_y -= FISH_RAND_VELOCITY
+      }
+    } else {
+      if (temp == 0) {
+        fish_diff_velocity_x += FISH_RAND_VELOCITY
+      } else {
+        fish_diff_velocity_x -= FISH_RAND_VELOCITY
+      }
+    }
+  }
 }
 
 macro void fish_fast_distance_square(byte input, byte output) {
