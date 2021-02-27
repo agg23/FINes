@@ -61,13 +61,11 @@ void draw_title_screen() {
 
   // Manually draw plants outside of normal plant bounds to complete screen
   draw_plant_of_type(microsword, large, -4, false, 2, 0)
-  draw_plant_of_type(microsword, large, -2, false, 2, 0)
-  draw_plant_of_type(microsword, large, 0, false, 1, 0)
-  draw_plant_of_type(microsword, small, 1, false, 1, 0)
+  draw_plant_of_type(microsword, medium, -2, false, 1, 0)
 
-  add_plant(microsword, 2, large, 2)
+  add_plant(microsword, 2, medium, 2)
   add_plant(microsword, 4, small, 2)
-  add_plant(microsword, 6, small, 2)
+  add_plant(marimo, 6, small, 2)
   add_plant(microsword, 8, large, 1)
   add_plant(microsword, 9, small, 2)
   add_plant(anubias, 11, large, 3)
@@ -75,18 +73,21 @@ void draw_title_screen() {
   add_plant(rotala, 15, small, 1)
   add_plant(microsword, 16, small, 2)
 
-  add_plant(rotala, 19, large, 1)
-  add_plant(rotala, 20, medium, 1)
-  add_plant(rotala, 21, large, 1)
-  add_plant(rotala, 22, small, 1)
+  add_plant(amazonsword, 19, medium, 3)
+  add_plant(marimo, 23, small, 2)
 
-  add_plant(microsword, 24, small, 2)
-  add_plant(microsword, 26, large, 2)
+  add_plant(sagittaria, 25, large, 3)
 
   draw_plants()
 
   // Fix attr entry for far left
   ppu_set_addr(ppu_attrtable0 + 6 * 8)
+  ppu_write_data(%01010101)
+
+  // Fix attr entry for far right
+  ppu_set_addr(ppu_attrtable0 + 5 * 8 + 7)
+  ppu_write_data(%01010101)
+  ppu_set_addr(ppu_attrtable0 + 6 * 8 + 7)
   ppu_write_data(%01010101)
 
   // Bottom attr
