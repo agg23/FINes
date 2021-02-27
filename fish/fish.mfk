@@ -13,7 +13,7 @@ import entity/time
 enum FishType {
   tetra,
   rasbora,
-  cherry_shrimp,
+  // cherry_shrimp,
   cory,
   betta
 }
@@ -24,6 +24,12 @@ enum FishQuality {
   average,
   good,
   excellent
+}
+
+enum FishStrata {
+  top_strata,
+  middle_strata,
+  bottom_strata
 }
 
 const byte MAX_FISH_COUNT = 20
@@ -65,7 +71,7 @@ void init_fish() {
   }
 
   spawn_fish(tetra, true, $80, $26, false)
-  spawn_fish(rasbora, true, $60, $84, true)
+  // spawn_fish(rasbora, true, $60, $84, true)
   // // spawn_fish(cherry_shrimp, true)
   // spawn_fish(tetra, false, $34, $B2)
   // spawn_fish(tetra, true, $80, $26)
@@ -144,7 +150,6 @@ void fish_tick() {
 inline void fish_breed() {
   fish_breed_type(tetra)
   fish_breed_type(rasbora)
-  fish_breed_type(cherry_shrimp)
   fish_breed_type(cory)
 }
 
@@ -273,3 +278,6 @@ inline void render_fish() {
     render_fish_type(fish_type[i], fish_x[i], fish_y[i], mask, pos_direction)
   }
 }
+
+// tetra, rasbora, cory, betta
+const array(FishStrata) fish_strata[FishType] = [middle_strata, middle_strata, bottom_strata, top_strata]

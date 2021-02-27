@@ -21,11 +21,7 @@ inline void fish_move() {
       continue
     }
 
-    if (fish_type[i] == tetra || fish_type[i] == rasbora || fish_type[i] == cory || fish_type[i] == betta) {
-      tetra_fish_move(i)
-    } else if (fish_type[i] == cherry_shrimp) {
-      // cherry_shrimp_move(i)
-    }
+    tetra_fish_move(i, fish_strata[fish_type[i]])
   }
 }
 
@@ -100,17 +96,23 @@ inline void dead_fish_move(byte i) {
   fish_y[i] += vel_y
 }
 
-inline void tetra_fish_move(byte i) {
+inline void tetra_fish_move(byte i, FishStrata strata) {
   fish_diff_velocity_x = fish_velocity_x[i]
   fish_diff_velocity_y = fish_velocity_y[i]
 
-  boid_center_mass_step(i)
+  boid_center_mass_step(i, strata)
 
   // boid_distance_step(i)
 
   // boid_average_velocity_step(i)
 
-  trend_center(i)
+  if (strata == top_strata) {
+    trend_strata(i, $40, $60)
+  } else if (strata == middle_strata) {
+    trend_strata(i, $70, $90)
+  } else {
+    trend_strata(i, $B0, $D0)
+  }
 
   boid_apply_random(i)
 
@@ -183,9 +185,9 @@ macro void apply_fish_velocity(byte i, byte vel_x, byte vel_y, bool const cap_lo
   fish_y[i] = vel_y
 }
 
-inline void boid_center_mass_step(byte i) {
+inline void boid_center_mass_step(byte i, FishStrata strata) {
   word center
-  center = perceived_boid_center(i)
+  center = perceived_boid_center(i, strata)
 
   word stemp
   byte temp
@@ -319,7 +321,7 @@ inline void boid_average_velocity_step(byte i) {
   fish_diff_velocity_y += temp.lo
 }
 
-inline word perceived_boid_center(byte i) {
+inline word perceived_boid_center(byte i, FishStrata strata) {
   byte j
   word sum_x
   word sum_y
@@ -330,7 +332,7 @@ inline word perceived_boid_center(byte i) {
   count = 0
 
   for j,0,until,MAX_FISH_COUNT {
-    if (i != j && fish_active[j]) {
+    if (i != j && fish_active[j] && fish_alive[j] && fish_strata[fish_type[j]] == strata) {
       sum_x += fish_x[j]
       sum_y += fish_y[j]
       count += 1
@@ -356,10 +358,10 @@ inline word perceived_boid_center(byte i) {
   return output
 }
 
-inline void trend_center(byte i) {
-  if (fish_y[i] > $90) {
+macro void trend_strata(byte i, byte const top_pos, byte const bottom_pos) {
+  if (fish_y[i] > bottom_pos) {
     fish_diff_velocity_y -= FISH_STRATA_VELOCITY_PER_TICK
-  } else if (fish_y[i] < $70) {
+  } else if (fish_y[i] < top_pos) {
     fish_diff_velocity_y += FISH_STRATA_VELOCITY_PER_TICK
   }
 }
