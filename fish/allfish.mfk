@@ -1,4 +1,5 @@
 import ui/shared
+import ui/gameover
 import fish/fish
 
 import fish/tetra
@@ -141,7 +142,7 @@ inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_
 
 void check_gameover() {
   if (should_gameover()) {
-    set_screen(gameover)
+    init_gameover()
   }
 }
 
@@ -155,7 +156,7 @@ bool should_gameover() {
   }
 
   // No fish
-  if (fish_bucks > CHEAPEST_FISH_PRICE) {
+  if (fish_bucks >= CHEAPEST_FISH_PRICE) {
     // At least one fish can be purchased
     return false
   }

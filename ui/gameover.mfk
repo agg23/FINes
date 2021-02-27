@@ -1,6 +1,15 @@
 import custom_random
 import ui/shared
 
+void init_gameover() {
+  init_aquarium()
+  init_fish()
+
+  init_plants()
+
+  set_screen(gameover)
+}
+
 bool gameover_screen_tick() {
   if (input_can_be_consumed) {  
     if (input_a != 0 || input_b != 0 || input_start != 0 || input_select != 0) {
