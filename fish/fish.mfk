@@ -56,6 +56,7 @@ array(byte) fish_health [MAX_FISH_COUNT]
 array(FishQuality) fish_quality [MAX_FISH_COUNT]
 
 const byte FISH_MAX_VELOCITY = $30
+const byte FISH_MAX_BREAK_VELOCITY = $40
 const byte FISH_MAX_DEAD_VELOCITY = $30
 const byte FISH_DECAY_VELOCITY_PER_TICK = $2
 const byte FISH_STRATA_VELOCITY_PER_TICK = $2
