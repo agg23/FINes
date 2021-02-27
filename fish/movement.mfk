@@ -106,7 +106,7 @@ inline void tetra_fish_move(byte i) {
 
   boid_center_mass_step(i)
 
-  // boid_distance_step(i)
+  boid_distance_step(i)
 
   // boid_average_velocity_step(i)
 
@@ -138,21 +138,21 @@ inline void tetra_fish_move(byte i) {
   apply_fish_velocity(i, fish_diff_velocity_x, fish_diff_velocity_y, true)
 
   // Only decay over certain speed to prevent flashing directions
-  // if (fish_diff_velocity_x & $80 != 0) {
-  //   if (fish_diff_velocity_x < -$10) {
-  //     fish_diff_velocity_x += FISH_DECAY_VELOCITY_PER_TICK
-  //   }
-  // } else if (fish_diff_velocity_x > $10) {
-  //   fish_diff_velocity_x -= FISH_DECAY_VELOCITY_PER_TICK
-  // }
+  if (fish_velocity_x[i] & $80 != 0) {
+    if (fish_velocity_x[i] < -$10) {
+      fish_velocity_x[i] += FISH_DECAY_VELOCITY_PER_TICK
+    }
+  } else if (fish_velocity_x[i] > $10) {
+    fish_velocity_x[i] -= FISH_DECAY_VELOCITY_PER_TICK
+  }
 
-  // if (fish_diff_velocity_y & $80 != 0) {
-  //   if (fish_diff_velocity_y < -$10) {
-  //     fish_diff_velocity_y += FISH_DECAY_VELOCITY_PER_TICK
-  //   }
-  // } else if (fish_diff_velocity_y > $10) {
-  //   fish_diff_velocity_y -= FISH_DECAY_VELOCITY_PER_TICK
-  // }
+  if (fish_velocity_y[i] & $80 != 0) {
+    if (fish_velocity_y[i] < -$10) {
+      fish_velocity_y[i] += FISH_DECAY_VELOCITY_PER_TICK
+    }
+  } else if (fish_velocity_y[i] > $10) {
+    fish_velocity_y[i] -= FISH_DECAY_VELOCITY_PER_TICK
+  }
 }
 
 macro void apply_fish_velocity(byte i, byte vel_x, byte vel_y, bool const cap_location) {
@@ -240,7 +240,7 @@ inline void boid_distance_step(byte i) {
   displacement_y = 0
 
   for j,0,until,MAX_FISH_COUNT {
-    if (i != j && fish_active[j]) {
+    if (i != j && fish_active[j] && fish_alive[j]) {
       // Naive fast distance
       x_distance = fish_x[j] - fish_x[i]
       y_distance = fish_y[j] - fish_y[i]
@@ -250,10 +250,10 @@ inline void boid_distance_step(byte i) {
       temp = word(x_squared) + word(y_squared)
 
       if (temp < $B0) {
-        arithmetic_shift_right(x_distance)
-        fish_diff_velocity_x -= x_distance
-        arithmetic_shift_right(y_distance)
-        fish_diff_velocity_y -= y_distance
+        // arithmetic_shift_right(x_distance)
+        fish_diff_velocity_x -= distance_inverse(x_distance)
+        // arithmetic_shift_right(y_distance)
+        fish_diff_velocity_y -= distance_inverse(y_distance)
         // displacement_x -= x_distance
         // displacement_y -= y_distance
       }
@@ -269,6 +269,17 @@ inline void boid_distance_step(byte i) {
     // signed16_arithmetic_shift_right(displacement_y)
     // fish_diff_velocity_y += displacement_y.lo
   // }
+}
+
+inline byte distance_inverse(byte input) {
+  byte temp
+  temp = center_mass_distance(input)
+
+  if (temp & $80 != 0) {
+    return ($F0 - temp) << 1
+  } else {
+    return ($10 - temp) << 1
+  }
 }
 
 inline void boid_average_velocity_step(byte i) {
@@ -307,7 +318,7 @@ inline word perceived_boid_center(byte i) {
   count = 0
 
   for j,0,until,MAX_FISH_COUNT {
-    if (i != j && fish_active[j]) {
+    if (i != j && fish_active[j] && fish_alive[j]) {
       sum_x += fish_x[j]
       sum_y += fish_y[j]
       count += 1
@@ -343,15 +354,15 @@ inline void trend_center(byte i) {
 
 inline void bound_position(byte i) {
   if (fish_x[i] < active_tank.x_low + 8) {
-    fish_diff_velocity_x += $4
+    fish_diff_velocity_x += $8
   } else if (fish_x[i] > active_tank.x_high - 8) {
-    fish_diff_velocity_x -= $4
+    fish_diff_velocity_x -= $8
   }
 
   if (fish_y[i] < active_tank.y_low + 8) {
-    fish_diff_velocity_y += $4
+    fish_diff_velocity_y += $8
   } else if (fish_y[i] > active_tank.y_high - 8) {
-    fish_diff_velocity_y -= $4
+    fish_diff_velocity_y -= $8
   }
 }
 
