@@ -58,7 +58,6 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value, bool invert
       oam_buffer[oam_index + 3] = (tile_x + i) * 8
     }
 
-
     oam_index += 4
   }
 
@@ -82,7 +81,7 @@ void render_progress_indicator(byte tile_x, byte tile_y, byte value, bool invert
   }
 
   oam_buffer[oam_index] = tile_y * 8 - 1
-  oam_buffer[oam_index + 1] = base_tile + 7 - steps + first_offset
+  oam_buffer[oam_index + 1] = base_tile + 7 - steps
   oam_buffer[oam_index + 2] = 0
   oam_buffer[oam_index + 3] = (tile_x + tile_count) * 8 + first_offset
 
