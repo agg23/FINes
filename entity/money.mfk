@@ -105,5 +105,5 @@ void money_tick() {
     bonus = 0
   }
 
-  earn(10 + bonus, care_bonus)
+  earn(7 + bonus, care_bonus)
 }

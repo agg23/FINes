@@ -14,6 +14,10 @@ void time_tick() {
     day_timer = 0
     increment_day()
     money_tick()
+  } else if (day_timer == 8) {
+    money_tick()
+
+    day_timer += 1
   } else {
     day_timer += 1
   }
