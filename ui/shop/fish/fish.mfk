@@ -12,9 +12,12 @@ void calculate_fish_shop_enabled() {
 
   enable_fish = is_space_for_fish()
 
-  for i,0,until,SHOP_ITEM_COUNT {
+  for i,0,until,SHOP_ITEM_COUNT - 2 {
     shop_item_enabled[i] = enable_fish
   }
+
+  shop_item_enabled[4] = false
+  shop_item_enabled[5] = false
 
   if (not(enable_fish)){
     if (shop_state != tank) {
@@ -120,7 +123,7 @@ void purchase_fish() {
       spawn_fish(type, shop_price_state == male, $80, $20, false)
       calculate_fish_shop_enabled()
 
-       play_purchase()
+      play_purchase()
     } else {
       play_denied()
     }
@@ -129,5 +132,5 @@ void purchase_fish() {
 
 const array(FishType) shop_fish_tanks = [
   tetra, rasbora, cory,
-  betta, tetra, tetra
+  betta, placeholder, placeholder
 ]

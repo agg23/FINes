@@ -49,6 +49,8 @@ inline void draw_shop_fish_tank(byte fish_i, FishType type, byte x, byte y) {
       draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
       draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
     }
+  } else if (shop_fish_tanks[fish_i] == placeholder) {
+    draw_text(x - 2, y + 6, coming_soon_text.pointer, coming_soon_text.length, 8)
   } else {
     draw_text(x - 2, y + 8, plant_no_room_text.pointer, plant_no_room_text.length, 0)
   }
@@ -90,7 +92,12 @@ inline void render_shop_fish() {
 
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
-      render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 58 + i * 12 * 8, 0, true)
+      if (shop_fish_tanks[i * 3 + j] == betta) {
+        // Push betta down in tank
+        render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 64 + i * 12 * 8, 0, true)
+      } else {
+        render_fish_type(shop_fish_tanks[i * 3 + j], 64 + j * 64, 58 + i * 12 * 8, 0, true)
+      }
       render_tank_light(7 * 8 + 3 + j * 8 * 8 , 6 * 8 + i * 12 * 8)
 
       if (shop_item_enabled[i * 3 + j]) {
@@ -195,4 +202,8 @@ const array(byte) any_price_text = [
 
 const array(byte) sexed_price_text = [
   "M/F" ascii
+]
+
+const array(byte) coming_soon_text = [
+  "Coming`soon" ascii
 ]

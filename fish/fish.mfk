@@ -15,7 +15,8 @@ enum FishType {
   rasbora,
   // cherry_shrimp,
   cory,
-  betta
+  betta,
+  placeholder
 }
 
 enum FishQuality {
@@ -288,5 +289,5 @@ inline void render_fish() {
   }
 }
 
-// tetra, rasbora, cory, betta
-const array(FishStrata) fish_strata[FishType] = [middle_strata, middle_strata, bottom_strata, top_strata]
+// tetra, rasbora, cory, betta, placeholder
+const array(FishStrata) fish_strata[FishType] = [middle_strata, middle_strata, bottom_strata, top_strata, middle_strata]
