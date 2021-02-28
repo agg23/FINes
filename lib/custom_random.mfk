@@ -6,6 +6,10 @@ void init_random() {
   init_rand_seed()
 }
 
+void init_random_with_seed(byte seed) {
+  rand_seed = seed
+}
+
 macro void random_int_const(byte const min, byte const max, byte output) {
   output = rand()
   output = output %% (max - min)
