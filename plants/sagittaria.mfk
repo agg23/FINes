@@ -3,7 +3,7 @@ import graphics_buffer
 import plants/plants
 
 // Make sure to update text arrays
-const byte SAGITTARIA_PRICE = 15
+const byte SAGITTARIA_PRICE = 55
 
 // TODO: Size is unused
 inline void draw_sagittaria(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
@@ -71,5 +71,5 @@ const array(byte) sagittaria_name_text = [
 ]
 
 const array(byte) sagittaria_price_text = [
-  "15" ascii
+  "55" ascii
 ]

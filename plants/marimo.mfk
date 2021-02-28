@@ -3,7 +3,7 @@ import graphics_buffer
 import plants/plants
 
 // Make sure to update text arrays
-const byte MARIMO_PRICE = 15
+const byte MARIMO_PRICE = 17
 
 // Size is unused purposefully
 inline void draw_marimo(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
@@ -34,5 +34,5 @@ const array(byte) marimo_name_text = [
 ]
 
 const array(byte) marimo_price_text = [
-  "15" ascii
+  "17" ascii
 ]

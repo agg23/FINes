@@ -3,7 +3,7 @@ import graphics_buffer
 import plants/plants
 
 // Make sure to update text arrays
-const byte ANUBIAS_PRICE = 15
+const byte ANUBIAS_PRICE = 38
 
 inline void draw_anubias(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
   byte i
@@ -72,5 +72,5 @@ const array(byte) anubias_name_text = [
 ]
 
 const array(byte) anubias_price_text = [
-  "15" ascii
+  "38" ascii
 ]

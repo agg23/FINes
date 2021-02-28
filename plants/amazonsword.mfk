@@ -3,7 +3,7 @@ import graphics_buffer
 import plants/plants
 
 // Make sure to update text arrays
-const byte AMAZONSWORD_PRICE = 15
+const byte AMAZONSWORD_PRICE = 32
 
 inline void draw_amazonsword(PlantSize size, byte x, pointer.byte data, bool write_attr, byte custom_bottom_y) {
   byte i
@@ -87,5 +87,5 @@ const array(byte) amazonsword_name_text = [
 ]
 
 const array(byte) amazonsword_price_text = [
-  "15" ascii
+  "32" ascii
 ]

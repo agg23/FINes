@@ -3,7 +3,7 @@ import graphics_buffer
 import plants/plants
 
 // Make sure to update text arrays
-const byte MICROSWORD_PRICE = 15
+const byte MICROSWORD_PRICE = 25
 
 inline void draw_microsword(PlantSize size, byte x, pointer.byte data, bool write_attr, byte width, byte custom_bottom_y) {
   byte i
@@ -52,5 +52,5 @@ const array(byte) microsword_name_text = [
 ]
 
 const array(byte) microsword_price_text = [
-  "15" ascii
+  "25" ascii
 ]
