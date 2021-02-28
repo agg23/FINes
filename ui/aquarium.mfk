@@ -148,15 +148,21 @@ void draw_clear_spectate_text() {
 }
 
 void draw_aquarium() {
+  internal_draw_aquarium(true)
+}
+
+void internal_draw_aquarium(bool draw_header) {
   draw_tank()
   draw_plants()
 
-  if (not(spectate_mode)) {
+  if (spectate_mode) {
+    draw_spectate_text()
+  } else if (draw_header) {
     draw_commandbar()
     draw_money()
     draw_overall_health()
   } else {
-    draw_spectate_text()
+    draw_text(0, 2, placing_plant_text.pointer, placing_plant_text.length, 32)
   }
 
   load_aquarium_palettes()
@@ -173,4 +179,8 @@ const array(byte) spectate_mode_text = [
 
 const array(byte) exit_spectate_text = [
   "to exit" ascii
+]
+
+const array(byte) placing_plant_text = [
+  "Placing plant" ascii
 ]
