@@ -125,6 +125,15 @@ inline void sprite_render() {
   ppu_oam_dma_write(oam_buffer.addr.hi)
 }
 
+inline void load_transition_palette() {
+  byte i
+  ppu_set_addr(ppu_palette_ram)
+
+  for i,0,until,transition_palette.length {
+    ppu_write_data(transition_palette[i])
+  }
+}
+
 inline void set_color_effect(ColorEffect effect) {
   if (effect == red) {
     ppu_mask = default_mask | %00100000

@@ -80,6 +80,8 @@ void nmi() {
 
 inline void nmi_work() {
   if (buffer_screen_blank) {
+    load_transition_palette()
+
     screen_transfer_tick()
     nmi_always_run()
     new_frame = false
