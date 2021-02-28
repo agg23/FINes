@@ -19,5 +19,5 @@ macro void random_int_const_min(byte const min, byte max, byte output) {
 }
 
 inline bool random_bool() {
-  return rand() > $FF
+  return rand() > $80
 }
