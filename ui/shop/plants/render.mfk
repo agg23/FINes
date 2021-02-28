@@ -17,6 +17,13 @@ void draw_shop_plants_screen() {
     ppu_ctrl = vertical_ppu_ctrl
 
     read_ppu_status()
+    ppu_set_addr(row_address + 3)
+    ppu_write_data($10)
+    for j,0,until,7 {
+      ppu_write_data($12)
+    }
+    
+    read_ppu_status()
     ppu_set_addr(row_address + 4)
     ppu_write_data(shop_tank[0])
     ppu_write_data(shop_tank[4])
@@ -41,6 +48,13 @@ void draw_shop_plants_screen() {
     ppu_write_data(shop_tank[$11])
     ppu_write_data(shop_tank[$11])
     ppu_write_data(shop_tank[$11])
+
+    read_ppu_status()
+    ppu_set_addr(row_address + 32 - 4)
+    ppu_write_data($10)
+    for j,0,until,7 {
+      ppu_write_data($11)
+    }
   }
 
   ppu_ctrl = standard_ppu_ctrl

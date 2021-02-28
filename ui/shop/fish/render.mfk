@@ -9,7 +9,7 @@ void draw_shop_fish_screen() {
 
   for i,0,until,SHOP_ROW_COUNT {
     for j,0,until,SHOP_COLUMN_COUNT {
-      draw_shop_fish_tank(i * 3 + j, shop_fish_tanks[i * 3 + j], 6 + j * 8, 5 + i * 12)
+      draw_shop_fish_tank(i * 3 + j, shop_fish_tanks[i * 3 + j], 5 + j * 8, 5 + i * 12)
     }
   }
 
@@ -29,30 +29,40 @@ inline void draw_shop_fish_tank(byte fish_i, FishType type, byte x, byte y) {
 
   for i,0,until,5 {
     ppu_set_addr(address)
+    if (i != 0) {
+      ppu_write_data($12)
+    } else {
+      ppu_write_data($10)
+    }
+
     for j,0,until,4 {
       ppu_write_data(shop_tank[i * 4 + j])
+    }
+
+    if (i != 0) {
+      ppu_write_data($11)
     }
 
     address += 32
   }
 
-  draw_fish_name(type, x - 2, y + 6, 8)
+  draw_fish_name(type, x - 1, y + 6, 8)
 
   if (shop_item_enabled[fish_i]) {
     // Any
-    draw_text(x - 1, y + 8, any_price_text.pointer, any_price_text.length, 0)
-    draw_fish_any_price(type, x + any_price_text.length, y + 8)
+    draw_text(x, y + 8, any_price_text.pointer, any_price_text.length, 0)
+    draw_fish_any_price(type, x + any_price_text.length + 1, y + 8)
 
     // Bettas can only be purchased as male
     if (type != betta) {
       // Sexed
-      draw_text(x - 1, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
-      draw_fish_sexed_price(type, x + sexed_price_text.length, y + 9)
+      draw_text(x, y + 9, sexed_price_text.pointer, sexed_price_text.length, 0)
+      draw_fish_sexed_price(type, x + sexed_price_text.length + 1, y + 9)
     }
   } else if (shop_fish_tanks[fish_i] == placeholder) {
-    draw_text(x - 2, y + 6, coming_soon_text.pointer, coming_soon_text.length, 8)
+    draw_text(x - 1, y + 6, coming_soon_text.pointer, coming_soon_text.length, 8)
   } else {
-    draw_text(x - 2, y + 8, plant_no_room_text.pointer, plant_no_room_text.length, 0)
+    draw_text(x - 1, y + 8, plant_no_room_text.pointer, plant_no_room_text.length, 0)
   }
 }
 
@@ -189,7 +199,7 @@ const array(byte) shop_tank = [
   4, 5, 6, 7,
   8, 9, $A, $B,
   $C, $D, $E, $F,
-  $11, 0, 0, $12
+  0, 0, 0, 0
 ]
 
 const array(byte) fish_screen_text = [
