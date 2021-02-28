@@ -77,8 +77,6 @@ void draw_shop() {
 
   set_bank_1()
 
-  enable_sprite0 = false
-
   load_shop_palette()
 
   return [shop_screen] {

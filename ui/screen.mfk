@@ -75,6 +75,7 @@ void screen_draw_tick() {
   // NMI has cleared screen, now write it
   // Draw new screen
   buffer_screen_draw = false
+  init_sprites()
   ppu_wait_vblank()
 
   clear_buffer()

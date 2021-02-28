@@ -39,8 +39,6 @@ void draw_inspect() {
 
   load_inspect_palette()
 
-  enable_sprite0 = false
-
   if (inspect_screen == inspect_fish_details) {
     draw_inspect_details()
   }
@@ -169,8 +167,6 @@ void draw_inspect_details() {
   draw_inspect_fish_details_content()
 
   set_bank_1()
-
-  enable_sprite0 = false
 }
 
 void render_inspect() {

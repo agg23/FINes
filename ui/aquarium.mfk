@@ -157,8 +157,6 @@ void draw_aquarium() {
 
   load_aquarium_palettes()
   set_bank_0()
-
-  enable_sprite0 = true
 }
 
 inline void load_aquarium_palettes() {

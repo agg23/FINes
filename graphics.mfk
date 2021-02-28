@@ -17,8 +17,6 @@ byte oam_index = 0
 
 bool drawing_enabled
 
-bool enable_sprite0
-
 // enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
 const byte standard_ppu_ctrl = %10010000
 // Same as above, but increment address by 32
@@ -115,7 +113,7 @@ inline void clear_remaining_oam() {
       //the y position of each sprite (0th byte)
       //so we use the %00000011 mask to write every 4th byte (every 0th sprite byte)
       
-      oam_buffer[i] = $ef // move the sprite off screen
+      oam_buffer[i] = $FF // move the sprite off screen
     } else {
       oam_buffer[i] = 0
     }
