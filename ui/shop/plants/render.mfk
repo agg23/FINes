@@ -112,7 +112,7 @@ void draw_shop_plant(byte row, byte column) {
   type = shop_plant_tanks[row * SHOP_COLUMN_COUNT + column]
 
   temp = plant_expected_width[type]
-  draw_plant_of_type(type, plant_shop_size[type], x - plant_min_x + ((8 - temp) >> 1), true, temp, y + 6)
+  draw_plant_of_type(type, plant_shop_size[type], x - plant_min_x + ((8 - temp) >> 1) - 1, true, temp, y + 6)
 
   draw_plant_name(type, x - 1, y + 8, 8)
 
