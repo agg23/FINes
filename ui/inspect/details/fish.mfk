@@ -25,21 +25,26 @@ inline bool inspect_fish_details_tick() {
 
       // Request screen redraw
       set_screen_forcibly(inspect)
+
+      play_deactivate()
       return true
     } else if (input_select != 0 && input_start != 0) {
       if (not(fish_alive[inspect_fish_details_index])) {
         // Dispose of fish
-        delete_fish(inspect_fish_details_index)
+        delete_fish(inspect_fish_details_index) 
+
+        play_button_chirp()
       } else {
         earn(fish_sale_price(inspect_fish_details_index), fish_sale)
         delete_fish(inspect_fish_details_index)
+
+        play_sale()
       }
 
       if (inspect_packed_length == 1) {
         // Removed last fish, return to aquarium
         set_screen(aquarium)
       } else {
-        // TODO: Selling the first item twice? seems to break this
         if (current_inspect_row >= current_inspect_page_length - 1 && current_inspect_page * 5 + current_inspect_page_length == inspect_packed_length) {
           if (current_inspect_page_length < 2 && current_inspect_page > 0) {
             // Page is now out of range

@@ -55,12 +55,15 @@ inline bool shop_fish_price_selection_input_tick() {
         shop_state = tank
       }
 
+      play_deactivate()
+
       return true
     } else if (input_a != 0) {
       if (shop_price_state == any) {
         purchase_fish()
       } else if (shop_price_state == price_selection_sex) {
         shop_price_state = male
+        play_button_chirp()
       } else {
         // Male/female
         purchase_fish()
@@ -70,16 +73,24 @@ inline bool shop_fish_price_selection_input_tick() {
     } else if (input_dy > 0 && shop_price_state == any) {
       // Bottom
       shop_price_state = price_selection_sex
+
+      play_button_chirp()
       return true
     } else if (input_dy < 0 && shop_price_state == price_selection_sex) {
       // Top
       shop_price_state = any
+
+      play_button_chirp()
       return true
     } else if (input_dx > 0 && shop_price_state == male) {
       shop_price_state = female
+
+      play_button_chirp()
       return true
     } else if (input_dx < 0 && shop_price_state == female) {
       shop_price_state = male
+
+      play_button_chirp()
       return true
     }
   }
@@ -97,6 +108,10 @@ void purchase_fish() {
       // TODO: Make better fish spawn position
       spawn_fish(type, random_bool(), $80, $20, false)
       calculate_fish_shop_enabled()
+
+      play_purchase()
+    } else {
+      play_denied()
     }
   } else {
     if (purchase(fish_sexed_price(type))) {
@@ -104,6 +119,10 @@ void purchase_fish() {
       // TODO: Make better fish spawn position
       spawn_fish(type, shop_price_state == male, $80, $20, false)
       calculate_fish_shop_enabled()
+
+       play_purchase()
+    } else {
+      play_denied()
     }
   }
 }

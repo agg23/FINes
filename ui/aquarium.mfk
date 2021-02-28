@@ -82,6 +82,8 @@ bool aquarium_spectate_tick() {
 
   if (input_start != 0 && input_select != 0) {
     stop_spectate()
+
+    play_deactivate()
     
     return true
   } else if (input_start != 0 || input_select != 0 || input_a != 0 || input_b != 0 || input_dx != 0 || input_dy != 0) {

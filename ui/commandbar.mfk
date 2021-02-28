@@ -8,7 +8,6 @@ import ui/planteditor
 import ui/inspect/inspect
 import ui/stats
 
-import entity/inspect
 import entity/money
 
 const byte commandbar_item_count = 5
@@ -21,18 +20,26 @@ void activate_feed() {
 
 void activate_fish_inspect() {
   init_inspect()
+
+  play_button_chirp()
 }
 
 void activate_stats() {
   init_stats()
+
+  play_button_chirp()
 }
 
 void activate_shop() {
   init_shop()
+
+  play_button_chirp()
 }
 
 void activate_spectator() {
   start_spectate()
+
+  play_button_chirp()
 }
 
 const array(function.void.to.void) menuitem_actions = [activate_feed.pointer, activate_fish_inspect.pointer, activate_stats.pointer, activate_shop.pointer, activate_spectator.pointer]
@@ -47,12 +54,16 @@ bool commandbar_tick() {
       // Left
       if selected_command_item > 0 {
         selected_command_item -= 1
+
+        play_button_chirp()
       }
       return true
     } else if input_dx > 0 {
       // Right
       if selected_command_item < commandbar_item_count - 1 {
         selected_command_item += 1
+
+        play_button_chirp()
       }
       return true
     }

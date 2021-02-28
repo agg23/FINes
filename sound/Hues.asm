@@ -2,7 +2,7 @@
 
 .base $D000
 
-untitled_music_data:
+fines_music_data:
 	db 2
 	dw @instruments
 	dw @samples-3
@@ -224,7 +224,7 @@ untitled_music_data:
 
 @song1ch0:
 @ref29:
-	db $79,$84,$31,$99,$36,$99,$36,$b5,$2a,$99,$2e,$99,$28,$99,$2c,$99
+	db $79,$88,$31,$99,$36,$99,$36,$b5,$2a,$99,$2e,$99,$28,$99,$2c,$99
 @ref30:
 	db $79,$31,$99,$36,$99,$36,$b5,$2a,$99,$2e,$99,$28,$99,$2c,$99
 	db $ff,$0e
@@ -233,7 +233,7 @@ untitled_music_data:
 	db $79,$31,$99,$36,$99,$00,$f7,$ad
 @song1ch0loop:
 @ref32:
-	db $fb,<(@tempo_env14),>(@tempo_env14),$79,$84,$31,$99,$36,$99,$36,$b5,$2a,$99,$2e,$99,$28,$99,$2c,$99
+	db $fb,<(@tempo_env14),>(@tempo_env14),$79,$88,$31,$99,$36,$99,$36,$b5,$2a,$99,$2e,$99,$28,$99,$2c,$99
 @ref33:
 	db $79,$2a,$99,$31,$99,$31,$d1,$2e,$99,$2f,$b5
 	db $ff,$0e
@@ -317,21 +317,21 @@ untitled_music_data:
 @ref59:
 	db $f7,$e7
 @ref60:
-	db $f7,$e7
+	db $81,$78,$f7,$e5
 @song1ch3loop:
 @ref61:
-	db $7b,$86,$30,$69,$03,$99,$00,$d1,$8a,$31,$99,$82,$3c,$99,$8a,$31,$99,$82,$3c,$97,$00
-	db $ff,$0d
+	db $7b,$86,$30,$69,$03,$87,$00,$e3,$8a,$31,$8b,$00,$8b,$82,$3c,$8b,$00,$8b,$8a,$31,$8b,$00,$8b,$82,$3c,$8b,$00,$8b
+	db $ff,$14
 	dw @ref61
-	db $ff,$0d
+	db $ff,$14
 	dw @ref61
-	db $ff,$0d
+	db $ff,$14
 	dw @ref61
-	db $ff,$0d
+	db $ff,$14
 	dw @ref61
-	db $ff,$0d
+	db $ff,$14
 	dw @ref61
-	db $ff,$0d
+	db $ff,$14
 	dw @ref61
 @ref62:
 	db $ef,$3c,$99,$00,$99,$3c,$99,$00,$99

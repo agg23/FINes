@@ -116,6 +116,8 @@ inline bool shop_tank_selection_input_tick() {
   if (input_can_be_consumed) {
     if (input_b != 0) {
       close_shop()
+
+      play_deactivate()
       return true
     } else if (input_select != 0 || input_start != 0) {
       if (shop_screen == fish) {
@@ -127,9 +129,11 @@ inline bool shop_tank_selection_input_tick() {
       // Request screen redraw
       set_screen_forcibly(shop)
 
+      play_button_chirp()
       return true
     } else if (input_a != 0) {
       if (not(shop_item_enabled[current_shop_row * SHOP_COLUMN_COUNT + current_shop_column])) {
+        play_denied()
         return false
       }
 
@@ -140,6 +144,8 @@ inline bool shop_tank_selection_input_tick() {
         } else {
           shop_state = price
           shop_price_state = any
+
+          play_button_chirp()
         }
       } else if (shop_screen == plants) {
         purchase_plant()
@@ -151,11 +157,13 @@ inline bool shop_tank_selection_input_tick() {
       if (current_shop_column < SHOP_COLUMN_COUNT - 1) {
         current_shop_column += 1
 
+        play_button_chirp()
         return true
       } else if (current_shop_row < SHOP_ROW_COUNT - 1) {
         current_shop_row += 1
         current_shop_column = 0
 
+        play_button_chirp()
         return true
       }
     } else if (input_dx < 0) {
@@ -163,22 +171,26 @@ inline bool shop_tank_selection_input_tick() {
       if (current_shop_column > 0) {
         current_shop_column -= 1
 
+        play_button_chirp()
         return true
       } else if (current_shop_row > 0) {
         current_shop_row -= 1
         current_shop_column = SHOP_COLUMN_COUNT - 1
 
+        play_button_chirp()
         return true
       }
     } else if (input_dy > 0 && current_shop_row < SHOP_ROW_COUNT - 1) {
       // Bottom
       current_shop_row += 1
 
+      play_button_chirp()
       return true
     } else if (input_dy < 0 && current_shop_row > 0) {
       // Top
       current_shop_row -= 1
 
+      play_button_chirp()
       return true
     }
   }

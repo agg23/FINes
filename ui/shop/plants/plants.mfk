@@ -23,6 +23,10 @@ void purchase_plant() {
 
   if (purchase(plant_price(type))) {
     start_plant_editing(type)
+
+     play_purchase()
+  } else {
+    play_denied()
   }
 }
 

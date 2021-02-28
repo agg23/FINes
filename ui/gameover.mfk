@@ -8,12 +8,22 @@ void init_gameover() {
   init_plants()
 
   set_screen(gameover)
+
+  // Stop music
+  #if(music)
+  famistudio_music_stop()
+  #endif
+
+  play_gameover()
 }
 
 bool gameover_screen_tick() {
   if (input_can_be_consumed) {  
     if (input_a != 0 || input_b != 0 || input_start != 0 || input_select != 0) {
-      set_screen(title)
+      init_title()
+
+      play_button_chirp()
+
       return true
     }
   }

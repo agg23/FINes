@@ -64,6 +64,8 @@ inline bool inspect_fish_tick() {
   if (inspect_packed_length == 0) {
     if (input_can_be_consumed && (input_a != 0 || input_b != 0 || input_select != 0 || input_start != 0)) {
       close_inspect()
+
+      play_deactivate()
       return true
     }
     
@@ -75,6 +77,8 @@ inline bool inspect_fish_tick() {
   if (input_can_be_consumed) {
     if (input_b != 0) {
       close_inspect()
+
+      play_deactivate()
       return true
     } else if (input_a != 0) {
       if (inspect_screen == inspect_fish) {
@@ -83,6 +87,8 @@ inline bool inspect_fish_tick() {
 
       // Request screen redraw
       set_screen_forcibly(inspect)
+
+      play_button_chirp()
 
       return true
     } else if (input_dx > 0 && current_inspect_page < current_inspect_page_count - 1) {
@@ -94,6 +100,8 @@ inline bool inspect_fish_tick() {
       // Request screen redraw
       set_screen_forcibly(inspect)
 
+      play_button_chirp()
+
       return true
     } else if (input_dx < 0 && current_inspect_page > 0) {
       // Left
@@ -103,6 +111,8 @@ inline bool inspect_fish_tick() {
       current_inspect_page_length = inspect_row_count()
       // Request screen redraw
       set_screen_forcibly(inspect)
+
+      play_button_chirp()
 
       return true
     } else if (input_dy > 0) {
@@ -119,6 +129,8 @@ inline bool inspect_fish_tick() {
       // Enable next
       draw_inspect_item_attr(current_inspect_row, true)
 
+      play_button_chirp()
+
       return true
     } else if (input_dy < 0) {
       // Top
@@ -133,6 +145,8 @@ inline bool inspect_fish_tick() {
       draw_inspect_item_attr(temp, false)
       // Enable prev
       draw_inspect_item_attr(current_inspect_row, true)
+
+      play_button_chirp()
 
       return true
     }

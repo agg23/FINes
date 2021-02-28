@@ -177,6 +177,8 @@ void fish_breed_type(FishType type) {
     // Breed
     random_int_const(0, 1, temp)
     spawn_fish(type, temp == 1, $80, $20, true)
+
+    play_plant_growth()
   }
 }
 
@@ -184,7 +186,9 @@ inline void fish_feed() {
   byte i
   // Fish food has the minor price of $2
   if (purchase(2)) {
-    check_gameover()
+    if (check_gameover()) {
+      return
+    }
     for i,0,until,MAX_FISH_COUNT {
       if (fish_active[i] && fish_alive[i]) {
         if (fish_hunger[i] > $40) {
@@ -197,8 +201,10 @@ inline void fish_feed() {
 
     // Feeding also adds ammonia
     increase_ammonia(25)
+
+    play_purchase()
   } else {
-    // TODO: Play denial sound effect
+    play_denied()
   }
 }
 
@@ -253,7 +259,9 @@ void kill_fish(byte i) {
   fish_health[i] = 0
   fish_death_date[i] = elapsed_day
 
-  check_gameover()
+  if (not(check_gameover())) {
+    play_fish_death()
+  }
 }
 
 inline void render_fish() {

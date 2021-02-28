@@ -47,12 +47,16 @@ inline bool plant_editor_tick() {
       earn(plant_price(plant_editor_type), refund_money)
 
       stop_plant_editing()
+      
+      play_deactivate()
       return true
     }
     if (input_a != 0) {
       add_plant(plant_editor_type, plant_editor_x, small, plant_editor_width)
       stop_plant_editing()
       check_gameover()
+
+      play_button_chirp()
       return true
     }
     if (input_dx < 0) {
@@ -72,6 +76,8 @@ inline bool plant_editor_tick() {
         active_plant_flash = true
         active_plant_write_attr = true
 
+        play_button_chirp()
+
         return true
       }
     } else if (input_dx > 0) {
@@ -89,6 +95,8 @@ inline bool plant_editor_tick() {
         plant_editor_timer = 0
         active_plant_flash = true
         active_plant_write_attr = true
+
+        play_button_chirp()
 
         return true
       }

@@ -21,6 +21,19 @@ asm void famistudio_update() @$C191 extern
 asm void famistudio_music_play(byte a) @$C0C0 extern
 
 /**
+ * Stops any music currently playing, if any. Note that this will not update the APU, so sound might linger. Calling
+ * famistudio_update after this will update the APU.
+ */
+asm void famistudio_music_stop() @$C058 extern
+
+/**
+ * Pause/unpause the currently playing song. Note that this will not update the APU, so sound might linger. Calling
+ * famistudio_update after this will update the APU.
+ * @param a Zero to play, non-zero to pause.
+ */
+asm void famistudio_music_pause(byte a) @$C13A extern
+
+/**
  * Initialize the sound effect player
  * @param xy Sound effect data pointer
  */

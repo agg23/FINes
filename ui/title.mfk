@@ -5,6 +5,14 @@ import plants/allplants
 
 import fish/fish
 
+void init_title() {
+  #if(music)
+  famistudio_music_play(0)
+  #endif
+
+  set_screen(title)
+}
+
 bool title_screen_tick() {
   render_fish()
   fish_move()
@@ -19,6 +27,8 @@ bool title_screen_tick() {
       init_fish()
 
       set_screen(aquarium)
+
+      play_button_chirp()
 
       return true
     }

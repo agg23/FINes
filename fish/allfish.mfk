@@ -140,10 +140,14 @@ inline void render_fish_type(FishType type, byte x, byte y, byte mask, bool pos_
   }
 }
 
-void check_gameover() {
+bool check_gameover() {
   if (should_gameover()) {
     init_gameover()
+
+    return true
   }
+
+  return false
 }
 
 bool should_gameover() {

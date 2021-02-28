@@ -1,9 +1,33 @@
 import sound/sound
 
-void play_button_chirp() {
+void play_deactivate() {
+  famistudio_sfx_play(0, FAMISTUDIO_SFX_CH0)
+}
+
+void play_denied() {
+  famistudio_sfx_play(1, FAMISTUDIO_SFX_CH0)
+}
+
+void play_fish_death() {
+  famistudio_sfx_play(2, FAMISTUDIO_SFX_CH0)
+}
+
+void play_gameover() {
   famistudio_sfx_play(3, FAMISTUDIO_SFX_CH0)
 }
 
+void play_sale() {
+  famistudio_sfx_play(5, FAMISTUDIO_SFX_CH0)
+}
+
+void play_purchase() {
+  famistudio_sfx_play(4, FAMISTUDIO_SFX_CH0)
+}
+
 void play_plant_growth() {
-  famistudio_sfx_play(2, FAMISTUDIO_SFX_CH0)
+  famistudio_sfx_play(6, FAMISTUDIO_SFX_CH0)
+}
+
+void play_button_chirp() {
+  famistudio_sfx_play(7, FAMISTUDIO_SFX_CH0)
 }

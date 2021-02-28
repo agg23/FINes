@@ -49,10 +49,14 @@ void earn(byte amount, MoneySource source) {
     income_amount += amount
     sales_amount += amount
     refund(amount)
+
+    play_sale()
   } else if (source == care_bonus) {
     income_amount += amount
     care_bonus_amount += amount
     refund(amount)
+
+    play_sale()
   } else if (source == refund_money) {
     expenses_amount -= amount
     refund(amount)

@@ -24,17 +24,23 @@ bool stats_tick() {
   if (input_b != 0) {
     close_stats()
 
+    play_deactivate()
+
     return true
   } else if (input_dx > 0 && stats_page < 1) {
     // Right
     stats_page += 1
 
     set_screen_forcibly(stats)
+
+    play_button_chirp()
     return true
   } else if (input_dx < 0 && stats_page > 0) {
     stats_page -= 1
 
     set_screen_forcibly(stats)
+
+    play_button_chirp()
     return true
   }
 
