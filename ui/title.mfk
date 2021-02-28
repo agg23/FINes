@@ -6,6 +6,13 @@ import plants/allplants
 import fish/fish
 
 void init_title() {
+  spawn_fish(tetra, true, $C0, $66, false)
+  spawn_fish(tetra, true, $65, $83, false)
+  spawn_fish(tetra, true, $B2, $71, false)
+  spawn_fish(tetra, true, $17, $50, false)
+  spawn_fish(rasbora, true, $40, $94, false)
+  spawn_fish(rasbora, true, $93, $91, false)
+
   #if(music)
   famistudio_music_play(0)
   #endif
@@ -28,7 +35,7 @@ bool title_screen_tick() {
       init_plants()
       init_fish()
 
-      set_screen(aquarium)
+      init_aquarium()
 
       play_button_chirp()
 
@@ -121,12 +128,6 @@ void draw_title_screen() {
   set_bank_0()
 
   load_title_screen_palettes()
-
-  spawn_fish(tetra, true, $80, $26, false)
-  spawn_fish(tetra, true, $60, $43, false)
-  spawn_fish(tetra, true, $82, $31, false)
-  spawn_fish(rasbora, true, $40, $11, false)
-  spawn_fish(rasbora, true, $93, $81, false)
 }
 
 inline void load_title_screen_palettes() {

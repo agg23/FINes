@@ -15,6 +15,10 @@ byte spectate_timer
 void init_aquarium() {
   spectate_mode = false
   spectate_timer = 0
+
+  spawn_fish(tetra, true, $80, $66, false)
+
+  set_screen(aquarium)
 }
 
 bool aquarium_tick() {

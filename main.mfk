@@ -27,7 +27,6 @@ void main() {
 
   init_random()
   init_tank()
-  init_aquarium()
   init_fish()
 
   init_plants()

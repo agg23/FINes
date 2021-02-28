@@ -71,15 +71,6 @@ void init_fish() {
   for i,0,until,MAX_FISH_COUNT {
     fish_active[i] = false
   }
-
-  spawn_fish(tetra, true, $80, $26, false)
-  // spawn_fish(rasbora, true, $60, $84, true)
-  // // spawn_fish(cherry_shrimp, true)
-  // spawn_fish(tetra, false, $34, $B2)
-  // spawn_fish(tetra, true, $80, $26)
-  // spawn_fish(tetra, true, $81, $26)
-  // spawn_fish(tetra, true, $80, $27)
-  // spawn_fish(tetra, true, $81, $27)
 }
 
 void spawn_fish(FishType type, bool sex, byte x, byte y, bool bred) {
