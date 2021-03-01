@@ -122,7 +122,6 @@ void draw_title_screen() {
   }
 
   draw_text(4, 10, contest_text.pointer, contest_text.length, 0)
-  draw_text(9, 11, title_build_text.pointer, title_build_text.length, 0)
   draw_text(9, 28, music_attribution_text.pointer, music_attribution_text.length, 0)
 
   set_bank_0()
@@ -138,10 +137,6 @@ inline void load_title_screen_palettes() {
 
 const array(byte) contest_text = [
   "NESDev Comp 2021 Edition"
-]
-
-const array(byte) title_build_text = [
-  "Build 2/28/21.0"
 ]
 
 const array(byte) music_attribution_text = [
