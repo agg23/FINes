@@ -4,10 +4,21 @@ import fish/shared
 const byte BETTA_ANY_PRICE = 95
 
 byte betta_y_temp
+byte betta_y_temp2
 macro void render_betta(byte x, byte y, byte mask, bool pos_direction) {
   betta_y_temp = y - 8
+
+  // Hack to fix betta death
+  if (mask & $80 != 0) {
+    // Upside down
+    betta_y_temp2 = betta_y_temp + 8
+    betta_y_temp = y + 8
+  } else {
+    betta_y_temp2 = y
+  }
+
   render_three_tile_fish(x, betta_y_temp, mask, pos_direction, 1, betta_tiles_top[0], betta_tiles_top[1], betta_tiles_top[2])
-  render_three_tile_fish(x, y, mask, pos_direction, 1, betta_tiles_bottom[0], betta_tiles_bottom[1], betta_tiles_bottom[2])
+  render_three_tile_fish(x, betta_y_temp2, mask, pos_direction, 1, betta_tiles_bottom[0], betta_tiles_bottom[1], betta_tiles_bottom[2])
 }
 
 const array(byte) betta_tiles_top = [$89, $8A, $8B]
